@@ -1,0 +1,31 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+.coverage
+.mypy_cache/
+# OS/IDE
+.DS_Store
+.vscode/
+.idea/
+# Large experimental datasets
+/data/raw/*
+!/data/raw/.gitkeep
+/data/processed/*
+!/data/processed/.gitkeep
+*.zip
+# OpenFOAM: generated case output (leave initial 0/ and dictionaries tracked)
+cfd/cases/**/processor*/
+cfd/cases/**/postProcessing/
+cfd/cases/**/constant/polyMesh/
+cfd/cases/**/VTK/
+cfd/cases/**/log.*
+cfd/cases/**/[1-9]/
+cfd/cases/**/[1-9][0-9]*/
+cfd/cases/**/core
+# Originals inside previously generated OpenFOAM case are not to be committed
+cfd/cases/**/data/source/*

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")"
+if ! command -v blockMesh >/dev/null; then
+  echo 'OpenFOAM environment not sourced. Run e.g. source /opt/openfoam*/etc/bashrc first.' >&2
+  exit 1
+fi
+if ! command -v simpleFoam >/dev/null; then
+  echo 'simpleFoam not found: use an OpenFOAM installation providing simpleFoam (e.g. OpenFOAM.com 2312+).' >&2
+  exit 1
+fi
+blockMesh > log.blockMesh 2>&1
+checkMesh > log.checkMesh 2>&1
+simpleFoam > log.simpleFoam 2>&1
+echo 'Simulation finished. See log files and postProcessing/'

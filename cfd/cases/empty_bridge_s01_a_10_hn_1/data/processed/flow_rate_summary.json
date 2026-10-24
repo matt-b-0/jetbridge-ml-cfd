@@ -1,0 +1,11 @@
+{
+  "dataset": "S01-A-10-HN-1",
+  "source": "05-HVAC/S01-A-10-HN-1.csv",
+  "method": "arithmetic mean of all valid (nonnegative) Q.FS entries; no steady-state period filter",
+  "valid_samples": 58,
+  "mean_L_per_s": 533.8655172413793,
+  "median_L_per_s": 536.9,
+  "selected_m3_per_s": 0.5338655172413793,
+  "cross_section_m2": 3.3902386388639996,
+  "bulk_speed_m_per_s": 0.15747136827520403
+}
