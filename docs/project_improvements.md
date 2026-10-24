@@ -73,7 +73,7 @@ The transfer test fixes the 24-sensor interior and hybrid layouts before examini
 
 Selected derived figures and small aggregate tables are committed under docs/results/current. Raw inputs, all point predictions, solver logs, fields and models remain excluded. The gallery includes enough evidence to read the repository without running OpenFOAM or accessing a local drive.
 
-The GitHub Actions workflow tests Python 3.10 and 3.12 using package installation and pytest, and uploads JUnit results. It does not download the FAA dataset or install OpenFOAM. Workflow execution on GitHub is pending until the changes are pushed; local test results do not imply hosted CI success. Action configuration follows the official [checkout](https://github.com/actions/checkout), [setup-python](https://github.com/actions/setup-python) and [upload-artifact](https://github.com/actions/upload-artifact) documentation.
+The GitHub Actions workflow tests Python 3.10 and 3.12 using package installation and pytest, and uploads JUnit results. It does not download the FAA dataset or install OpenFOAM. Hosted status is recorded in GitHub Actions; local test results alone do not imply hosted CI success. Action configuration follows the official [checkout](https://github.com/actions/checkout), [setup-python](https://github.com/actions/setup-python) and [upload-artifact](https://github.com/actions/upload-artifact) documentation.
 
 Thermal fields remain excluded from reconstruction reference data. Their bounded continuation and unresolved convergence are documented separately rather than extending the thermal scope here.
 
@@ -88,7 +88,7 @@ On the baseline mesh, nominal-inch versus published-metre positions change sampl
 
 For RBF, full-section mean plane RMSE changes from 0.033883 (interior) to 0.026579 m/s (hybrid) at baseline flow, and 0.027537 to 0.021193 m/s at 80% flow. For SVR, the corresponding pairs are 0.033648/0.028435 and 0.027427/0.023186 m/s. This supports transfer of this fixed layout comparison across this controlled flow perturbation; it is not broad operating-condition validation.
 
-The tracked starter case now includes the two writeFields false compatibility entries. Its controlDict matches the already-solved baseline runtime copy exactly. Geometry and physical boundaries were not changed. Local tests pass; hosted CI remains pending a future push.
+The tracked starter case now includes the two writeFields false compatibility entries. Its controlDict matches the already-solved baseline runtime copy exactly. Geometry and physical boundaries were not changed. Local tests pass. Both hosted Python jobs passed after publication; see [run 40091944317](https://github.com/matt-b-0/jetbridge-ml-cfd/actions/runs/40091944317).
 
 ## Additional report visuals
 Nine captioned figure pairs are included under docs/results/additional_figures. Regenerate them with python -m jetbridge_ml.report_synthesis --analysis /path/to/completed-analysis --verification-samples /path/to/verification-study --output /path/to/new-figures. The local ZIP is under data/processed/report_synthesis; large original fields remain excluded. These figures add descriptive views of existing results, not new validation.

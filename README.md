@@ -44,7 +44,7 @@ python -m jetbridge_ml.run_analysis \
 
 The default command runs the experimental mean/nearest/linear/RBF/SVR comparison, paired errors and reduced numerical-stability study. It needs the external FAA dataset but does not need OpenFOAM. Every output/gallery path must be new. Logs, package versions, source hashes and SUMMARY.md are saved automatically.
 
-For a general development installation rather than the pinned research environment, use `python -m pip install -e '.[dev]'`. The automated workflow tests Python 3.10 and 3.12; hosted CI has not yet run for these local changes.
+For a general development installation rather than the pinned research environment, use `python -m pip install -e '.[dev]'`. The automated workflow tests Python 3.10 and 3.12; inspect the [GitHub Actions results](https://github.com/matt-b-0/jetbridge-ml-cfd/actions) for hosted status.
 
 [Optional CFD analysis flags and complete commands](docs/project_improvements.md) add matched raw/HVAC audits, sensor-placement comparisons, thermal diagnostics and summaries of completed verification cases. They require explicit input paths; the analysis runner does not silently start CFD solves or download raw data.
 
@@ -78,7 +78,7 @@ The [thermal extension](docs/thermal_case_results.md) uses a cold supply and lab
 | docs/results/current | Selected reproducible figures and small derived summaries |
 | data/processed | Ignored complete local outputs |
 
-The [.github workflow](.github/workflows/numerical-checks.yml) installs the Python package and runs tests without external measurements or OpenFOAM, then saves JUnit results. It is configured locally; GitHub execution requires a push.
+The [.github workflow](.github/workflows/numerical-checks.yml) installs the Python package and runs tests without external measurements or OpenFOAM, then saves JUnit results. It runs on pushes and pull requests; see the [check history](https://github.com/matt-b-0/jetbridge-ml-cfd/actions).
 
 Background and research assumptions: [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), [assumptions](docs/assumptions.md), [four-workstream results](docs/four_workstreams_results.md), [numerical stability](docs/numerical_stability_study.md), and [AI-use record](docs/ai_usage_log.md).
 
