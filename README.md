@@ -87,3 +87,5 @@ A separate cold-supply thermal trial and zero-gravity control are documented in 
 
 The [course-aligned numerical stability study](docs/numerical_stability_study.md) compares FTCS, implicit Euler, Crank–Nicolson, relaxation, and actual sensor-layout noise amplification. It also audits existing CFD convergence without claiming a cause of the thermal failure.
 
+
+The trained CFD virtual-sensor SVR, interpolation comparison, and optimization error graphs are documented in [docs/cfd_svr_benchmark.md](docs/cfd_svr_benchmark.md).
