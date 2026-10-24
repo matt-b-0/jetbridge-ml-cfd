@@ -78,3 +78,6 @@ Then use VS Code Source Control > Publish to GitHub or use `git remote add origi
 
 The first reproducible benchmark compares nearest, linear and RBF interpolation with held-out sensor locations. See [the workflow](docs/interpolation_workflow.md) for environment setup, dataset-path commands, saved manifests, coverage reporting and limitations. Raw FAA data remains external to Git.
 
+
+CFD comparison figures can be regenerated with the workflow in [docs/cfd_comparison_visuals.md](docs/cfd_comparison_visuals.md). It separates the matched 10 ft case from exploratory cross-station differences.
+
