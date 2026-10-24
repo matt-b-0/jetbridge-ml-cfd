@@ -7,3 +7,4 @@
 - **Sparse and asynchronous measurements:** not a synchronized 3D velocity field; group data by experiments and stations.
 - **Interpolation and extrapolation:** do not claim reconstructed values in unsampled regions are validated solely because maps look smooth.
 - **Data licences:** confirm the released dataset terms before publicly copying raw inputs into the GitHub repo.
+- Experimental interpolation baseline: use published entire-record replicate means and absolute x/y metre coordinates, with a separate fit per replicate and no pooled repeats. Fixed nearest/linear/thin-plate-spline RBF settings are exploratory. Linear unsupported predictions remain missing; report common-hull and extrapolation scores separately. No CFD or supplied-flow constraint is used.

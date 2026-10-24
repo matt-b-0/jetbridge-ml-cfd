@@ -2,7 +2,7 @@
 
 Starter repository for MMA3001 work comparing reconstruction from sparse FAA/NRC jet-bridge measurements against OpenFOAM reference fields.
 
-**Status:** working scaffold. Only the original CFD input case has been packaged; it has not been solver-validated. The Python modules contain small demonstrated utilities, *not* a finished analysis pipeline.
+**Status:** first experimental interpolation benchmark implemented and tested. An isolated OpenFOAM baseline converged with a mesh passing checkMesh; physical validation and mesh sensitivity remain outstanding. See docs/baseline_run_2026-10-24.md and docs/interpolation_initial_results.md. The repository CFD inputs retain the documented compatibility/geometry issues.
 
 Read `PROJECT_CONTEXT.md` for experiment background and `AGENTS.md` for Codex rules. Always read the case README before attempting CFD.
 
@@ -73,3 +73,8 @@ Then use VS Code Source Control > Publish to GitHub or use `git remote add origi
 3. Implement robust raw FAA parsers and validation splits.
 4. Compare baseline interpolation methods and GPR on identical held-out locations.
 5. Add virtual CFD-sensor experiments and report limitations.
+
+## Experimental interpolation benchmark
+
+The first reproducible benchmark compares nearest, linear and RBF interpolation with held-out sensor locations. See [the workflow](docs/interpolation_workflow.md) for environment setup, dataset-path commands, saved manifests, coverage reporting and limitations. Raw FAA data remains external to Git.
+
