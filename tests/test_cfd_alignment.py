@@ -27,3 +27,9 @@ def test_sample_alignment_rejects_duplicate_and_nonfinite_samples():
         align_samples(expected, repeated)
     with pytest.raises(ValueError, match="finite"):
         align_samples(expected[:1], [[.35, 2.48, 3.05, 0, 0, np.nan]])
+
+
+def test_probe_drift_does_not_include_iterations_after_saved_field():
+    from jetbridge_ml.cfd_interface.plot_thermal import _probe_temperature_drift
+    trace=np.array([[850,0,0],[900,10,20],[950,11,22],[1000,1000,2000]],float)
+    assert _probe_temperature_drift(trace,950,50)==pytest.approx(2)

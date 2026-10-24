@@ -84,3 +84,6 @@ CFD comparison figures can be regenerated with the workflow in [docs/cfd_compari
 
 A separate cold-supply thermal trial and zero-gravity control are documented in [docs/thermal_case_results.md](docs/thermal_case_results.md). The buoyant runs have not passed convergence checks and are not validated reference fields.
 
+
+The [course-aligned numerical stability study](docs/numerical_stability_study.md) compares FTCS, implicit Euler, Crank–Nicolson, relaxation, and actual sensor-layout noise amplification. It also audits existing CFD convergence without claiming a cause of the thermal failure.
+

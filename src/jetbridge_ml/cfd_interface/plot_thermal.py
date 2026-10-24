@@ -19,6 +19,16 @@ from .plot_comparison import align_samples, mesh_profile
 from jetbridge_ml.validation.metrics import regression_metrics
 
 
+def _probe_temperature_drift(trace, final_iteration, window=100):
+    """Return maximum per-probe range within the saved iterate's closed window."""
+    trace=np.asarray(trace,float)
+    keep=(trace[:,0]>=final_iteration-window) & (trace[:,0]<=final_iteration)
+    selected=trace[keep,1:]
+    if len(selected)<2:
+        raise ValueError("Insufficient scheduled probes in the selected iteration window")
+    return float(np.ptp(selected,axis=0).max())
+
+
 def export(case, output, sensors):
     """Sample the latest saved thermal field and report its solver status.
 
@@ -93,7 +103,6 @@ functions {
     result["speed_delta_mps"]=result.cfd_speed_mps-result.speed_mps
     result["temperature_delta_K"]=result.cfd_temperature_C-result.temperature_C
     trace=np.loadtxt(case/"postProcessing/sensors/0/T")
-    recent=trace[trace[:,0] >= float(latest)-100,1:]
     export_log=(output/f"log.export_{case.name}").read_text()
     speed_bound=re.search(r"max\(mag\(U\)\) = ([0-9.eE+-]+)",export_log)
     temperature_bounds=re.findall(r"(?:min|max)\(T\) = ([0-9.eE+-]+)",export_log)
@@ -109,7 +118,7 @@ functions {
                  physical_comparison_usable=bool(converged and not failed),
                  maximum_velocity_mps=max_speed,temperature_boundary_overshoot=overshoot,
                  sanity_velocity_threshold_mps=10,
-                 scheduled_probe_temperature_range_last100_iterations_K=float(np.ptp(recent,axis=0).max()),
+                 scheduled_probe_temperature_range_last100_iterations_K=_probe_temperature_drift(trace,float(latest)),
                  speed=regression_metrics(result.speed_mps,result.cfd_speed_mps),
                  temperature=regression_metrics(result.temperature_C,result.cfd_temperature_C))
     surfaces={f:np.loadtxt(folder/f"thermalSlices/{latest}/{f}_plane10.raw") for f in ("U","T")}

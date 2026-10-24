@@ -33,7 +33,7 @@ The initial run reached maximum speed approximately 62,288 m/s and temperature m
 The stabilization attempt starts from the control's converged field and reduces pressure/U/T/turbulence relaxation to 0.1/0.1/0.2/0.3, with unchanged physical boundaries and a 1000-iteration cap. At the last saved field:
 - Maximum speed 1.427448 m/s; temperatures 294.4392857–297.525 K, with no boundary overshoot detected.
 - Signed inlet/outlet flow -0.5317607143 / +0.5317616106 m3/s; relative imbalance approximately 0.000169%.
-- Probe temperature range over the last 100 scheduled iterations approximately 0.1723 K, so stationarity is not established.
+- Corrected probe-temperature range in snapshot-967 window [867,967] is 0.1324055 K, so stationarity is not established. The former 0.1723 K report incorrectly included later probe records; the final-iteration-1000 audit gives 0.1187674 K over [900,1000]. See numerical_stability_study.md.
 - Final solver residuals at iteration 1000 remain above requested criteria: Ux 0.00134348, Uy 0.00049360, Uz 0.00052115, T 0.000293997, first p_rgh 0.0341527, epsilon 0.00086272, k 0.00086320.
 
 The copied warm-start field retained its previous output time index, shifting saved time folders to 67,167,...,967. The run ended at 1000, but field comparisons explicitly use saved iteration 967, not an invented final-1000 field. SIMPLE iteration is not physical time.
