@@ -81,3 +81,6 @@ The first reproducible benchmark compares nearest, linear and RBF interpolation 
 
 CFD comparison figures can be regenerated with the workflow in [docs/cfd_comparison_visuals.md](docs/cfd_comparison_visuals.md). It separates the matched 10 ft case from exploratory cross-station differences.
 
+
+A separate cold-supply thermal trial and zero-gravity control are documented in [docs/thermal_case_results.md](docs/thermal_case_results.md). The buoyant runs have not passed convergence checks and are not validated reference fields.
+
