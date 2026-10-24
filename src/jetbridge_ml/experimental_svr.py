@@ -16,7 +16,8 @@ from jetbridge_ml.data_processing.faa import read_speed_average
 from jetbridge_ml.interpolation.plane import predict_plane
 from jetbridge_ml.machine_learning.selection import select_plane_svr, DEFAULT_GRID
 
-METHODS=('nearest','linear','rbf','svr')
+METHODS=('mean','nearest','linear','rbf','svr')
+COLORS={'mean':'#424242','nearest':'#888888','linear':'#2681a0','rbf':'#d69330','svr':'#a34863'}
 
 
 def evaluate_experimental_plane(frame,grid=None):
@@ -47,7 +48,10 @@ def evaluate_experimental_plane(frame,grid=None):
         tx,qx=scaler.transform(x[train]),scaler.transform(x[[heldout]])
         inside=bool(Delaunay(tx).find_simplex(qx,tol=1e-10)[0]>=0)
         for method in METHODS:
-            pred=model.predict(x[[heldout]]) if method=='svr' else predict_plane(method,tx,y[train],qx)
+            if method=='mean':
+                pred=np.array([y[train].mean()])
+            else:
+                pred=model.predict(x[[heldout]]) if method=='svr' else predict_plane(method,tx,y[train],qx)
             row=valid.iloc[heldout].to_dict()
             row.update(method=method,fold=heldout,prediction_mps=float(pred[0]),inside_hull=inside,
                        target_available=True,train_rows=';'.join(map(str,valid.iloc[train].source_row)))
@@ -113,11 +117,11 @@ def main():
     fig,axes=plt.subplots(1,2,figsize=(10,4),layout='constrained')
     for ax,subset in zip(axes,('common_hull','outside_hull')):
         part=summary[summary.subset==subset].set_index('method').reindex(METHODS)
-        ax.bar(METHODS,part.mean_run_rmse,color=['#777','#2681a0','#d69330','#a34863'])
+        ax.bar(METHODS,part.mean_run_rmse,color=[COLORS[m] for m in METHODS])
         ax.set(ylabel='Mean per-run outer RMSE (m/s)',title=subset.replace('_',' '))
     fig.suptitle('Experimental prediction: nested held-location evaluation\nLinear does not extrapolate; SVR tuned inside outer training data only')
     save(fig,'experimental_nested_errors')
-    fig,axes=plt.subplots(1,4,figsize=(13,3.8),layout='constrained')
+    fig,axes=plt.subplots(1,len(METHODS),figsize=(15,3.8),layout='constrained')
     common=pred[pred.inside_hull]
     for ax,method in zip(axes,METHODS):
         part=common[common.method==method]
@@ -133,11 +137,11 @@ def main():
     for method in METHODS:
         part=common[common.method==method]
         station=part.groupby(['station_ft','run_id']).error_mps.apply(lambda v:np.sqrt(np.mean(v**2))).groupby('station_ft').mean()
-        axes[0].plot(station.index,station.values,'o-',label=method)
+        axes[0].plot(station.index,station.values,'o-',label=method,color=COLORS[method])
         # Binned descriptive mean error, not a confidence interval.
         bins=pd.cut(part.height_m,[0,.5,1,1.5,2,2.5])
         values=part.groupby(bins,observed=True).error_mps.mean()
-        axes[1].plot([v.mid for v in values.index],values.values,'o-',label=method)
+        axes[1].plot([v.mid for v in values.index],values.values,'o-',label=method,color=COLORS[method])
     axes[0].set(xlabel='Nominal station (ft)',ylabel='Mean per-run RMSE (m/s)')
     axes[1].set(xlabel='Local sensor height bin midpoint (m)',ylabel='Mean signed prediction error (m/s)')
     axes[1].axhline(0,color='black',lw=.8)
@@ -146,7 +150,8 @@ def main():
     fig.suptitle('Experimental spatial diagnostics | common supported locations')
     save(fig,'experimental_spatial_errors')
     manifest=dict(packages={name:version(name) for name in ('numpy','pandas','scipy','scikit-learn','matplotlib')},
-                  runs=len(sources),outer_targets=int(len(pred)/4),methods=list(METHODS),grid=DEFAULT_GRID,
+                  runs=len(sources),outer_targets=int(len(pred)/len(METHODS)),methods=list(METHODS),grid=DEFAULT_GRID,
+                  mean_baseline='Arithmetic mean of retained sensors in each outer fold; held-out target excluded',
                   split='Nested outer leave-one-location-out; inner 3-fold grouped location CV; independent fit per replicate; no replicate pooling',
                   scaling='Training-only StandardScaler shared by all baselines in each outer fold; differs from original unscaled exploratory benchmark',
                   interpretation='Outer cross-validation estimates tuned algorithm error, not a new untouched external test; repeats/runs are not independent physical systems',

@@ -1,0 +1,32 @@
+{
+  "runs": 36,
+  "stations": 9,
+  "rbf_wins": 21,
+  "svr_wins": 15,
+  "ties": 0,
+  "equal_run_mean_difference_mps": -0.008150860560558738,
+  "median_difference_mps": -0.0005748346899348885,
+  "equal_station_mean_difference_mps": -0.004883808166437343,
+  "layout_strata": [
+    {
+      "layout_points": 12,
+      "runs": 30,
+      "mean_difference": 0.0013847495871994314,
+      "median_difference": 2.7404388194370282e-05
+    },
+    {
+      "layout_points": 24,
+      "runs": 6,
+      "mean_difference": -0.05582891129934958,
+      "median_difference": -0.05467790034335257
+    }
+  ],
+  "limitations": [
+    "Run/station pairs are descriptive; repeated measurements share an apparatus",
+    "The 24-point layout occurs at 58 ft; station and layout density are confounded, so stratum differences are not a causal sensor-count effect",
+    "No pooling 504 sensors as independent experimental replicates; no significance test or confidence interval",
+    "One configuration and apparatus; not proof of superiority on other systems"
+  ],
+  "input_sha256": "612e8ad1e2654f863fc4b3001ab0a00c21a0ea0380996d22c731d56eaa79bfa9",
+  "script_sha256": "ab3b55604c23d6e61eb5e1afb300a4e208db05268d9de3b6bc14b64b94b85199"
+}

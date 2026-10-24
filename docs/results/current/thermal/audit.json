@@ -1,0 +1,106 @@
+{
+  "original_restart": {
+    "case": "/home/mattb/projects/jetbridge-thermal-stabilized-s01-ac-10-hn-1",
+    "last_iteration": 1000.0,
+    "last_saved_field_iteration": 967.0,
+    "mesh_check_passed": true,
+    "solver_reported_convergence": false,
+    "last_initial_residuals": {
+      "Ux": 0.001343482916,
+      "Uy": 0.0004935993665,
+      "Uz": 0.000521150065,
+      "T": 0.0002939966917,
+      "p_rgh": 0.03415267385,
+      "epsilon": 0.0008627222885,
+      "k": 0.0008631980528
+    },
+    "residual_thresholds": {
+      "Ux": 1e-05,
+      "Uy": 1e-05,
+      "Uz": 1e-05,
+      "T": 1e-06,
+      "p_rgh": 1e-05,
+      "epsilon": 1e-05,
+      "k": 1e-05
+    },
+    "residual_screen_passed": false,
+    "probe_window": [
+      900.0,
+      1000.0
+    ],
+    "probe_records": 10,
+    "maximum_probe_temperature_range_K": 0.11876740000002428,
+    "stationarity_screen_K": 0.01,
+    "stationarity_screen_passed": false,
+    "inlet_m3s": -0.5317607143,
+    "outlet_m3s": 0.5317613474,
+    "relative_flux_imbalance": 1.1905730960471633e-06,
+    "flux_screen_passed": true,
+    "minimum_temperature_K": 294.4392857,
+    "maximum_temperature_K": 297.525,
+    "temperature_boundary_screen_passed": true,
+    "last_reported_maximum_speed_mps": null,
+    "numerical_reference_eligible": false,
+    "experimentally_validated": false
+  },
+  "continuation": {
+    "case": "/home/mattb/projects/jetbridge-thermal-continuation-20261024",
+    "last_iteration": 1967.0,
+    "last_saved_field_iteration": 1967.0,
+    "mesh_check_passed": true,
+    "solver_reported_convergence": false,
+    "last_initial_residuals": {
+      "Ux": 0.001076117551,
+      "Uy": 0.0007252489445,
+      "Uz": 0.0005757428154,
+      "T": 0.0002591691084,
+      "p_rgh": 0.03001114768,
+      "epsilon": 0.001300751258,
+      "k": 0.00126092116
+    },
+    "residual_thresholds": {
+      "Ux": 1e-05,
+      "Uy": 1e-05,
+      "Uz": 1e-05,
+      "T": 1e-06,
+      "p_rgh": 1e-05,
+      "epsilon": 1e-05,
+      "k": 1e-05
+    },
+    "residual_screen_passed": false,
+    "probe_window": [
+      1867.0,
+      1967.0
+    ],
+    "probe_records": 11,
+    "maximum_probe_temperature_range_K": 0.13500190000002021,
+    "stationarity_screen_K": 0.01,
+    "stationarity_screen_passed": false,
+    "inlet_m3s": -0.5317607143,
+    "outlet_m3s": 0.5317600591,
+    "relative_flux_imbalance": 1.2321331426205499e-06,
+    "flux_screen_passed": true,
+    "minimum_temperature_K": 294.4392857,
+    "maximum_temperature_K": 297.525,
+    "temperature_boundary_screen_passed": true,
+    "last_reported_maximum_speed_mps": 5.099651844,
+    "numerical_reference_eligible": false,
+    "experimentally_validated": false
+  },
+  "limitations": [
+    "No change to physical boundaries or solver relaxation; one bounded continuation, not a parameter search",
+    "Restart at 967 overlaps old log iterations 967\u20131000; histories are shown separately, not concatenated as one exact trajectory",
+    "A 0.01 K range over 100 iterations is a declared screening criterion, not a physical validation tolerance",
+    "Flux balance alone does not establish convergence; steady SIMPLE iteration is not physical time"
+  ],
+  "source_sha256": {
+    "/home/mattb/projects/jetbridge-thermal-stabilized-s01-ac-10-hn-1/log.solver": "86db80d740c5f9d458ec216c17e80b499cd8cafa3e9acaed197671755c498437",
+    "/home/mattb/projects/jetbridge-thermal-continuation-20261024/log.solver": "e337a9f0db9a897644f944d752b9ea834a25366c97314c51a80a9b9b1535e087",
+    "/home/mattb/projects/jetbridge-thermal-continuation-20261024/log.checkMesh": "de8b5423e6669f21c43e79f0cd087c8237a0ac6e2a1928e9f5037bddb01633be",
+    "/home/mattb/projects/jetbridge-thermal-continuation-20261024/continuation.json": "088d1e8560f3f5ff0c4423ed06d5c458afc6d4d60d570a8a6f59555dd27c332d",
+    "/home/mattb/projects/jetbridge-thermal-continuation-20261024/system/fvSolution": "103e12f1828dbeb7e5259d96ff6d4089ee76d97f8efe4d0776a11fbe286830f2",
+    "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/src/jetbridge_ml/cfd_interface/thermal_audit.py": "3f0dc53a419ab3476000dd0f9e2edf3f711e0d569d6ad33c26aed7b39a2d5735",
+    "/home/mattb/projects/jetbridge-thermal-stabilized-s01-ac-10-hn-1/postProcessing/sensors/0/T": "569924a99be382fb79fe03dfcbf14978762fd04579d64337e87ebccbf831ec3e",
+    "/home/mattb/projects/jetbridge-thermal-continuation-20261024/postProcessing/sensors/967/T": "4663f68934118ef3c177f38477a453f4a234be026854ec236b5c2b78cbb204e6"
+  }
+}

@@ -1,95 +1,85 @@
-# Jet Bridge CFD + Numerical Interpolation + Machine Learning
+# Jet Bridge CFD, Interpolation and Machine Learning
 
-Starter repository for MMA3001 work comparing reconstruction from sparse FAA/NRC jet-bridge measurements against OpenFOAM reference fields.
+An MMA3001 investigation of how accurately interpolation and support vector regression reconstruct sparse jet-bridge air-speed measurements, and what OpenFOAM virtual-sensor studies reveal about spatial sampling.
 
-**Status:** first experimental interpolation benchmark implemented and tested. An isolated OpenFOAM baseline converged with a mesh passing checkMesh; physical validation and mesh sensitivity remain outstanding. See docs/baseline_run_2026-10-24.md and docs/interpolation_initial_results.md. The repository CFD inputs retain the documented compatibility/geometry issues.
+**Current status:** nested experimental comparisons, sensor-placement experiments and isothermal mesh/coordinate/flow checks have run. The buoyant thermal case remains unconverged. Numerical convergence is not experimental validation.
 
-Read `PROJECT_CONTEXT.md` for experiment background and `AGENTS.md` for Codex rules. Always read the case README before attempting CFD.
+## Results you can inspect immediately
 
-## Layout
+The [results gallery](docs/results/current/README.md) contains selected derived figures and small tables committed with the code. No OpenFOAM installation or local dataset is needed to read it. See the [run summary](docs/results/current/SUMMARY.md) and [methods/reproduction guide](docs/project_improvements.md).
 
-```
-AGENTS.md                     Codex-specific working instructions
-PROJECT_CONTEXT.md            research decisions / dataset caveats
-cfd/cases/...                 executable OpenFOAM cases (separate from Python package)
-src/jetbridge_ml/
-  data_processing/            input readers, coordinate mapping
-  interpolation/              traditional numerical methods
-  machine_learning/           learned surrogates, hyperparameters
-  validation/                 withheld-location splits, metrics, physics checks
-  cfd_interface/              import/export/sampling CFD fields
-examples/                     small runnable demonstration
-scripts/                      orchestration scripts (future)
-tests/                        unit tests
-data/raw/                     user's large raw dataset (ignored by Git)
-data/processed/               derived larger datasets (ignored by Git)
-docs/                         AI reflection, assumptions and research notes
-```
+For 36 experimental runs and 504 held-out sensor means, common supported locations give:
 
-## Python setup (WSL/Linux)
+| Method | Mean per-run RMSE (m/s) |
+| --- | ---: |
+| Retained-sensor mean | 0.067648 |
+| Nearest neighbour | 0.071293 |
+| Linear interpolation | 0.055241 |
+| Thin-plate RBF | 0.049590 |
+| RBF-kernel SVR | 0.057741 |
+
+Each experimental replicate is fitted separately. SVR hyperparameters are selected inside each outer training fold. Linear interpolation does not extrapolate; coverage and outside-hull errors are reported separately.
+
+![Paired experimental errors](docs/results/current/paired/paired_model_errors.png)
+
+RBF wins 21 of 36 paired runs, but its mean advantage is concentrated at the 58 ft, 24-sensor layout. The 12-sensor runs slightly favour SVR on average. Station and layout density are confounded, so this is not evidence that density alone causes the difference. No IID-sensor significance claim is made.
+
+The CFD checks quantify mesh sensitivity and small coordinate-rounding effects. A fixed 24-sensor hybrid layout also improves RBF/SVR full-section reconstruction in a synthetic 80%-flow case. These are numerical studies, not independently matched experimental validations.
+
+## Reproduce the Python analysis
+
+The tested environment is Python 3.12 under Ubuntu 24.04/WSL. From a clone of this repository:
 
 ```bash
-python3 -m venv .venv
+python3.12 -m venv .venv
 source .venv/bin/activate
-python -m pip install -e '.[dev]'
+python -m pip install -r requirements-benchmark.txt
+python -m pip install --no-deps -e .
 python -m pytest -q
-python examples/compare_nearest.py
+python -m jetbridge_ml.run_analysis \
+  --dataset /path/to/JetBridge_2026 \
+  --output data/processed/new-analysis \
+  --gallery data/processed/new-gallery
 ```
 
-`pip install -e` installs this package in **editable mode**, so imports such as `from jetbridge_ml.interpolation import nearest_neighbor` work across the repo without copying scripts between folders. VS Code should select `.venv/bin/python` for the interpreter.
+The default command runs the experimental mean/nearest/linear/RBF/SVR comparison, paired errors and reduced numerical-stability study. It needs the external FAA dataset but does not need OpenFOAM. Every output/gallery path must be new. Logs, package versions, source hashes and SUMMARY.md are saved automatically.
 
-## OpenFOAM CFD
+For a general development installation rather than the pinned research environment, use `python -m pip install -e '.[dev]'`. The automated workflow tests Python 3.10 and 3.12; hosted CI has not yet run for these local changes.
 
-The starter case is in `cfd/cases/empty_bridge_s01_a_10_hn_1/`.
+[Optional CFD analysis flags and complete commands](docs/project_improvements.md) add matched raw/HVAC audits, sensor-placement comparisons, thermal diagnostics and summaries of completed verification cases. They require explicit input paths; the analysis runner does not silently start CFD solves or download raw data.
+
+## OpenFOAM cases
+
+The isothermal starter is [cfd/cases/empty_bridge_s01_a_10_hn_1](cfd/cases/empty_bridge_s01_a_10_hn_1/README.md). It uses steady incompressible k-epsilon RANS, a full-face supply and sealed walls. The tested v2412 writeFields compatibility entries are included. Run cases in a separate Linux/WSL directory and retain their logs and fields outside Git.
 
 ```bash
-cd cfd/cases/empty_bridge_s01_a_10_hn_1
-python3 scripts/verify_setup.py
-blockMesh
-checkMesh
-simpleFoam
-python3 scripts/compare_probe_speeds.py
+source /usr/lib/openfoam/openfoam2412/etc/bashrc
+# In a separate copy of the case:
+blockMesh > log.blockMesh
+checkMesh > log.checkMesh
+simpleFoam > log.simpleFoam
 ```
 
-These are **instructions**, not evidence they ran; source your OpenFOAM environment and confirm solver/BC compatibility with your installed version. Never publish or use an unverified CFD result as experimental truth.
+The [verification workflow](docs/project_improvements.md) prepares isolated coarse/fine meshes and a reduced-flow case, with bounded iteration caps. Three meshes provide sensitivity evidence; they do not automatically establish mesh independence or a GCI. The known 0.127 mm source-ceiling discrepancy remains documented.
 
-## GitHub
+The [thermal extension](docs/thermal_case_results.md) uses a cold supply and laboratory-temperature walls as an unmeasured wall-temperature surrogate. Its continuation still fails residual and stationarity checks. Thermal fields are excluded from ML/reference training.
 
-Keep **this folder** as the single Git repository. `cfd/` and `src/` are ordinary directories/modules, not separate Git repositories and not Git submodules. Commit source and small reproducibility artifacts; ignore meshed/time-series solver output and giant raw data files. Add an appropriately reviewed `LICENSE` before public release.
+## Project structure and evidence
 
-Suggested initial commands:
+| Location | Responsibility |
+| --- | --- |
+| src/jetbridge_ml/data_processing | Experimental readers, units and source records |
+| src/jetbridge_ml/interpolation | Traditional reconstruction methods |
+| src/jetbridge_ml/machine_learning | SVR fitting and training-only selection |
+| src/jetbridge_ml/cfd_interface | CFD sampling, numerical checks and comparisons |
+| src/jetbridge_ml/validation | Error metrics, spatial splits and reduced stability checks |
+| cfd/cases | OpenFOAM inputs and reproducible case preparation |
+| tests | Numerical and data-handling checks |
+| docs/results/current | Selected reproducible figures and small derived summaries |
+| data/processed | Ignored complete local outputs |
 
-```bash
-git init -b main
-git add .
-git commit -m 'Initial reproducible Jet Bridge project scaffold'
-```
+The [.github workflow](.github/workflows/numerical-checks.yml) installs the Python package and runs tests without external measurements or OpenFOAM, then saves JUnit results. It is configured locally; GitHub execution requires a push.
 
-Then use VS Code Source Control > Publish to GitHub or use `git remote add origin ...` / `git push`. Publish only after reviewing original-data redistribution rights.
+Background and research assumptions: [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), [assumptions](docs/assumptions.md), [four-workstream results](docs/four_workstreams_results.md), [numerical stability](docs/numerical_stability_study.md), and [AI-use record](docs/ai_usage_log.md).
 
-## First steps
-1. Reconfirm `.venv` tests locally.
-2. Confirm the CFD case runs on your OpenFOAM version; record `checkMesh`, convergence, fluxes and probe outputs.
-3. Implement robust raw FAA parsers and validation splits.
-4. Compare baseline interpolation methods and GPR on identical held-out locations.
-5. Add virtual CFD-sensor experiments and report limitations.
-
-## Experimental interpolation benchmark
-
-The first reproducible benchmark compares nearest, linear and RBF interpolation with held-out sensor locations. See [the workflow](docs/interpolation_workflow.md) for environment setup, dataset-path commands, saved manifests, coverage reporting and limitations. Raw FAA data remains external to Git.
-
-
-CFD comparison figures can be regenerated with the workflow in [docs/cfd_comparison_visuals.md](docs/cfd_comparison_visuals.md). It separates the matched 10 ft case from exploratory cross-station differences.
-
-
-A separate cold-supply thermal trial and zero-gravity control are documented in [docs/thermal_case_results.md](docs/thermal_case_results.md). The buoyant runs have not passed convergence checks and are not validated reference fields.
-
-
-The [course-aligned numerical stability study](docs/numerical_stability_study.md) compares FTCS, implicit Euler, Crank–Nicolson, relaxation, and actual sensor-layout noise amplification. It also audits existing CFD convergence without claiming a cause of the thermal failure.
-
-
-The trained CFD virtual-sensor SVR, interpolation comparison, and optimization error graphs are documented in [docs/cfd_svr_benchmark.md](docs/cfd_svr_benchmark.md).
-
-A collection of 16 report figures for the isothermal baseline, zero-gravity thermal control and provisional buoyant snapshot is described in [docs/report_figures.md](docs/report_figures.md), including PNG/PDF exports, captions and reproducibility commands.
-
-The [four-workstream results](docs/four_workstreams_results.md) add nested experimental SVR evaluation, CFD sensor-placement sensitivity, matched raw/HVAC audits, and a bounded thermal continuation. These retain separate experimental, numerical-reference and convergence conclusions.
+Raw FAA/NRC data, generated meshes, saved fields, full prediction tables and fitted model binaries remain outside Git. The public repository includes source, tests, documentation and selected derived results. Dataset provenance and source details are recorded in PROJECT_CONTEXT.md and the analysis manifests.

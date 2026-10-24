@@ -1,0 +1,5 @@
+method,runs,beats_mean_runs,mean_rmse_difference_mps
+linear,36,28,-0.01240707059454093
+nearest,36,20,0.003645126611626393
+rbf,36,29,-0.01805852185006544
+svr,36,24,-0.0099076612895067

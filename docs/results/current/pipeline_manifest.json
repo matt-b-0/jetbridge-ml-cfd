@@ -1,0 +1,143 @@
+{
+  "created_utc": "2026-10-24T11:49:09.873358+00:00",
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "commands": [
+    {
+      "section": "experimental",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.experimental_svr",
+        "--dataset",
+        "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026",
+        "--mesh",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/cfd/cases/empty_bridge_s01_a_10_hn_1/system/blockMeshDict",
+        "--output",
+        "/home/mattb/projects/jetbridge-submission-analysis-20261024-final/experimental"
+      ]
+    },
+    {
+      "section": "paired",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.paired_analysis",
+        "--metrics",
+        "/home/mattb/projects/jetbridge-submission-analysis-20261024-final/experimental/metrics.csv",
+        "--output",
+        "/home/mattb/projects/jetbridge-submission-analysis-20261024-final/paired"
+      ]
+    },
+    {
+      "section": "stability",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.stability_study",
+        "--output",
+        "/home/mattb/projects/jetbridge-submission-analysis-20261024-final/stability"
+      ]
+    },
+    {
+      "section": "sensor_design",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.sensor_design_study",
+        "--candidates",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/processed/report_figures/sampled_iso.csv",
+        "--reference",
+        "/home/mattb/projects/jetbridge-virtual-samples-20261024/dense_test.csv",
+        "--output",
+        "/home/mattb/projects/jetbridge-submission-analysis-20261024-final/sensor_design"
+      ]
+    },
+    {
+      "section": "matched",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.cfd_interface.matched_audit",
+        "--dataset",
+        "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026",
+        "--case",
+        "/home/mattb/projects/jetbridge-baseline-20261024",
+        "--output",
+        "/home/mattb/projects/jetbridge-submission-analysis-20261024-final/matched"
+      ]
+    },
+    {
+      "section": "thermal",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.cfd_interface.thermal_audit",
+        "--restart-source",
+        "/home/mattb/projects/jetbridge-thermal-stabilized-s01-ac-10-hn-1",
+        "--continuation",
+        "/home/mattb/projects/jetbridge-thermal-continuation-20261024",
+        "--output",
+        "/home/mattb/projects/jetbridge-submission-analysis-20261024-final/thermal"
+      ]
+    },
+    {
+      "section": "verification",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.cfd_interface.verification_results",
+        "--study",
+        "/home/mattb/projects/jetbridge-verification-20261024",
+        "--output",
+        "/home/mattb/projects/jetbridge-submission-analysis-20261024-final/verification"
+      ]
+    }
+  ],
+  "packages": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "pandas": "3.1.0",
+    "scikit-learn": "1.9.1",
+    "matplotlib": "3.11.2"
+  },
+  "code_sha256": {
+    "src/jetbridge_ml/benchmark.py": "3fba82e3902d60865996f7e0ff124b887ccd6a5ce5f91b4300c3fd0b25b346c9",
+    "src/jetbridge_ml/experimental_svr.py": "70b05dff049917d3ccfd18749158b39caf3d9328e611d71aa94da951206a56d1",
+    "src/jetbridge_ml/paired_analysis.py": "ab3b55604c23d6e61eb5e1afb300a4e208db05268d9de3b6bc14b64b94b85199",
+    "src/jetbridge_ml/run_analysis.py": "f5cf455eac4cadcf68095f975cfca6d7367089118cbfbf57f52abcaee55d11ae",
+    "src/jetbridge_ml/sensor_design_study.py": "39918d784b8ffe852b1352e09ae763cc5190189097dafc43129445bf82092f9d",
+    "src/jetbridge_ml/stability_study.py": "ff4d2a2187e1d45bf55efb329e53d105c10f113131583d5c8d4b0756f172ffe0",
+    "src/jetbridge_ml/virtual_benchmark.py": "83245c71abd2bbbd4d03e1f3edb82fc8e4b6500a350005e0b46b02df6e0c1a2b",
+    "src/jetbridge_ml/__init__.py": "b49bfcd9c2f5c2bb08987cde5141f83e2723a43198c0d29de10412f0d47846a3",
+    "src/jetbridge_ml/cfd_interface/matched_audit.py": "aa75125f8fdc63b02f5896d4a07d3db4afc006a87f96ee22bf233cd14cfb4ad5",
+    "src/jetbridge_ml/cfd_interface/plot_comparison.py": "18366456c1f5f415f4e80ee7685053322a333e0296a713494b0de5907c34a4ba",
+    "src/jetbridge_ml/cfd_interface/plot_thermal.py": "fd32a038f9062c8ce01a3748618d9aecc8a1c9c62e157b98b8c0ea21cc26a932",
+    "src/jetbridge_ml/cfd_interface/report_figures.py": "0df4988e2d4bf640a6cd69d02afd3ab03f311ca0d1616c3391731cb91f213dd1",
+    "src/jetbridge_ml/cfd_interface/thermal_audit.py": "3f0dc53a419ab3476000dd0f9e2edf3f711e0d569d6ad33c26aed7b39a2d5735",
+    "src/jetbridge_ml/cfd_interface/verification_results.py": "c123e321ef11ac0b35a10c42112a46ddca8bdfedf4dc3b347215553d5667999d",
+    "src/jetbridge_ml/cfd_interface/verification_study.py": "17e2b7d0987a83d4be05cab235dfe9affc155534f78323e41b7892d2595d20aa",
+    "src/jetbridge_ml/cfd_interface/virtual_sensors.py": "25099dceb826de94cec0f892162f33975757d99d60b46ab54480eaed2534fa0d",
+    "src/jetbridge_ml/cfd_interface/__init__.py": "187eadf46749ad4841ad975d01ca5db0abd286ad3c0bdf4cd7a03a6f25ab27e0",
+    "src/jetbridge_ml/data_processing/faa.py": "34e2c6389da846bfd71914ae752c69ed79e760303434566b0085c65ae70cbf55",
+    "src/jetbridge_ml/data_processing/raw_speed.py": "3fdda9366c9b16f163c49fd327bfa7c49c90565e6d0762cd5a92bd8c78ea2ba8",
+    "src/jetbridge_ml/data_processing/sensors.py": "6fb49bcdfab3ecd80818236b147ca9c3b83e7c66d72a15bf733dd41c6afae025",
+    "src/jetbridge_ml/data_processing/__init__.py": "3a28cbec3629c478b50005ddcfee5292a0dd3685df185565a2812b5453744dd9",
+    "src/jetbridge_ml/interpolation/nearest.py": "6f9e56c444215912ff1aafb251f7b2adcd29bfb7b72200179a3d76d722b1b8f1",
+    "src/jetbridge_ml/interpolation/plane.py": "fa28a2949e774c63efdb35bf7c748c9b461bdb42e4ca3d4577d04c05744b8cfc",
+    "src/jetbridge_ml/interpolation/sensitivity.py": "26e73be40338db65b43c1f764709458b6c204a345e1f30e57f5f0cbe64217922",
+    "src/jetbridge_ml/interpolation/spatial.py": "97224a6080543880c435abee57c2388cd2fc8750de415c557941eb91bcc8ace0",
+    "src/jetbridge_ml/interpolation/__init__.py": "5935c7e7dbac266d5c7df6e5d910fc55faf71b14d60b0f714acd83de9b46c886",
+    "src/jetbridge_ml/machine_learning/selection.py": "ce7b284fedb4d9771c9fe1eaf3a8cabc79e93cc108c460a1d311b59042d797d1",
+    "src/jetbridge_ml/machine_learning/svr.py": "28f75ce2cc841ff8819dc80f24675fcf2b6424fc8513858cce54e63e55009853",
+    "src/jetbridge_ml/machine_learning/__init__.py": "5a4e41cf795f61a20dbd3e8ee44c76c16794d9c6a4f7ee5630938945578ec2db",
+    "src/jetbridge_ml/validation/metrics.py": "948be27ee8c273c3a3b3201a434a829638cff7a40d469e80d56fce0b3259d2fa",
+    "src/jetbridge_ml/validation/spatial.py": "6b0a959aa2860b949671cf48641295d8deee3cf2c4d4b7a91ea194cfae97eb9e",
+    "src/jetbridge_ml/validation/stability.py": "1507d0634dfd88507402ddc176f38fb4a38e1534051e4c28c382ad84a2b703e6",
+    "src/jetbridge_ml/validation/__init__.py": "88e2c7979a8b053d9acd3982ebcf06ec45a45ae1c61e6d379a5d270184cb777d"
+  },
+  "manifests": {
+    "stability/manifest.json": "0fca2adc5df8b2b2395acbcacd3f61c0e07ad6e98cdf373623807b23b87f2e68",
+    "experimental/manifest.json": "8c49ddcd9b28d9c2463158fd2ac376b2a5398172d98810b33e494e169a20f752",
+    "sensor_design/manifest.json": "3f00be908539175d5b8776634aded9a6050247eafe3d687d362a83028c139e9b"
+  }
+}

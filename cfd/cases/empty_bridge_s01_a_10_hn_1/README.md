@@ -1,6 +1,6 @@
 # Jet bridge OpenFOAM baseline — S01-A-10-HN-1
 
-**Status:** complete OpenFOAM input case and 3-block mesh definition; **not solved or checked with OpenFOAM in this environment** (OpenFOAM executables are unavailable here). Run `blockMesh`, `checkMesh` and `simpleFoam` on your system and inspect logs before treating results as credible.
+**Status:** an isolated copy with the same geometry and physics passed checkMesh and converged at iteration 237 under OpenCFD v2412. The two required writeFields compatibility entries are now included here. Coarse/fine mesh and reduced-flow checks are documented in docs/project_improvements.md in the repository root. Physical validation remains outstanding.
 
 ## Experiment selected
 

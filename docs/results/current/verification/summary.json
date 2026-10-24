@@ -1,0 +1,126 @@
+{
+  "cases": {
+    "baseline": {
+      "cells": 141312,
+      "flow_factor": 1.0,
+      "mesh_counts": [
+        24,
+        32,
+        84,
+        18,
+        82
+      ],
+      "case": "/home/mattb/projects/jetbridge-baseline-20261024",
+      "saved_iteration": "237",
+      "solver_converged": true,
+      "mesh_ok": true,
+      "pressure_drop_kinematic_m2s2": 0.0042844954,
+      "inlet_m3s": -0.53386552,
+      "outlet_m3s": 0.53386552,
+      "relative_flux_imbalance": 0.0,
+      "sample_sha256": "6bb7b34757d76c6cbbe416d90c91cb1ab6c912c4c737ca1109b400fd06bd3403"
+    },
+    "coarse": {
+      "cells": 17664,
+      "flow_factor": 1.0,
+      "mesh_counts": [
+        12,
+        16,
+        42,
+        9,
+        41
+      ],
+      "cold_start": true,
+      "case": "/home/mattb/projects/jetbridge-verification-20261024/coarse",
+      "saved_iteration": "115",
+      "solver_converged": true,
+      "mesh_ok": true,
+      "pressure_drop_kinematic_m2s2": 0.0039596529,
+      "inlet_m3s": -0.53386552,
+      "outlet_m3s": 0.53386552,
+      "relative_flux_imbalance": 0.0,
+      "sample_sha256": "86e1815f9c593a79e32afa861ad8ed7ba8c43eddbb191467beeee7e75f34d768"
+    },
+    "fine": {
+      "cells": 476928,
+      "flow_factor": 1.0,
+      "mesh_counts": [
+        36,
+        48,
+        126,
+        27,
+        123
+      ],
+      "cold_start": true,
+      "case": "/home/mattb/projects/jetbridge-verification-20261024/fine",
+      "saved_iteration": "380",
+      "solver_converged": true,
+      "mesh_ok": true,
+      "pressure_drop_kinematic_m2s2": 0.0044620035,
+      "inlet_m3s": -0.53386551,
+      "outlet_m3s": 0.53386552,
+      "relative_flux_imbalance": 1.8731309200373872e-08,
+      "sample_sha256": "b551f01e8491a28fa123c13953b8dcd04c6535b455826a7275418563e7e37897"
+    },
+    "flow80": {
+      "cells": 141312,
+      "flow_factor": 0.8,
+      "mesh_counts": [
+        24,
+        32,
+        84,
+        18,
+        82
+      ],
+      "cold_start": true,
+      "case": "/home/mattb/projects/jetbridge-verification-20261024/flow80",
+      "saved_iteration": "237",
+      "solver_converged": true,
+      "mesh_ok": true,
+      "pressure_drop_kinematic_m2s2": 0.0029004374,
+      "inlet_m3s": -0.42709241,
+      "outlet_m3s": 0.42709241,
+      "relative_flux_imbalance": 0.0,
+      "sample_sha256": "01099ca180baf7fc2b756590c34b40e526bc4910e194c0477750d8d2e93e2e04"
+    }
+  },
+  "coordinate_sensitivity": [
+    {
+      "case": "baseline",
+      "points": 12,
+      "nominal_minus_published_rmse_mps": 0.00029347487181737757,
+      "maximum_absolute_speed_change_mps": 0.0007685045380430022,
+      "mean_speed_change_mps": -0.00017671763755033412
+    },
+    {
+      "case": "coarse",
+      "points": 12,
+      "nominal_minus_published_rmse_mps": 0.000227255131478147,
+      "maximum_absolute_speed_change_mps": 0.000581874673120264,
+      "mean_speed_change_mps": -0.0001575746158698164
+    },
+    {
+      "case": "fine",
+      "points": 12,
+      "nominal_minus_published_rmse_mps": 0.00022316599274658543,
+      "maximum_absolute_speed_change_mps": 0.00058163522945609,
+      "mean_speed_change_mps": -0.00013582721172215179
+    },
+    {
+      "case": "flow80",
+      "points": 12,
+      "nominal_minus_published_rmse_mps": 0.0002445546595932416,
+      "maximum_absolute_speed_change_mps": 0.0006375674410629972,
+      "mean_speed_change_mps": -0.00014970942979453694
+    }
+  ],
+  "limitations": [
+    "Three meshes and unequal refinement ratios: sensitivity evidence only, no GCI, observed-order or mesh-independence claim",
+    "Fine mesh is a numerical comparison reference, not exact physical truth",
+    "Nominal inches/local-floor mapping is an alternative coordinate interpretation, not a verified correction",
+    "Flow transfer tests fixed layout generalisation with refitted models; it does not test a frozen surrogate across flow rates",
+    "Synthetic 80% flow is not a new matched experimental case; walls/turbulence/diffuser assumptions retained"
+  ],
+  "input_manifest_sha256": "11159c767f6670ba0749e72b373cc85498d0b11567a2c129636f4c6221fa74be",
+  "script_sha256": "c123e321ef11ac0b35a10c42112a46ddca8bdfedf4dc3b347215553d5667999d"
+}
