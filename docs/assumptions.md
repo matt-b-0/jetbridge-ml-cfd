@@ -13,3 +13,6 @@
 
 ## CFD virtual-sensor SVR (2026-10-24)
 The model uses scalar speed from the converged isothermal field only. Training stations and final withheld planes are disjoint; both are sampled with cellPoint. Baselines share training-only standardized 3D coordinates. Full-plane wall extrapolation is reported separately from the common sensor hull. SVR solver-iteration diagnostics are not neural-network epochs or PDE stability evidence. See cfd_svr_benchmark.md.
+
+## Report visualisation (2026-10-24)
+The report collection uses common physical coordinates and cellPoint field sampling; sensor comparison panels retain the earlier cell-sampling convention. Uniform plane-sample statistics do not replace mesh-integrated flux or physical validation. Buoyant iteration 967 remains provisional and is labelled NOT CONVERGED. See report_figures.md for numerical status, rendering details and captions.
