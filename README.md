@@ -83,3 +83,4 @@ The [.github workflow](.github/workflows/numerical-checks.yml) installs the Pyth
 Background and research assumptions: [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), [assumptions](docs/assumptions.md), [four-workstream results](docs/four_workstreams_results.md), [numerical stability](docs/numerical_stability_study.md), and [AI-use record](docs/ai_usage_log.md).
 
 Raw FAA/NRC data, generated meshes, saved fields, full prediction tables and fitted model binaries remain outside Git. The public repository includes source, tests, documentation and selected derived results. Dataset provenance and source details are recorded in PROJECT_CONTEXT.md and the analysis manifests.
+Nine [additional report figures with PNG/PDF downloads and captions](docs/results/additional_figures/README.md) show model skill, station/layout effects, mesh profiles, flow-transfer error maps and unresolved thermal convergence.

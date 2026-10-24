@@ -1,0 +1,19 @@
+{
+  "figures": 9,
+  "input_sha256": {
+    "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/processed/submission_analysis/experimental/metrics.csv": "612e8ad1e2654f863fc4b3001ab0a00c21a0ea0380996d22c731d56eaa79bfa9",
+    "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/processed/submission_analysis/experimental/predictions.csv": "2dfd72664b334e398e9fe4b0a025e75713477fb8cb4275a6be8714e684137049",
+    "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/processed/submission_analysis/paired/paired_runs.csv": "cb634a38673b4e74d9df85cbb125d006e4263ed29a7e00a5019ca60b2df59fda",
+    "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/processed/submission_analysis/matched/matched_sensor_audit.csv": "b6cd04386b40325e5faba20a0f601effdf591b32f28d87288fcb603f185ab8c0",
+    "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/processed/submission_analysis/verification/mesh_metrics.csv": "a3f57e50cac55ccbb5006354d18797018e710a263e15846a4472d477e2a58a21",
+    "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/processed/submission_analysis/verification/coordinate_metrics.csv": "7eaa03264902902c100e32245aefb8cd7d414e0ff154d071aab8d21a1d532c59",
+    "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/processed/submission_analysis/verification/transfer_metrics.csv": "f2093d57c89da42a3410264e130b430bcefd724e1708d4348a0478908784b36e",
+    "/home/mattb/projects/jetbridge-verification-20261024/samples_coarse.csv": "86e1815f9c593a79e32afa861ad8ed7ba8c43eddbb191467beeee7e75f34d768",
+    "/home/mattb/projects/jetbridge-verification-20261024/samples_baseline.csv": "6bb7b34757d76c6cbbe416d90c91cb1ab6c912c4c737ca1109b400fd06bd3403",
+    "/home/mattb/projects/jetbridge-verification-20261024/samples_fine.csv": "b551f01e8491a28fa123c13953b8dcd04c6535b455826a7275418563e7e37897",
+    "/home/mattb/projects/jetbridge-verification-20261024/samples_flow80.csv": "01099ca180baf7fc2b756590c34b40e526bc4910e194c0477750d8d2e93e2e04",
+    "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/processed/submission_analysis/thermal/audit.json": "4a66303016008d3271468b207622aa167d2f5207ce41e515cf99ab306c6ad61a"
+  },
+  "script_sha256": "996635b001d25810f867242d940464ed3895a5cc597dbe45574b4b07da529893",
+  "note": "No CFD solves or experimental model retraining; fixed-layout CFD reconstructions are refitted using training-only selection"
+}

@@ -89,3 +89,6 @@ On the baseline mesh, nominal-inch versus published-metre positions change sampl
 For RBF, full-section mean plane RMSE changes from 0.033883 (interior) to 0.026579 m/s (hybrid) at baseline flow, and 0.027537 to 0.021193 m/s at 80% flow. For SVR, the corresponding pairs are 0.033648/0.028435 and 0.027427/0.023186 m/s. This supports transfer of this fixed layout comparison across this controlled flow perturbation; it is not broad operating-condition validation.
 
 The tracked starter case now includes the two writeFields false compatibility entries. Its controlDict matches the already-solved baseline runtime copy exactly. Geometry and physical boundaries were not changed. Local tests pass; hosted CI remains pending a future push.
+
+## Additional report visuals
+Nine captioned figure pairs are included under docs/results/additional_figures. Regenerate them with python -m jetbridge_ml.report_synthesis --analysis /path/to/completed-analysis --verification-samples /path/to/verification-study --output /path/to/new-figures. The local ZIP is under data/processed/report_synthesis; large original fields remain excluded. These figures add descriptive views of existing results, not new validation.
