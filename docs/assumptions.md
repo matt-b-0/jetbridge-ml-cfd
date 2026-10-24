@@ -16,3 +16,6 @@ The model uses scalar speed from the converged isothermal field only. Training s
 
 ## Report visualisation (2026-10-24)
 The report collection uses common physical coordinates and cellPoint field sampling; sensor comparison panels retain the earlier cell-sampling convention. Uniform plane-sample statistics do not replace mesh-integrated flux or physical validation. Buoyant iteration 967 remains provisional and is labelled NOT CONVERGED. See report_figures.md for numerical status, rendering details and captions.
+
+## Four-workstream evaluation (2026-10-24)
+Experimental SVR tuning is nested inside held-location folds with separate fits per replicate and shared training-only standardized coordinates. CFD density designs are exploratory and non-nested; hybrid designs were added after boundary-heavy results, and evaluation uses disjoint spatial sample grids from one numerical field. The 58 ft A/B HVAC windows remain separate. Raw inch coordinates are nominal local values, not replacements for published absolute metre coordinates. Thermal continuation preserves physics/relaxation and fails residual/probe stationarity checks at 1967; low flux imbalance alone is insufficient. See four_workstreams_results.md.

@@ -91,3 +91,5 @@ The [course-aligned numerical stability study](docs/numerical_stability_study.md
 The trained CFD virtual-sensor SVR, interpolation comparison, and optimization error graphs are documented in [docs/cfd_svr_benchmark.md](docs/cfd_svr_benchmark.md).
 
 A collection of 16 report figures for the isothermal baseline, zero-gravity thermal control and provisional buoyant snapshot is described in [docs/report_figures.md](docs/report_figures.md), including PNG/PDF exports, captions and reproducibility commands.
+
+The [four-workstream results](docs/four_workstreams_results.md) add nested experimental SVR evaluation, CFD sensor-placement sensitivity, matched raw/HVAC audits, and a bounded thermal continuation. These retain separate experimental, numerical-reference and convergence conclusions.

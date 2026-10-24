@@ -51,3 +51,6 @@ Initial buoyant run failed numerically by iteration 3000. Zero-gravity control m
 
 To reproduce the warm start, run scripts/stabilize.py with --thermal, --control, --control-time 733 and a new --output directory. It copies the converged control field, changes numerical relaxation only, and preserves the source thermal boundaries. The retained output time index means the first saved checkpoint may be at iteration 67 rather than 100; the exporter records the actual saved time.
 
+
+## Bounded continuation audit
+The new scripts/continue_saved.py copies a selected saved field into a fresh case, preserves physical and numerical settings, and extends the iteration cap. The recorded continuation from 967 to 1967 still failed residual and probe-stationarity checks; it is not a reference field or a validated thermal result. See docs/four_workstreams_results.md in the repository root for commands and diagnostics. Original case dictionaries and prior result figures are unchanged.
