@@ -1,0 +1,61 @@
+{
+  "repeats": 20,
+  "warmup": "One untimed fit and both query workloads per method/run",
+  "design": "First source location withheld in each of 36 runs; same retained data and query sets across methods; method order shuffled within repetitions",
+  "seed": 20261025,
+  "aggregation": "Median across repetitions within run, then median across runs within layout size",
+  "timing": "perf_counter_ns; file I/O and table parsing excluded; fitting includes each method required preprocessing; prediction includes query transform",
+  "svr_search": "Separate 12-candidate x 3-fold search plus final refit; three repetitions per run; selected parameters checked against saved outer fold",
+  "search_median_ms": {
+    "11": 47.164811,
+    "23": 52.352194499999996
+  },
+  "memory": "Peak tracemalloc allocation during one fit and 2400-query prediction; includes Python-traced arrays but not all native library or process allocations; not total RAM",
+  "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "cpu": "11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz",
+  "packages": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "pandas": "3.1.0",
+    "scikit-learn": "1.9.1",
+    "threadpoolctl": "3.7.0"
+  },
+  "threadpools": [
+    {
+      "user_api": "openmp",
+      "internal_api": "openmp",
+      "num_threads": 1,
+      "prefix": "libgomp",
+      "filepath": "/home/mattb/projects/jetbridge-python-env/lib/python3.12/site-packages/scikit_learn.libs/libgomp-e985bcbb.so.1.0.0",
+      "version": null
+    },
+    {
+      "user_api": "blas",
+      "internal_api": "openblas",
+      "num_threads": 1,
+      "prefix": "libscipy_openblas",
+      "filepath": "/home/mattb/projects/jetbridge-python-env/lib/python3.12/site-packages/scipy.libs/libscipy_openblas-5f890258.so",
+      "version": "0.3.31.dev",
+      "threading_layer": "pthreads",
+      "architecture": "SkylakeX"
+    },
+    {
+      "user_api": "blas",
+      "internal_api": "openblas",
+      "num_threads": 1,
+      "prefix": "libscipy_openblas",
+      "filepath": "/home/mattb/projects/jetbridge-python-env/lib/python3.12/site-packages/numpy.libs/libscipy_openblas64_-f48b354e.so",
+      "version": "0.3.34.106.0",
+      "threading_layer": "pthreads",
+      "architecture": "SkylakeX"
+    }
+  ],
+  "source_sha256": "2dfd72664b334e398e9fe4b0a025e75713477fb8cb4275a6be8714e684137049",
+  "script_sha256": "7de4ed8bfb17b36dd53ed3879171ee2c265492d621bab2bcebcab638c1c2b87e",
+  "limits": [
+    "Illustrative small-array workload, not every outer fold or large-data scaling experiment",
+    "Linear returns NaN outside its training hull; timing does not imply equivalent support",
+    "Process scheduling and hardware affect short timings; no precision beyond the recorded repeats is implied",
+    "No retuning on test values or changes to reported predictive accuracy"
+  ]
+}

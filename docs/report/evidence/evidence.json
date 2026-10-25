@@ -1,0 +1,88 @@
+{
+  "evaluated_speed_quartiles_mps": {
+    "q25": 0.138,
+    "median": 0.1765,
+    "q75": 0.42225
+  },
+  "selection_n_outer_folds": 504,
+  "C_counts": {
+    "0.1": 243,
+    "1.0": 196,
+    "10.0": 65
+  },
+  "gamma_counts": {
+    "0.1": 316,
+    "1.0": 188
+  },
+  "epsilon_counts": {
+    "0.002": 251,
+    "0.01": 253
+  },
+  "median_grid_cv_rmse_spread_mps": 0.01585378745325275,
+  "inner_train_sizes": [
+    7,
+    8,
+    15,
+    16
+  ],
+  "inner_validation_sizes": [
+    3,
+    4,
+    7,
+    8
+  ],
+  "illustrative_refit_parameters": {
+    "C": 1.0,
+    "gamma": 0.1,
+    "epsilon": 0.002
+  },
+  "illustrative_hull_area_fraction": 0.4131567565607553,
+  "experimental_field_range_mps": {
+    "rbf": {
+      "min": 0.082611204097787,
+      "max": 0.15793139348466975,
+      "inside_min": 0.10239164103018211,
+      "inside_max": 0.15781561136807568,
+      "negative": 0
+    },
+    "svr": {
+      "min": 0.07747415832041012,
+      "max": 0.16039398562985002,
+      "inside_min": 0.10454491297645603,
+      "inside_max": 0.16039398562985002,
+      "negative": 0
+    }
+  },
+  "cfd_example": {
+    "rbf": {
+      "rmse": 0.023309725528429866,
+      "max_abs_error": 0.05750468076807911
+    },
+    "svr": {
+      "rmse": 0.025147483231464336,
+      "max_abs_error": 0.059040017023928935
+    }
+  },
+  "variation_n_runs": 6,
+  "variation_sd_range_mps": [
+    0.005761944116355168,
+    0.033462914796333364
+  ],
+  "matched_temporal_sd_range_mps": [
+    0.011925580467015704,
+    0.028684601542972064
+  ],
+  "manifest": {
+    "input_sha256": {
+      "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/processed/submission_analysis/experimental/predictions.csv": "2dfd72664b334e398e9fe4b0a025e75713477fb8cb4275a6be8714e684137049",
+      "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/processed/submission_analysis/experimental/search.csv": "61831d736fe02ac4ba4dc0ab00b3247d1f4ce808393fa01dbd9d88c052dfb924",
+      "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/processed/submission_analysis/sensor_design/predictions.csv.gz": "a68abe221b1204836967067c8077d636451531ab2f4f7e3f8e3f49dcc5a5acd6",
+      "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/processed/report_revision/performance/repeated_timings.csv": "a6796d9768954e8b3962d81a5e3114c69384bc194ead177cdbf8517cab52d8aa",
+      "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/cfd/cases/empty_bridge_s01_a_10_hn_1/system/blockMeshDict": "3206f4c8d7c3410434c792a91a5f80508f5c9f64327691d763f44e28b194f872"
+    },
+    "script_sha256": "ca7a1fdbfa371162b5d8a7fe213a5a305453f462c3114b787b20cb1bca3edc84",
+    "perturbation_seed": 20261025,
+    "draws": 200,
+    "perturbation_assumptions": "Across-replicate SD; independent centred Gaussian scenario; fixed full-data SVR parameters; no measurement-uncertainty or robustness ranking claim"
+  }
+}

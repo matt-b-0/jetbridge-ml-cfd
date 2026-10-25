@@ -84,3 +84,7 @@ Background and research assumptions: [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md), [
 
 Raw FAA/NRC data, generated meshes, saved fields, full prediction tables and fitted model binaries remain outside Git. The public repository includes source, tests, documentation and selected derived results. Dataset provenance and source details are recorded in PROJECT_CONTEXT.md and the analysis manifests.
 Nine [additional report figures with PNG/PDF downloads and captions](docs/results/additional_figures/README.md) show model skill, station/layout effects, mesh profiles, flow-transfer error maps and unresolved thermal convergence.
+
+The [revised report and controlled performance workflow](docs/report/README.md) documents error interpretation, sensor coverage, scaled noise sensitivity and reproducible timing; the thermal fields remain diagnostic and unconverged.
+
+[Second report review evidence and submission audit](docs/report/SECOND_REVIEW_AUDIT.md) includes spatial reconstructions, physical hull coverage, selection/sensitivity diagnostics and the current reproducibility gaps. Generated [HTML API documentation](docs/html/index.html) and the [local test report](docs/report/test-results.xml) are included.

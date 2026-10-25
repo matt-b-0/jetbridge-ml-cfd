@@ -1,0 +1,7 @@
+method,region,finite_points,max_gain
+nearest,inside,1392,1.0
+nearest,outside,2108,1.0
+linear,inside,1392,1.0000000000000002
+linear,outside,0,
+rbf,inside,1392,1.4676780859668939
+rbf,outside,2108,2.829343387454305
