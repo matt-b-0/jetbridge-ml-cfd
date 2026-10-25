@@ -29,3 +29,6 @@ cfd/cases/**/[1-9][0-9]*/
 cfd/cases/**/core
 # Originals inside previously generated OpenFOAM case are not to be committed
 cfd/cases/**/data/source/*
+
+# Regenerated Word authoring output; retain final deliverables separately
+/docs/report/*_output/

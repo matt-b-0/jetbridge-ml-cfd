@@ -117,7 +117,7 @@ p('The cold-supply extension uses an unmeasured wall-temperature surrogate and r
 h('AI use and individual learning',2)
 p('AI assistance supported parsing, workflow and plotting code, numerical checks, documentation and this report scaffold. Verification included unit tests, coordinate/source audits, repeated outputs, mesh checks, solver logs and hosted CI. Errors found during development included a probe-window bug and coordinate-dependent geometric tie selection; these were corrected and recorded in the AI-use log [4].')
 """)
-source=source.replace('Existing code snapshot 3cb9b93 with local report-revision extensions generated 25 October 2026.', 'Implementation and report-evidence revision generated 25 October 2026; the accompanying submission audit records its exact Git state.')
+source=source.replace('Existing code snapshot 3cb9b93 with local report-revision extensions generated 25 October 2026.', 'Implementation and evidence commit 1f293e58f46b93ffc32929764847390a62f29994, generated 25 October 2026. This is a local revision pending publication.')
 source=source.replace('Record the final submitted commit when preparing submission.', 'The final submitted clone must include the recorded implementation revision and its external-data regeneration instructions.')
 # Insert a complete source entry without altering the existing bibliography order.
 source=source.replace("h('Data and code provenance',2)", "p('[8] OpenCFD. nutkWallFunction and yPlus documentation. https://doc.openfoam.com/2312/tools/processing/boundary-conditions/rtm/derived/wall/nutkWallFunction/ and https://doc.openfoam.com/2212/tools/post-processing/function-objects/field/yPlus/. Accessed 25 October 2026. Installed v2412 dictionaries and saved-field output supply the case-specific values.')\nh('Data and code provenance',2)")
@@ -142,5 +142,6 @@ source=source.replace('data/processed/stability_study/diffusion_stability.png','
 source=source.replace('MMA3001_Jet_Bridge_Revised_Report.docx','MMA3001_Jet_Bridge_Evidence_Report.docx')
 source=source.replace('\nms median',r'\nms median')
 exec(compile(source,str(BASE),'exec'))
+
 
 

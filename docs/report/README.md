@@ -1,6 +1,6 @@
-# Report revision and reproduction
+# Report revisions and reproduction
 
-The revised Word report has ten main pages, one reference page and two diagnostic appendices. It preserves the original template separately. The existing AI-use paragraph was left unchanged at the student's request; personal reflection has not been invented.
+The first revised Word report has ten main pages, one reference page and two diagnostic appendices. The subsequent Evidence Report has ten main pages, references and four appendices; see the second-review section below. It preserves the original template separately. The existing AI-use paragraph was left unchanged at the student's request; personal reflection has not been invented.
 
 The revision strengthens engineering interpretation of absolute errors, station/density confounding, CFD bias, spatial coverage and the distinction between scalar speed and signed flux. It explains the SVR choice without claiming superiority over untested GPR, examines unsmoothed RBF sensitivity, and replaces incompatible historical timings with a controlled benchmark. Five larger main-text figures replace the previous dense figure arrangement. Thermal diagnostics and the reduced diffusion study are placed in appendices. Thermal results remain unconverged and excluded from trusted reference data.
 
@@ -29,3 +29,4 @@ No CFD inputs, raw experimental records, predictive scores or published GitHub h
 The evidence report has ten main pages, references and four appendices. See [response and submission audit](SECOND_REVIEW_AUDIT.md) for new spatial plots, real-area coverage, SVR selection frequencies, observed-variation perturbations, y-plus and timing variability. Matthew Brasacchio, 33858659 is filled in. The original AI paragraph is unchanged.
 
 Run python docs/report/build_evidence_report.py to rebuild the evidence report from tracked figure assets; python-docx is required. No ignored figure path is needed by this builder. Original analysis regeneration still requires the external source data and fields. Generated API docs are in docs/html. All 74 tests pass; the retained test report records the run.
+

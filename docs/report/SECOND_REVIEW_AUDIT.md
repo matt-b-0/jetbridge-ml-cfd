@@ -47,6 +47,12 @@ This adds a diagnostic field and postprocessing output to the run copy; original
 | Licence | No LICENSE file found; student choice remains required; no licence invented |
 | Individual AI reflection | Existing statement left unchanged at student's request; fuller personal reflection remains outstanding |
 | Publication | These changes are local until explicitly published; no claim that GitHub contains them |
-| Final clone/archive | Check exact committed revision and included files before submission; a copy with local uncommitted changes is insufficient |
+| Clean implementation clone | Commit 1f293e58f46b93ffc32929764847390a62f29994 rebuilt the report from tracked assets; all 74 tests passed from that clean clone |
 
 The report is an evidence-based draft rather than a claim that all submission conditions are complete. Public accessibility, licensing, personal reflection and numerical/physical validation are separate questions.
+
+The implementation/evidence commit is 1f293e58f46b93ffc32929764847390a62f29994. The final document and packaging may be recorded in a later commit; git rev-parse HEAD on the submitted clone identifies that exact packaging revision. Local commits have not been pushed.
+
+
+Final document verification: Microsoft Word confirms 15 pages, with references starting at page 11. All pages were rendered and reviewed. A final image comparison identified changes only on pages 4 and 11, which were reinspected. All eight tables have numbered captions, all eight figures have captions, the student name/ID are supplied, and the AI paragraph is verbatim. The packaged LibreOffice renderer is unavailable (soffice.exe missing); native Word supplied the successful layout check.
+
