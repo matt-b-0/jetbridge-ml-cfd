@@ -40,3 +40,18 @@ The builder needs python-docx. It uses tracked figure assets. Set `JETBRIDGE_REP
 - Original scores and exploratory lower-C results remain explicitly separate.
 - A personal AI reflection and licence choice remain outstanding by the student's instructions.
 - Publication, exact implementation commit, hosted checks and clone verification are recorded below only after checking them. Document packaging may be a subsequent commit because a report cannot contain its own content-addressed Git hash.
+
+## Verified implementation publication
+
+Implementation/evidence commit: 6c6cf81103f9644dcc6b3adebfcd3ff01775537e. Pushed to the public repository on 26 October 2026 and independently read through the GitHub connector. A fresh clone directly from GitHub rebuilt the Word draft and passed all 75 tests. Its complete 504-fold expanded-C experiment and both station diagnostics reproduced the saved numerical summary exactly in the documented WSL Python environment. No raw FAA archive or large CFD fields were needed for this representative check.
+
+The report identifies this immutable implementation commit. The document-packaging commit is separate; use git rev-parse HEAD in the submitted clone or the archive manifest for the exact packaging revision. The licence is still intentionally undecided, and the AI reflection is intentionally unchanged.
+
+
+Hosted workflow for implementation 6c6cf81 completed successfully: https://github.com/matt-b-0/jetbridge-ml-cfd/actions/runs/40262525830 (queried from GitHub Actions on 26 October 2026). Local and hosted checks verify software behaviour, not physical validation.
+
+
+## Final document layout
+
+Microsoft Word confirms 17 pages: main report 1–10, references 11, Appendix A 12, Appendix B 13, Appendix C 14–15 and Appendix D 16–17. All pages were rendered and visually reviewed. The final change affected only pages 5 and 11; both were reinspected. The document has nine captioned figures and nine numbered tables, 11-point body text and 10-point captions. The AI paragraph is verbatim. The packaged LibreOffice renderer is unavailable because soffice.exe is missing; native Word supplied the successful render.
+

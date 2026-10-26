@@ -34,3 +34,5 @@ Run python docs/report/build_evidence_report.py to rebuild the evidence report f
 ## Final review revision on 26 October
 
 See [final-review audit](FINAL_REVIEW_AUDIT.md) for the 58 ft reconstruction, hatched extrapolation, expanded-C sensitivity, larger typography and included representative inputs. Run python docs/report/build_submission_report.py for the current draft. The AI paragraph and undecided licence are retained under direct student instruction.
+
+The current draft is MMA3001_Jet_Bridge_Submission_Draft.docx. Its published implementation is 6c6cf81103f9644dcc6b3adebfcd3ff01775537e; a fresh public clone rebuilt it, passed 75 tests and reproduced the full final diagnostic summary. Hosted checks passed in run 40262525830. The licence and personal AI reflection remain intentionally incomplete under student instruction.
