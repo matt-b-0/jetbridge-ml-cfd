@@ -30,3 +30,7 @@ The evidence report has ten main pages, references and four appendices. See [res
 
 Run python docs/report/build_evidence_report.py to rebuild the evidence report from tracked figure assets; python-docx is required. No ignored figure path is needed by this builder. Original analysis regeneration still requires the external source data and fields. Generated API docs are in docs/html. All 74 tests pass; the retained test report records the run.
 
+
+## Final review revision on 26 October
+
+See [final-review audit](FINAL_REVIEW_AUDIT.md) for the 58 ft reconstruction, hatched extrapolation, expanded-C sensitivity, larger typography and included representative inputs. Run python docs/report/build_submission_report.py for the current draft. The AI paragraph and undecided licence are retained under direct student instruction.

@@ -1,0 +1,117 @@
+{
+  "10": {
+    "run": "S01-A-10-HN-1",
+    "full_refit_params": {
+      "C": 1.0,
+      "gamma": 0.1,
+      "epsilon": 0.002
+    },
+    "hull_area_fraction": 0.4131567565607553,
+    "diagnostics": [
+      {
+        "method": "rbf",
+        "supported_rmse_mps": 0.015040714620900338,
+        "max_supported_abs_error_mps": 0.025360151494441,
+        "worst_x_m": 0.35,
+        "worst_local_height_m": 0.6124502297090353,
+        "worst_observed_speed_mps": 0.158,
+        "worst_prediction_mps": 0.1326398485055589,
+        "full_field_min": 0.082611204097787,
+        "full_field_max": 0.1581248609894926
+      },
+      {
+        "method": "svr",
+        "supported_rmse_mps": 0.015502615584315399,
+        "max_supported_abs_error_mps": 0.0276655337108277,
+        "worst_x_m": 0.35,
+        "worst_local_height_m": 0.6124502297090353,
+        "worst_observed_speed_mps": 0.158,
+        "worst_prediction_mps": 0.1303344662891722,
+        "full_field_min": 0.07747415832041012,
+        "full_field_max": 0.16038166119143837
+      }
+    ]
+  },
+  "58": {
+    "run": "S01-A-58-HN-1",
+    "full_refit_params": {
+      "C": 0.1,
+      "gamma": 1.0,
+      "epsilon": 0.01
+    },
+    "hull_area_fraction": 0.4969856636890246,
+    "diagnostics": [
+      {
+        "method": "rbf",
+        "supported_rmse_mps": 0.18892624253110887,
+        "max_supported_abs_error_mps": 0.3562123053756231,
+        "worst_x_m": 0.83,
+        "worst_local_height_m": 1.0125364969869963,
+        "worst_observed_speed_mps": 0.397,
+        "worst_prediction_mps": 0.7532123053756231,
+        "full_field_min": -0.152185423286052,
+        "full_field_max": 1.2338734522884178
+      },
+      {
+        "method": "svr",
+        "supported_rmse_mps": 0.2334202871638804,
+        "max_supported_abs_error_mps": 0.4009875379214057,
+        "worst_x_m": 0.83,
+        "worst_local_height_m": 0.6125364969869964,
+        "worst_observed_speed_mps": 0.747,
+        "worst_prediction_mps": 0.3460124620785942,
+        "full_field_min": 0.3069479612585577,
+        "full_field_max": 0.5988307886496769
+      }
+    ]
+  },
+  "expanded_grid": {
+    "C": [
+      0.01,
+      0.1,
+      1.0,
+      10.0
+    ],
+    "gamma": [
+      0.1,
+      1.0
+    ],
+    "epsilon": [
+      0.002,
+      0.01
+    ]
+  },
+  "expanded_C_counts": {
+    "0.01": 143,
+    "0.1": 111,
+    "1.0": 187,
+    "10.0": 63
+  },
+  "expanded_summary": {
+    "common_hull": {
+      "original_rmse": 0.05774065135176735,
+      "expanded_rmse": 0.05883772839595496
+    },
+    "outside_hull": {
+      "original_rmse": 0.07998762642994434,
+      "expanded_rmse": 0.0792902389853062
+    }
+  },
+  "expanded_by_layout": {
+    "12": {
+      "original_rmse": 0.01955139045553974,
+      "expanded_rmse": 0.0194333193045085
+    },
+    "24": {
+      "original_rmse": 0.24868695583290543,
+      "expanded_rmse": 0.2558597738531873
+    }
+  },
+  "classification": "Post-hoc exploratory grid sensitivity requested after inspecting primary results; primary scores and conclusions retained; outer held-out target excluded from every inner selection.",
+  "sha256": {
+    "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/docs/report/inputs/primary_prediction_evidence.csv": "5244d1456c61a3c61cf8a2290e721120c420e1ee2ffa08718714c83ccbe87c5d",
+    "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/docs/report/evidence/cfd_example_predictions.csv": "35cfb681a546bbb2e0180b16bec3dfe762fd549a40a4e22d6233fa4113321ce5",
+    "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/cfd/cases/empty_bridge_s01_a_10_hn_1/system/blockMeshDict": "3206f4c8d7c3410434c792a91a5f80508f5c9f64327691d763f44e28b194f872"
+  },
+  "script_sha256": "5ed7fb050042181a3622f738ae271de65c0cf58ff2b9997b6e8ff9d72a7fae89"
+}

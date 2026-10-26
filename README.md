@@ -88,3 +88,5 @@ Nine [additional report figures with PNG/PDF downloads and captions](docs/result
 The [revised report and controlled performance workflow](docs/report/README.md) documents error interpretation, sensor coverage, scaled noise sensitivity and reproducible timing; the thermal fields remain diagnostic and unconverged.
 
 [Second report review evidence and submission audit](docs/report/SECOND_REVIEW_AUDIT.md) includes spatial reconstructions, physical hull coverage, selection/sensitivity diagnostics and the current reproducibility gaps. Generated [HTML API documentation](docs/html/index.html) and the [local test report](docs/report/test-results.xml) are included.
+
+The [final report review and representative reproduction commands](docs/report/FINAL_REVIEW_AUDIT.md) add explicit physical coverage, the decisive 58 ft example and an exploratory lower-C check. The licence remains undecided; the final-review audit separates implementation, document packaging and publication revisions.

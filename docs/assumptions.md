@@ -22,3 +22,6 @@ Experimental SVR tuning is nested inside held-location folds with separate fits 
 
 ## Submission workflow and extra checks (2026-10-24)
 The arithmetic-mean baseline uses only retained sensors. Paired results remain descriptive at run/station/layout level; station and density are confounded at 58 ft. Three isothermal meshes and an 80%-flow synthetic case quantify sensitivity/transfer without a mesh-independence or physical-validation claim. Nominal-inch positions are an alternative mapping only. Flow transfer refits models on retained values while keeping layouts fixed. The curated gallery contains derived summaries, not raw data or dense predictions. See project_improvements.md.
+
+## Final report review on 26 October 2026
+The expanded C = 0.01 nested search is a post-hoc exploratory sensitivity, not a replacement for the primary predeclared comparison or an untouched test. No outer sensor target enters its own tuning. The first 58 ft replicate shows unphysical negative RBF extrapolation; maps show it without clipping. Full-array fields are illustrative fits and held-location errors are separate. Independent Gaussian perturbations are a scenario; correlated physical variations could change the comparison. The student explicitly left the licence undecided and the AI statement unchanged.
