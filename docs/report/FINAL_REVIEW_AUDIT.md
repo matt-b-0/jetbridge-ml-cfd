@@ -55,3 +55,11 @@ Hosted workflow for implementation 6c6cf81 completed successfully: https://githu
 
 Microsoft Word confirms 17 pages: main report 1–10, references 11, Appendix A 12, Appendix B 13, Appendix C 14–15 and Appendix D 16–17. All pages were rendered and visually reviewed. The final change affected only pages 5 and 11; both were reinspected. The document has nine captioned figures and nine numbered tables, 11-point body text and 10-point captions. The AI paragraph is verbatim. The packaged LibreOffice renderer is unavailable because soffice.exe is missing; native Word supplied the successful render.
 
+
+## 27 October 2026 — Author statement and MIT publication
+
+The current report supersedes the earlier licence/AI status recorded above. The author supplied the four-paragraph personal statement verbatim and explicitly authorised MIT publication. LICENSE covers project code and original documentation; FAA/NRC data retain CC BY 4.0. Report source and licence revision: 513e94da8281fd98604d0e702ff7493127115e2a. The regenerated report cites this immutable revision. No scientific results or physical validation claims were changed.
+
+
+Final checks: all 82 pytest tests passed and the Ruff correctness gate passed on 27 October 2026. Native Microsoft Word rendered 17 pages, with the main report ending on page 10. All pages were visually checked; the four supplied AI paragraphs were also checked for exact, single occurrence. A final provenance sentence clarifies that selected raw records are bundled while full OpenFOAM fields are regenerated. Scientific results were unchanged.
+

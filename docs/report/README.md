@@ -39,3 +39,5 @@ The current draft is MMA3001_Jet_Bridge_Submission_Draft.docx. Its published imp
 
 ## Current demo and quality workflow on 27 October 2026
 The repository now includes the attributed study input subset and compact archived numerical evidence. Use the root run_all.py driver and docs/LIVE_DEMO.md for one-clone execution; older commands above describe the original research runs. Static checking uses python -m ruff check src tests run_all.py; numerical tests use python -m pytest -q; API documentation uses python -m pdoc jetbridge_ml -o docs/html. See docs/DEVELOPMENT.md for scope and limitations. Live/full execute fresh isothermal CFD in new output folders; archived unconverged thermal evidence remains explicitly separate.
+
+Current author-statement/licence source revision: 513e94da8281fd98604d0e702ff7493127115e2a (27 October 2026). The report includes the exact supplied reflection, MIT code licence and current 82-test/bundled-data reproducibility description. Historical revisions above remain for provenance.
