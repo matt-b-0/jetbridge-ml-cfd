@@ -3,3 +3,6 @@
 Allrun text eol=lf
 Allclean text eol=lf
 *.py text eol=lf
+
+# Preserve demo input hashes across Windows/Linux clones
+/data/demo/** -text

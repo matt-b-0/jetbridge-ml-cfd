@@ -85,3 +85,5 @@ python -m jetbridge_ml.report_synthesis \
 ```
 
 The analysis tables come from run_analysis; verification samples come from verification_study. This command does not run CFD. Figure 07 refits the same predefined CFD reconstruction methods with training-only selection. For figure 01, boxes show the interquartile range, the horizontal line is the median, the triangle is the mean, and whiskers use the standard 1.5-IQR rule. These are descriptive run distributions, not confidence intervals.
+
+Current execution entry point: run_all.py at the repository root. The guide docs/LIVE_DEMO.md covers included data and fresh versus archived results; docs/DEVELOPMENT.md documents Ruff linting, pytest and pdoc. These current instructions supplement the dated research results above.

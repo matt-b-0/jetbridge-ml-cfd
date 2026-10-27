@@ -25,3 +25,6 @@ The arithmetic-mean baseline uses only retained sensors. Paired results remain d
 
 ## Final report review on 26 October 2026
 The expanded C = 0.01 nested search is a post-hoc exploratory sensitivity, not a replacement for the primary predeclared comparison or an untouched test. No outer sensor target enters its own tuning. The first 58 ft replicate shows unphysical negative RBF extrapolation; maps show it without clipping. Full-array fields are illustrative fits and held-location errors are separate. Independent Gaussian perturbations are a scenario; correlated physical variations could change the comparison. The student explicitly left the licence undecided and the AI statement unchanged.
+
+## Portable demo inputs on 27 October 2026
+The FAA/NRC official release record identifies CC BY 4.0. Selected original inputs are bundled unchanged with attribution and hashes; this does not select a project-code licence. Demo replay and archived thermal diagnostics are not new CFD simulations. Live solves the baseline; full also solves mesh/flow cases. Both retain the original physical assumptions and reject failed new CFD before reference fitting. No historical comparison is relabelled as a newly validated experiment.

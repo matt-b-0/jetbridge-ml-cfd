@@ -95,11 +95,16 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     for name in ('restart-source','continuation','output'):
         p.add_argument('--'+name,type=Path,required=True)
+    p.add_argument('--archived-inputs',type=Path,help='Explicit replay of saved audits and residual tables')
     a=p.parse_args()
     if a.output.exists(): p.error('Choose a fresh output directory')
     a.output.mkdir(parents=True)
-    audits={name:audit_thermal(case) for name,case in [('original_restart',a.restart_source),('continuation',a.continuation)]}
-    histories={key:residual_history(case/'log.solver') for key,case in [('original_restart',a.restart_source),('continuation',a.continuation)]}
+    if a.archived_inputs:
+        audits=json.loads((a.archived_inputs/'audit.json').read_text())
+        histories={key:pd.read_csv(a.archived_inputs/f'{key}_residuals.csv') for key in ('original_restart','continuation')}
+    else:
+        audits={name:audit_thermal(case) for name,case in [('original_restart',a.restart_source),('continuation',a.continuation)]}
+        histories={key:residual_history(case/'log.solver') for key,case in [('original_restart',a.restart_source),('continuation',a.continuation)]}
     # Previous log has no speed fieldMinMax: extract saved-field bound from its exporter record.
     fig,axes=plt.subplots(1,2,figsize=(12,4.5),layout='constrained')
     for key,history in histories.items():
@@ -123,6 +128,11 @@ def main():
                            'Restart at 967 overlaps old log iterations 967–1000; histories are shown separately, not concatenated as one exact trajectory',
                            'A 0.01 K range over 100 iterations is a declared screening criterion, not a physical validation tolerance',
                            'Flux balance alone does not establish convergence; steady SIMPLE iteration is not physical time']
+    if a.archived_inputs:
+        audits['replayed_archived_diagnostics']=True
+        audits['archived_input_sha256']={str(p):sha256(p.read_bytes()).hexdigest() for p in a.archived_inputs.iterdir() if p.suffix in ('.csv','.json')}
+        (a.output/'audit.json').write_text(json.dumps(audits,indent=2)+'\n')
+        return
     paths=[a.restart_source/'log.solver',a.continuation/'log.solver',a.continuation/'log.checkMesh',a.continuation/'continuation.json',a.continuation/'system/fvSolution',Path(__file__)]
     continuation=json.loads((a.continuation/'continuation.json').read_text())
     for relative in ('system/fvSolution','system/fvSchemes','system/blockMeshDict','constant/g','constant/transportProperties'):

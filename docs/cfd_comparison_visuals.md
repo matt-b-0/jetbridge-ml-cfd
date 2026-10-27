@@ -44,3 +44,6 @@ The source dataset and generated outputs remain excluded from Git. The plotting 
 
 Verification: all 16 Python tests passed. All four PNG figures were visually inspected for labels, axes, colour scales and layout. PDF versions were generated from the same Matplotlib figures.
 
+
+## Current demo and quality workflow on 27 October 2026
+The repository now includes the attributed study input subset and compact archived numerical evidence. Use the root run_all.py driver and docs/LIVE_DEMO.md for one-clone execution; older commands above describe the original research runs. Static checking uses python -m ruff check src tests run_all.py; numerical tests use python -m pytest -q; API documentation uses python -m pdoc jetbridge_ml -o docs/html. See docs/DEVELOPMENT.md for scope and limitations. Live/full execute fresh isothermal CFD in new output folders; archived unconverged thermal evidence remains explicitly separate.

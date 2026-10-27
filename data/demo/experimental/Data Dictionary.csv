@@ -1,0 +1,157 @@
+ID,Folder,File(s),Parameter(s),Unit,Description
+0,<root>,Data Dictionary.csv,All,Varies,This file
+1,All,All,Any,Varies,Any reading of -9999 is considered to be a null value.  The null value means no measurement was taken.
+2,00-Templates,All,All,Varies,Location of the coordinates for the bridge physical boundary.
+3,01-CSV,All,All,Varies,"Location of data for air speed (S), aerosol (P), and tracer gas (G) measurements."
+4,02-TXT,All,All,Varies,Files have the same data as found in the Processed folder but in a format to allow creation of video files.
+5,03-Averages,All,All,Varies,Averaged replications of the files in the Processed folder.  Entire air speed (S) files are averaged.  The aerosol (P) and tracer gas (G) measurements use the Series-Aerosols.txt and Sets-Aerosols.txt files
+6,04-Summary,All,All,Varies,Average of averaged replication files in the Averages folder.
+7,05-HVAC,All,All,Varies,Environmental data of the air inside and around the jet bridge lab.
+8,06-Periods,All,All,Varies,Averaged environmental data and time periods when the measurements were determined to be in quasi-steady state conditions.
+9,00-Templates,*,All,Varies,"The files in this folder can be applied to data found in the 02-TXT, 03-Averages, and 04-Summary folders.  This enables the user to include the physical boundary conditions when plotting the data."
+10,00-Templates,Boundary - Temporal - Airport.txt,"X, Y, and Z",m,Physical coordinates of the corner points of the airport bridge.
+11,00-Templates,Boundary - Temporal - Airport.txt,V and T,N/A,Not used but included to match the data structure in the 02-TXT folders 
+12,00-Templates,Boundary - Temporal - SWEMA.txt,"X, Y, and Z",m,Physical coordinates of the corner points of the airport bridge.
+13,00-Templates,Boundary - Temporal - SWEMA.txt,V and T,N/A,Not used but included to match the data structure in the 02-TXT folders 
+14,00-Templates,Boundary - Temporal - UPAS.txt,"X, Y, and Z",m,Physical coordinates of the corner points of the airport bridge.
+15,00-Templates,Boundary - Temporal - UPAS.txt,"Light, Tdb, Tdp, P, PM0.5, PM1.0, PM2.5, PM4.0, PM10, CO2",N/A,Not used but included to match the data structure in the 02-TXT folders 
+16,00-Templates,Boundary - Averages - Airport.txt,"X, Y, and Z",m,Physical coordinates of the corner points of the airport bridge.
+17,00-Templates,Boundary - Averages - SWEMA.txt,"X, Y, and Z",m,Physical coordinates of the corner points of the jetbridge for the averaged air velocity data.
+18,00-Templates,Boundary - Averages - UPAS.txt,"X, Y, and Z",m,Physical coordinates of the corner points of the jetbridge for the averaged particule data.
+19,00-Templates,Boundary - Averages*,"Mean, dMean, Median, dMedian, StdDev",N/A,Not used but included to match the data structure in the 03-Averages folders 
+20,00-Templates,Boundary - Summary - SWEMA.txt,"X, Y, and Z",m,Physical coordinates of the corner points of the jetbridge for the averaged sets of air velocity data.
+21,00-Templates,Boundary - Summary - UPAS.txt,,m,Physical coordinates of the corner points of the jetbridge for the averaged sets of particule data.
+22,00-Templates,Boundary - Summary*,"Mean, dMean, Median, dMedian, StdDev",N/A,Not used but included to match the data structure in the 03-Averages folders 
+23,01-CSV,G*,"X, Y, Z, UPAS, Time, Light, Tdb, P, PM0.5, PM1.0, PM2.5, PM4.0, PM10, CO2",Varies,Each file contains a set of measurements taken at the same time when carbon dioxide was used as a tracer gas.
+24,01-CSV,P*,"X, Y, Z, UPAS, Time, Light, Tdb, P, PM0.5, PM1.0, PM2.5, PM4.0, PM10, CO2",Varies,Each file contains a set of measurements taken at the same time when salt-water aerosols were used.
+25,01-CSV,S*,"X, Y, Z, Probe, Time, T, V",Varies,Each file contains a set of measurements taken at the same time with SWEMA air speed probes.
+26,01-CSV,"G01*, P01*, S01*",All,Varies,"Empty, downstream dose outlet placed at 40 ft"
+27,01-CSV,"G02*, P02*",All,Varies,Same as 01 with manikin placed at 42 ft facing downstream
+28,01-CSV,P03*,All,Varies,Same as 01 with manikin placed at 37 ft facing downstream
+29,01-CSV,"G04*, P04*, S04*",All,Varies,Same as 01 with manikin placed at 34 ft facing downstream
+30,01-CSV,"G05*, P05*, S05*",All,Varies,Same as 04 with three additional manikins placed 6 ft apart downstream
+31,01-CSV,"P06*, S06*",All,Varies,Same as 04 with six additional manikins placed 3 ft apart downstream
+32,01-CSV,"G07*, P07*",All,Varies,"Empty, upstream dose outlet placed at 42 ft"
+33,01-CSV,"G08*, P08*",All,Varies,Same as 07 with manikin placed at 40 ft facing upstream
+34,01-CSV,P09*,All,Varies,Same as 01 with manikin placed at 31 ft facing downstream
+35,01-CSV,P10*,All,Varies,Same as 01 with box placed at 31 ft
+36,01-CSV,S11*,All,Varies,Airport bridge
+37,01-CSV,xyy-A-*,All,Varies,Adiabatic conditions for test type x and jet bridge configuration yy.
+38,01-CSV,xyy-B-*,All,Varies,"Heat added or removed through walls, manikin, box, or heater for test type x and jet bridge configuration yy."
+39,01-CSV,xyy-zC-*,All,Varies,Same as xyy-A-* and xyy-B-* except supply air temperature is colder.  Variable z is A or B.
+40,01-CSV,xyy-zH-*,All,Varies,Same as xyy-A-* and xyy-B-* except supply air temperature is warmer.  Variable z is A or B.
+41,01-CSV,xyy-AEzz-*,All,Varies,Sensor sensitivity test with sensors at station zz and lower for test type x and jet bridge configuration yy.
+42,01-CSV,xyy-AX-*,All,Varies,Special case with different supply air temperature with each rep for test type x and jet bridge configuration yy. 
+43,01-CSV,xyy-C-*,All,Varies,Same as A but with nozzle reduced from 0.43” to 0.25” inner diameter for test type x and jet bridge configuration yy.
+44,01-CSV,xyy-D-*,All,Varies,Same as A except with sub-µm atomizer only (Topas ATM-222L) for test type x and jet bridge configuration yy.
+45,01-CSV,xyy-E-*,All,Varies,Same as A except with super-µm atomizer only (Tekceleo P&S360) for test type x and jet bridge configuration yy.
+46,01-CSV,*-*-nn-*,All,Varies,"Cross-section at Z-axis of nn feet for a specified test type, jet bridge configuration, and test setup."
+47,01-CSV,*-*-CL-*,All,Varies,"Center-plane section through the length of the bridge for a specified test type, jet bridge configuration, and test setup. "
+48,01-CSV,*-*-*-HN-*,All,Varies,"High exhaust fan speed with a neutral bridge air pressure for a specified test type, jet bridge configuration, test setup, and measurement station."
+49,01-CSV,*-*-*-HP-*,All,Varies,"High exhaust fan speed with a positive bridge air pressure for a specified test type, jet bridge configuration, test setup, and measurement station."
+50,01-CSV,*-*-*-LN-*,All,Varies,"Low exhaust fan speed with a netural bridge air pressure for a specified test type, jet bridge configuration, test setup, and measurement station."
+51,01-CSV,*-*-*-LP-*,All,Varies,"Low exhaust fan speed for a positive bridge air pressure for a specified test type, jet bridge configuration, test setup, and measurement station."
+52,01-CSV,*-*-*-*-x,All,Varies,"Replicate number for a specified test type, jet bridge configuration, test setup, measurement station, and flow condition."
+53,02-TXT,*,All,Varies,Same file names and data as the 01-CSV directory but with a different data structure.
+54,03-Averages,*,All,Varies,"Each file contains TITLE, VARIABLES, and ZONE sections.  TITLE identifies the file, which is used in the plots.  VARIABLES list all variables used to produce each ZONE section.  Each ZONE section structures the variables in block format to facilitate plotting.  Each line after the ZONE header represents each of the variables listed on the same line as VARIABLES."
+55,03-Averages,*,"X, Y, Z",m,Absolute coordinates of the sensor or walls
+56,03-Averages,CO2*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the CARBON DIOXIDE measurements in the named data set located in the Processed folder.
+57,03-Averages,Light*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the LIGHT LEVEL in the named data set located in the Processed folder.
+58,03-Averages,P*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the AIR PRESSURE in the named data set located in the Processed folder.
+59,03-Averages,PM0.5*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the PM0.5 CONCENTRATION in the named data set located in the Processed folder.
+60,03-Averages,PM1.0*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the PM1.0 CONCENTRATION in the named data set located in the Processed folder.
+61,03-Averages,PM2.5*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the PM2.5 CONCENTRATION in the named data set located in the Processed folder.
+62,03-Averages,"Tdb-G*, Tdb-P*","X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the DRY BULB AIR TEMPERATURE in the named data set located in the Processed folder.
+63,03-Averages,T-S*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the DRY BULB AIR TEMPERATURE in the named data set located in the Processed folder.
+64,03-Averages,Tdp*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the DEW POINT AIR TEMPERATURE in the named data set located in the Processed folder.
+65,03-Averages,V*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the AIR SPEED in the named data set located in the Processed folder.
+66,03-Averages,"CO*, Light*, P*, PM0.5*, PM1.0*, PM2.5*, Tdb-G*, Tdb-P*, T-S*, Tdp*, V*",Mean,Varies,Average values of data taken from the named file located in the Processed folder.
+67,03-Averages,"CO*, Light*, P*, PM0.5*, PM1.0*, PM2.5*, Tdb-G*, Tdb-P*, T-S*, Tdp*, V*",dMean,Varies,Deviation of the single average to the set average
+68,03-Averages,"CO*, Light*, P*, PM0.5*, PM1.0*, PM2.5*, Tdb-G*, Tdb-P*, T-S*, Tdp*, V*",Median,Varies,Median values of data taken from the named file located in the Processed folder.
+69,03-Averages,"CO*, Light*, P*, PM0.5*, PM1.0*, PM2.5*, Tdb-G*, Tdb-P*, T-S*, Tdp*, V*",dMedian,Varies,Deviation of the single median to the set median
+70,03-Averages,"CO*, Light*, P*, PM0.5*, PM1.0*, PM2.5*, Tdb-G*, Tdb-P*, T-S*, Tdp*, V*",StdDev,Varies,Sample standard deviation of data taken from the named file located in the Processed folder.
+71,03-Averages,CO2*,"Mean, dMean, Median, dMedian, StdDev",ppm,Carbon dioxide gas concentration
+72,03-Averages,Light*,"Mean, dMean, Median, dMedian, StdDev",lux,Light level
+73,03-Averages,P*,"Mean, dMean, Median, dMedian, StdDev",hPa,Air pressure
+74,03-Averages,PM0.5*,"Mean, dMean, Median, dMedian, StdDev",#/cm3,Particles ranging in size from 0.3 microns to 0.5 microns
+75,03-Averages,PM1.0*,"Mean, dMean, Median, dMedian, StdDev",#/cm3,Particles ranging in size from 0.5 microns to 1.0 microns
+76,03-Averages,PM2.5*,"Mean, dMean, Median, dMedian, StdDev",#/cm3,Particles ranging in size from 1.0 microns to 2.5 microns
+77,03-Averages,"Tdb-G*, Tdb-P*, T-S*","Mean, dMean, Median, dMedian, StdDev",°C,Dry-bulb temperature
+78,03-Averages,Tdp*,"Mean, dMean, Median, dMedian, StdDev",°C,Dew-point temperature
+79,03-Averages,V*,"Mean, dMean, Median, dMedian, StdDev",m/s,Air speed
+80,04-Summary,*,All,Varies,"Each file contains TITLE, VARIABLES, and ZONE sections.  TITLE identifies the file, which is used in the plots.  VARIABLES list all variables used to produce each ZONE section.  Each ZONE section structures the variables in block format to facilitate plotting.  Each line after the ZONE header represents each of the variables listed on the same line as VARIABLES."
+81,04-Summary,CO2*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the CARBON DIOXIDE measurements in the named data set located in the Averages folder.
+82,04-Summary,Light*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the LIGHT LEVEL in the named data set located in the Averages folder.
+83,04-Summary,P*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the AIR PRESSURE in the named data set located in the Averages folder.
+84,04-Summary,PM0.5*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the PM0.5 CONCENTRATION in the named data set located in the Averages folder.
+85,04-Summary,PM1.0*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the PM1.0 CONCENTRATION in the named data set located in the Averages folder.
+86,04-Summary,PM2.5*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the PM2.5 CONCENTRATION in the named data set located in the Averages folder.
+87,04-Summary,"Tdb-G*, Tdb-P*","X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the DRY BULB AIR TEMPERATURE in the named data set located in the Averages folder.
+88,04-Summary,T-S*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the DRY BULB AIR TEMPERATURE in the named data set located in the Averages folder.
+89,04-Summary,Tdp*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the DEW POINT AIR TEMPERATURE in the named data set located in the Averages folder.
+90,04-Summary,V*,"X, Y, Z, Mean, dMean, Median, dMedian, StdDev",Varies,Statistical results of the AIR SPEED in the named data set located in the Averages folder.
+91,04-Summary,All,"X, Y, Z",m,Absolute coordinates of the sensor or walls
+92,04-Summary,"CO*, Light*, P*, PM0.5*, PM1.0*, PM2.5*, Tdb-G*, Tdb-P*, T-S*, Tdp*, V*",Mean,Varies,Weighted average of the data taken from the named file located in the Averages folder.
+93,04-Summary,"CO*, Light*, P*, PM0.5*, PM1.0*, PM2.5*, Tdb-G*, Tdb-P*, T-S*, Tdp*, V*",Std Dev (Mean),Varies,Sample standard deviation of the averages taken from the name file located in the Averages folder.
+94,04-Summary,"CO*, Light*, P*, PM0.5*, PM1.0*, PM2.5*, Tdb-G*, Tdb-P*, T-S*, Tdp*, V*",Median,Varies,Weighted median of the data taken from the named file located in the Averages folder.
+95,04-Summary,"CO*, Light*, P*, PM0.5*, PM1.0*, PM2.5*, Tdb-G*, Tdb-P*, T-S*, Tdp*, V*",Std Dev (Median),Varies,Sample standard deviation of the medians taken from the name file located in the Averages folder.
+96,04-Summary,CO2*,"Mean, Std Dev (Mean), Median, Std Dev (Median)",ppm,Carbon dioxide gas concentration
+97,04-Summary,Light*,"Mean, Std Dev (Mean), Median, Std Dev (Median)",lux,Light level
+98,04-Summary,P*,"Mean, Std Dev (Mean), Median, Std Dev (Median)",hPa,Air pressure
+99,04-Summary,PM0.5*,"Mean, Std Dev (Mean), Median, Std Dev (Median)",#/cm3,Particles ranging in size from 0.3 microns to 0.5 microns
+100,04-Summary,PM1.0*,"Mean, Std Dev (Mean), Median, Std Dev (Median)",#/cm3,Particles ranging in size from 0.5 microns to 1.0 microns
+101,04-Summary,PM2.5*,"Mean, Std Dev (Mean), Median, Std Dev (Median)",#/cm3,Particles ranging in size from 1.0 microns to 2.5 microns
+102,04-Summary,"Tdb-G*, Tdb-P*, T-S*","Mean, Std Dev (Mean), Median, Std Dev (Median)",°C,Dry-bulb temperature
+103,04-Summary,Tdp*,"Mean, Std Dev (Mean), Median, Std Dev (Median)",°C,Dew-point temperature
+104,04-Summary,V*,"Mean, Std Dev (Mean), Median, Std Dev (Median)",m/s,Air speed
+105,05-HVAC,S*,All,Varies,Jet bridge ventilation measurements for the air speed data stored under the same file name in the 01-CSV and 02-TXT directories.
+106,05-HVAC,S*,Epoch Time,sec,"Time count of seconds that have elapsed since 00:00:00 UTC on January 1, 1970"
+107,05-HVAC,S*,P,hPa,Atmospheric station pressure.
+108,05-HVAC,S*,T.db.SA,°C,Dry-bulb temperature of the supply air.
+109,05-HVAC,S*,T.dp.SA,°C,Dew-point temperature of the supply air.
+110,05-HVAC,S*,Tdb.Lab,°C,Dry-bulb temperature of the lab air.
+111,05-HVAC,S*,Tdp.Lab,°C,Dew-point temperature of the lab air.
+112,05-HVAC,S*,dP,Pa,Bridge pressure relative to the outside
+113,05-HVAC,S*,Q.FS1,lps,Air flow rate through air flow station 1.
+114,05-HVAC,S*,Q.FS2,lps,Air flow rate through air flow station 2.
+115,05-HVAC,S*,Q.FS3,lps,Air flow rate through air flow station 3.
+116,05-HVAC,S*,Q.FS,lps,Combined air flow rate through all air flow stations.
+117,05-HVAC,XXX-Airport-01,All,Varies,Indoor and outdoor environmental measurements for an undisclosed airport gate and bridge for the month of December 2024.  Building pressure is unavailable.
+118,05-HVAC,XXX-Airport-02,All,Varies,Indoor and outdoor environmental measurements for an undisclosed airport gate and bridge for the month of March and April 2025.  PCA data is unavailable. 
+119,05-HVAC,XXX-Airport-*,Epoch Time (sec),sec,"Time count of seconds that have elapsed since 00:00:00 UTC on January 1, 1970"
+120,05-HVAC,XXX-Airport-*,A/C,Boolean,True (or 1) when an aircraft is present at the gate.
+121,05-HVAC,XXX-Airport-*,A/C #,N/A,Internal record number of the aircraft that was present at the gate.
+122,05-HVAC,XXX-Airport-*,Tdb.a.Gate (°C),°C,Dry-bulb temperature of the gate hold room.
+123,05-HVAC,XXX-Airport-*,Tdp.a.Gate (°C),°C,Dew-point temperature of the gate hold room.
+124,05-HVAC,XXX-Airport-*,Tdb.PCA.SA (°C),°C,Dry-bulb temperature of the air supplied to the aircraft.
+125,05-HVAC,XXX-Airport-*,Tdp.PCA.SA (°C),°C,Dew-point temperature of the air supplied to the aircraft.
+126,05-HVAC,XXX-Airport-*,Tdb.Bubble (°C),°C,Dry-bulb temperature of the air inside the bridge bubble (near the aircraft door).
+127,05-HVAC,XXX-Airport-*,Tdp.Bubble (°C),°C,Dew-point temperature of the air inside the bridge bubble (near the aircraft door).
+128,05-HVAC,XXX-Airport-*,Tdb.Gate (°C),°C,Dry-bulb temperature of the air inside the bridge near the gate doors.
+129,05-HVAC,XXX-Airport-*,HVAC Mode,"0, 1, or 2",HVAC mode of operation.  0 = system is off.  1 = partial set-back.  2 = normal mode.
+130,05-HVAC,XXX-Airport-*,S.SA.Fan (%),%,Supply air fan speed.
+131,05-HVAC,XXX-Airport-*,S.RA.Fan (%),%,Return air fan speed.
+132,05-HVAC,XXX-Airport-*,Tdb.Gate.SA (°C),°C,Dry-bulb temperature of the supply air to the gate hold room.
+133,05-HVAC,XXX-Airport-*,Tdb.Gate.RA (°C),°C,Dry-bulb temperature of the return air from the gate hold room.
+134,05-HVAC,XXX-Airport-*,Tdp.Gate.RA (°C),°C,Dew-point temperature of the return air from the gate hold room.
+135,05-HVAC,XXX-Airport-*,Tdb.Gate (°C),°C,Dry-bulb temperature of the air in the gate hold room.
+136,05-HVAC,XXX-Airport-*,dP (Pa),Pa,Building pressure relative to the outside.
+137,05-HVAC,XXX-Airport-*,P (hPa),hPa,Barometric station pressure as reported by the airport weather station.
+138,05-HVAC,XXX-Airport-*,Tdb.a.WS (°C),°C,Dry-bulb temperature of the outside air as reported by the airport weather station.
+139,05-HVAC,XXX-Airport-*,Tdp.a.WS (°C),°C,Dew-point temperature of the outside air as reported by the airport weather station.
+140,05-HVAC,XXX-Airport-*,G.A (kJ/m2),kJ/m2,Solar load as reported by the airport weather station.
+141,05-HVAC,XXX-Airport-*,V.ave (kph),kph,Average air speed as reported by the airport weather station.
+142,05-HVAC,XXX-Airport-*,V.peak (kph),kph,Peak air speed as reported by the airport weather station.
+143,05-HVAC,XXX-Airport-*,V.angle (degrees),degrees,Direction of where the wind is blowing from as reported by the airport weather station.
+144,06-Periods,Periods.csv,All,Varies,Contains information as to when the readings were in a quasi-steady state conditions and the average environmental conditions during those quasi-steady state conditions.
+145,06-Periods,Periods.csv,Set,N/A,Full file name as identifed above under IDs 23 to 52.
+146,06-Periods,Periods.csv,Config,,Test type and jet bridge configuration as described above under IDs 23 to 36.
+147,06-Periods,Periods.csv,Setup,,Test setup as described above under IDs 37 to 45
+148,06-Periods,Periods.csv,Station,,Station number as described above under IDs 46 to 47
+149,06-Periods,Periods.csv,Flow-Pressure,,Flow condition as described above under IDs 48 to 51
+150,06-Periods,Periods.csv,Rep,,Replicate number as described above under ID 52.
+151,06-Periods,Periods.csv,Entire Set-Start,sec,Epoch start time for the entire set.
+152,06-Periods,Periods.csv,Entire Set-End,sec,Epoch stop time for the entire set.
+153,06-Periods,Periods.csv,Stable-Start,sec,Epoch start time when the measurements were at quasi-steady state conditions.
+154,06-Periods,Periods.csv,Stable-End,sec,Epoch end time when the measurements were no longer at quasi-steady state conditions.
+155,06-Periods,Periods.csv,"P, T.db.SA, T.dp.SA, Tdb.Lab, Tdp.Lab, dP, Q.FS1, Q.FS2, Q.FS3, Q.FS",Varies,Same as above under IDs 107 to 116.

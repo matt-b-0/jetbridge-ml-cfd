@@ -1,0 +1,113 @@
+{
+  "thermal": {
+    "time": "967",
+    "converged": false,
+    "numerically_failed": false,
+    "physical_comparison_usable": false,
+    "maximum_velocity_mps": 1.427447817,
+    "temperature_boundary_overshoot": false,
+    "sanity_velocity_threshold_mps": 10,
+    "scheduled_probe_temperature_range_last100_iterations_K": 0.1324055000000044,
+    "speed": {
+      "rmse": 0.15619966120879786,
+      "mae": 0.14240101711859088,
+      "bias": 0.14240101711859088
+    },
+    "temperature": {
+      "rmse": 0.6411737472985028,
+      "mae": 0.5804720833333477,
+      "bias": 0.19700453333335824
+    }
+  },
+  "zero_gravity_control": {
+    "time": "733",
+    "converged": true,
+    "numerically_failed": false,
+    "physical_comparison_usable": true,
+    "maximum_velocity_mps": 0.1880651664,
+    "temperature_boundary_overshoot": false,
+    "sanity_velocity_threshold_mps": 10,
+    "scheduled_probe_temperature_range_last100_iterations_K": 5.199999998239946e-05,
+    "speed": {
+      "rmse": 0.13261506603560147,
+      "mae": 0.12042340571776083,
+      "bias": 0.012784772748154422
+    },
+    "temperature": {
+      "rmse": 1.5129189288269467,
+      "mae": 1.4066834583333119,
+      "bias": -1.4066834583333119
+    }
+  },
+  "setup": {
+    "run": "S01-AC-10-HN-1",
+    "inlet_temperature_K": 294.4392857142857,
+    "ambient_temperature_K": 297.525,
+    "supply_minus_lab_K": -3.085714285714289,
+    "flow_m3ps": 0.5317607142857144,
+    "stable_window_epoch": [
+      1744666320.0,
+      1744666600.0
+    ],
+    "valid_hvac_counts": {
+      "T.db.SA (\u00b0C)": 56,
+      "Tdb.Lab (\u00b0C)": 56,
+      "Q.FS (lps)": 56
+    },
+    "beta_per_K": 0.003361062095622217,
+    "relative_density_variation": 0.01037127732363428,
+    "wall_temperature": "Fixed at lab mean: surrogate, NOT measured wall temperature",
+    "assumptions": [
+      "steady Boussinesq, k-epsilon without explicit buoyancy turbulence production correction",
+      "full-face inlet, sealed walls, no manikins or conjugate wall conduction",
+      "baseline geometry unchanged, known ceiling discrepancy retained",
+      "initial ambient temperature and outlet backflow use lab mean",
+      "outlet fixed reduced hydrostatic pressure p_rgh=0",
+      "temperature field uses Kelvin; source experimental temperatures use Celsius"
+    ],
+    "sha256": {
+      "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/05-HVAC/S01-AC-10-HN-1.csv": "4f66452ed2ebc25760ec4a5ab879f29b1f4292f14ab90447303125d84cf0248b",
+      "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-AC-10-HN-1.txt": "58f528278c9b2236181dea8ce89269a5c23765e628c8521c75f0d1b2fe87844e",
+      "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/T-S01-AC-10-HN-1.txt": "a5f1644bae9d0450d345b1679690d2957d78a351c58d169cc655d6cf91a05ce3",
+      "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/06-Periods/Periods.csv": "2e619f608c40f1ab336361fef1d37a5732aaae27ade39c36f4fadd87996b9ed7",
+      "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/Data Dictionary.csv": "e0daf957b239c144492c41722efca40e6236131f57125bc2f21900bb6e9c1a89",
+      "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/cfd/cases/empty_bridge_s01_a_10_hn_1/system/blockMeshDict": "3206f4c8d7c3410434c792a91a5f80508f5c9f64327691d763f44e28b194f872"
+    },
+    "generator_sha256": "2abf6f518bb07b46d09535f6e03b036a2cbf6290d2a3be2a8be640804ffb18f0",
+    "stabilization_attempt": {
+      "initial_field": "zero-gravity control converged at 733",
+      "p_relaxation": 0.1,
+      "U_relaxation": 0.1,
+      "T_relaxation": 0.2,
+      "turbulence_relaxation": 0.3,
+      "maximum_iterations": 1000,
+      "physical_boundaries_unchanged": true
+    }
+  },
+  "run_sha256": {
+    "/home/mattb/projects/jetbridge-thermal-stabilized-s01-ac-10-hn-1/967/U": "14c105aa426af55f757ae525c0df49d7e90a1bf123791431a3a6c4af0eebfa6a",
+    "/home/mattb/projects/jetbridge-thermal-stabilized-s01-ac-10-hn-1/967/T": "81ccf8538b5073d8a5a967ff6d36f2ad0c75ab081ac253514a55162fbfaf3dff",
+    "/home/mattb/projects/jetbridge-thermal-stabilized-s01-ac-10-hn-1/constant/g": "816f979fc6a2872318bacf9d457fbd71ba77ef2aa6b805441b3ed60749b115a7",
+    "/home/mattb/projects/jetbridge-thermal-stabilized-s01-ac-10-hn-1/constant/transportProperties": "5a6da880b1b43b8710b85c5cad923a2172aa12fb855c01a0ecee4a42616c766a",
+    "/home/mattb/projects/jetbridge-thermal-stabilized-s01-ac-10-hn-1/system/fvSolution": "103e12f1828dbeb7e5259d96ff6d4089ee76d97f8efe4d0776a11fbe286830f2",
+    "/home/mattb/projects/jetbridge-thermal-stabilized-s01-ac-10-hn-1/system/fvSchemes": "7d49ca612e824cb77e6e3c6c88e96f0f0c96588b721aa094daee961cf217a60b",
+    "/home/mattb/projects/jetbridge-thermal-stabilized-s01-ac-10-hn-1/system/blockMeshDict": "3206f4c8d7c3410434c792a91a5f80508f5c9f64327691d763f44e28b194f872",
+    "/home/mattb/projects/jetbridge-thermal-stabilized-s01-ac-10-hn-1/system/controlDict": "9ebe37cb5a5d6c5a6a10a490ae07cffa6d7479bd0622c3cdf50869a00d5ad07e",
+    "/home/mattb/projects/jetbridge-thermal-stabilized-s01-ac-10-hn-1/0/T": "8efbb66eb82f7d2b1f690e1c1e116228de6b77b9aef4b8fc03332fbb30ec04a5",
+    "/home/mattb/projects/jetbridge-thermal-stabilized-s01-ac-10-hn-1/0/U": "83eb9ffce05df8f9d376d88f1c0fa1930c8e57aa70ad3142b6dc0a166402a3f2",
+    "/home/mattb/projects/jetbridge-thermal-stabilized-s01-ac-10-hn-1/log.solver": "86db80d740c5f9d458ec216c17e80b499cd8cafa3e9acaed197671755c498437",
+    "/home/mattb/projects/jetbridge-thermal-control-s01-ac-10-hn-1/733/U": "83eb9ffce05df8f9d376d88f1c0fa1930c8e57aa70ad3142b6dc0a166402a3f2",
+    "/home/mattb/projects/jetbridge-thermal-control-s01-ac-10-hn-1/733/T": "8efbb66eb82f7d2b1f690e1c1e116228de6b77b9aef4b8fc03332fbb30ec04a5",
+    "/home/mattb/projects/jetbridge-thermal-control-s01-ac-10-hn-1/constant/g": "1cb9f5a1411a8099a50c51169d399d8b273ad37c3e4ae61726235b8a858c1953",
+    "/home/mattb/projects/jetbridge-thermal-control-s01-ac-10-hn-1/constant/transportProperties": "5a6da880b1b43b8710b85c5cad923a2172aa12fb855c01a0ecee4a42616c766a",
+    "/home/mattb/projects/jetbridge-thermal-control-s01-ac-10-hn-1/system/fvSolution": "c6b3848ca1abf8dfd21941a8eb92895247956134d9d29ab42a189ed65a61d045",
+    "/home/mattb/projects/jetbridge-thermal-control-s01-ac-10-hn-1/system/fvSchemes": "7d49ca612e824cb77e6e3c6c88e96f0f0c96588b721aa094daee961cf217a60b",
+    "/home/mattb/projects/jetbridge-thermal-control-s01-ac-10-hn-1/system/blockMeshDict": "3206f4c8d7c3410434c792a91a5f80508f5c9f64327691d763f44e28b194f872",
+    "/home/mattb/projects/jetbridge-thermal-control-s01-ac-10-hn-1/system/controlDict": "033c30fde67b66c837b99e8bd3120f9e91e84f253e1d121046ba44ebcea25535",
+    "/home/mattb/projects/jetbridge-thermal-control-s01-ac-10-hn-1/0/T": "20705ca3da687e1da5b7f5ac2a7b7d90cfe09df96845b0b12294a10f3663d9f7",
+    "/home/mattb/projects/jetbridge-thermal-control-s01-ac-10-hn-1/0/U": "2fea148a3bc5f4446a7328dba4d443c341858c2970a2f76da0b0a4830362bb24",
+    "/home/mattb/projects/jetbridge-thermal-control-s01-ac-10-hn-1/log.solver": "98978c707798305b3240afbfe4895c71b9d0bc47e799f0ee4705b2faeca4691b"
+  },
+  "note": "Fixed walls at lab temperature are a surrogate, not measured wall temperatures; no CFD validation claimed",
+  "script_sha256": "fd32a038f9062c8ce01a3748618d9aecc8a1c9c62e157b98b8c0ea21cc26a932"
+}

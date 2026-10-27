@@ -133,6 +133,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--case",required=True,type=Path)
     parser.add_argument("--control",required=True,type=Path)
+    parser.add_argument('--replay-inputs',type=Path,help='Archived thermal comparisons and sampling arrays; no new solve')
     parser.add_argument("--output",required=True,type=Path)
     args=parser.parse_args()
     if args.output.exists():
@@ -141,8 +142,17 @@ def main():
     output.mkdir(parents=True)
     sensors=pd.read_csv(args.case/"data/processed/experimental_sensors.csv")
     settings=json.loads((args.case/"data/processed/setup.json").read_text())
-    thermal,metrics,surface,side=export(args.case.resolve(),output,sensors)
-    control,control_metrics,_,_=export(args.control.resolve(),output,sensors)
+    if args.replay_inputs:
+        cached=json.loads((args.replay_inputs/'metrics.json').read_text())
+        thermal=pd.read_csv(args.replay_inputs/'thermal_sensor_comparison.csv')
+        control=pd.read_csv(args.replay_inputs/'control_sensor_comparison.csv')
+        metrics=cached['thermal'];control_metrics=cached['zero_gravity_control']
+        prefix='jetbridge-thermal-stabilized-s01-ac-10-hn-1'
+        surface={f:np.loadtxt(args.replay_inputs/f'{prefix}_{f}.csv',delimiter=',') for f in ('U','T')}
+        side={f:np.loadtxt(args.replay_inputs/f'{prefix}_side_{f}.csv',delimiter=',') for f in ('U','T')}
+    else:
+        thermal,metrics,surface,side=export(args.case.resolve(),output,sensors)
+        control,control_metrics,_,_=export(args.control.resolve(),output,sensors)
     thermal.to_csv(output/"thermal_sensor_comparison.csv",index=False)
     control.to_csv(output/"control_sensor_comparison.csv",index=False)
     audit_paths=[]
@@ -153,7 +163,9 @@ def main():
                             directory/"system/blockMeshDict", directory/"system/controlDict",
                             directory/"0/T", directory/"0/U", directory/"log.solver"])
     manifest=dict(thermal=metrics,zero_gravity_control=control_metrics,setup=settings,
-                  run_sha256={str(p):sha256(p.read_bytes()).hexdigest() for p in audit_paths},
+                  replayed_archived_diagnostics=bool(args.replay_inputs),
+                  archived_input_sha256={str(p):sha256(p.read_bytes()).hexdigest() for p in args.replay_inputs.iterdir() if p.suffix in ('.csv','.json')} if args.replay_inputs else {},
+                  run_sha256={str(p):sha256(p.read_bytes()).hexdigest() for p in audit_paths if p.exists()},
                   note="Fixed walls at lab temperature are a surrogate, not measured wall temperatures; no CFD validation claimed",
                   script_sha256=sha256(Path(__file__).read_bytes()).hexdigest())
     (output/"metrics.json").write_text(json.dumps(manifest,indent=2)+"\n")

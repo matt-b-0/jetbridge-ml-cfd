@@ -1,0 +1,47 @@
+FoamFile { version 2.0; format ascii; class dictionary; object controlDict; }
+
+application buoyantBoussinesqSimpleFoam;
+startFrom startTime; startTime 967; stopAt endTime; endTime 1967;
+deltaT 1; writeControl timeStep; writeInterval 100; purgeWrite 3;
+writeFormat ascii; writePrecision 10; writeCompression off;
+timeFormat general; timePrecision 8; runTimeModifiable true;
+functions { 
+sensors
+{
+ type probes; libs ("libsampling.so"); fields (U T p_rgh);
+ probeLocations ((0.35 2.48 3.05)
+(0.35 2.08 3.05)
+(0.35 1.67 3.05)
+(0.35 1.26 3.05)
+(0.35 0.86 3.05)
+(0.35 0.45 3.05)
+(1.04 2.48 3.05)
+(1.04 2.08 3.05)
+(1.04 1.67 3.05)
+(1.04 1.26 3.05)
+(1.04 0.86 3.05)
+(1.04 0.45 3.05));
+ writeControl timeStep; writeInterval 10;
+}
+
+inletFlux
+{
+ type surfaceFieldValue; libs ("libfieldFunctionObjects.so");
+ regionType patch; name inlet; operation sum; writeFields false;
+ fields (phi); writeControl timeStep; writeInterval 10;
+}
+
+outletFlux
+{
+ type surfaceFieldValue; libs ("libfieldFunctionObjects.so");
+ regionType patch; name outlet; operation sum; writeFields false;
+ fields (phi); writeControl timeStep; writeInterval 10;
+}
+
+temperatureBounds
+{
+ type fieldMinMax; libs ("libfieldFunctionObjects.so"); fields (T U);
+ writeControl timeStep; writeInterval 10;
+}
+ }
+

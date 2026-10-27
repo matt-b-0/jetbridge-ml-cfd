@@ -101,17 +101,49 @@ def residual_history(path):
     return pd.DataFrame(rows,columns=['iteration','field','residual']).drop_duplicates(['iteration','field'])
 
 
+def read_archived_grid(path, points, thermal):
+    """Read an explicitly archived grid, rejecting mismatches and invalid data.
+
+    Parameters
+    ----------
+    path : pathlib.Path
+        Saved CSV with physical coordinates and sampled U, optionally T.
+    points : numpy.ndarray
+        Expected ordered coordinates in metres, shape (n, 3).
+    thermal : bool
+        Require stored Celsius temperatures when true.
+
+    Returns
+    -------
+    dict
+        Finite velocity components and optional Celsius temperature arrays.
+    """
+    cached=pd.read_csv(path)
+    np.testing.assert_allclose(cached[['x_m','y_m','z_m']],points,rtol=0,atol=1e-8)
+    if cached[['x_m','y_m','z_m']].duplicated().any():
+        raise ValueError('Archived grid has duplicate coordinates')
+    fields={'U':cached[['Ux_mps','Uy_mps','Uz_mps']].to_numpy()}
+    if thermal:fields['T']=cached.temperature_C.to_numpy()
+    if not all(np.isfinite(values).all() for values in fields.values()):
+        raise ValueError('Archived field contains nonfinite values')
+    return fields
+
+
 def main():
     """Export a captioned PNG/PDF figure collection from three saved cases."""
     parser=argparse.ArgumentParser(description=__doc__)
     for name in ('isothermal','thermal','control','dataset','thermal-comparisons','iso-comparisons','output'):
         parser.add_argument('--'+name,required=True,type=Path)
+    parser.add_argument('--replay-tables',type=Path,help='Explicitly redraw archived sample tables without a CFD field')
+    parser.add_argument('--iso-time',default='237')
     args=parser.parse_args()
+    labels=dict(LABELS)
+    labels['iso']=f'Isothermal | converged, iteration {args.iso_time}'
     out=args.output.resolve()
     if out.exists():
         parser.error('Choose a fresh output directory')
     out.mkdir(parents=True)
-    cases={'iso':(args.isothermal.resolve(),'237'),'control':(args.control.resolve(),'733'),
+    cases={'iso':(args.isothermal.resolve(),args.iso_time),'control':(args.control.resolve(),'733'),
            'thermal':(args.thermal.resolve(),'967')}
     width,zs,floors,tops=mesh_profile(args.isothermal/'system/blockMeshDict')
     profiles=[mesh_profile(path/'system/blockMeshDict') for path,_ in cases.values()]
@@ -123,7 +155,7 @@ def main():
         converged=f'SIMPLE solution converged in {time} iterations' in log
         if converged != (key!='thermal'):
             raise ValueError('Case convergence status changed; review captions')
-        if not (path/time/'U').exists():
+        if not args.replay_tables and not (path/time/'U').exists():
             raise ValueError('Saved field missing')
     sensors={s:read_speed_average(args.dataset/f'03-Averages/V-S01-A-{s}-HN-1.txt') for s in STATIONS}
     # Uniform midpoint grids: avoid boundary ambiguity and retain actual geometry.
@@ -149,7 +181,11 @@ def main():
     source_hashes={}
     for key,(path,time) in cases.items():
         print('Sampling',key,time,flush=True)
-        fields=sample_grid(path,time,out,points,key!='iso')
+        if args.replay_tables:
+            fields=read_archived_grid(args.replay_tables/f'sampled_{key}.csv',points,key!='iso')
+            source_hashes[str(args.replay_tables/f'sampled_{key}.csv')]=sha256((args.replay_tables/f'sampled_{key}.csv').read_bytes()).hexdigest()
+        else:
+            fields=sample_grid(path,time,out,points,key!='iso')
         fields['speed']=np.linalg.norm(fields['U'],axis=1)
         data[key]=fields
         table=pd.DataFrame(points,columns=['x_m','y_m','z_m'])
@@ -161,7 +197,7 @@ def main():
         table.to_csv(out/f'sampled_{key}.csv',index=False)
         for p in [path/time/'U',path/'system/blockMeshDict',path/'system/fvSolution',path/'0/U',
                   path/('log.simpleFoam' if key=='iso' else 'log.solver')]+([path/time/'T',path/'0/T',path/'constant/g'] if key!='iso' else []):
-            source_hashes[str(p)]=sha256(p.read_bytes()).hexdigest()
+            if p.exists(): source_hashes[str(p)]=sha256(p.read_bytes()).hexdigest()
     plt.rcParams.update({'font.family':'DejaVu Sans','font.size':10,'axes.spines.top':False,
                          'axes.spines.right':False,'pdf.fonttype':42,'savefig.facecolor':'white'})
     captions=[]
@@ -202,14 +238,14 @@ def main():
     vmax=max(v['speed'].max() for v in data.values())
     fig,axes=plt.subplots(3,1,figsize=(12,9),layout='constrained')
     for ax,key in zip(axes,cases):
-        image=sideplot(ax,data[key]['speed'],LABELS[key],Normalize(0,vmax),'viridis')
+        image=sideplot(ax,data[key]['speed'],labels[key],Normalize(0,vmax),'viridis')
     fig.colorbar(image,ax=list(axes),label='Speed magnitude (m/s)',shrink=.7)
     save(fig,'02_longitudinal_speed_shared_scale','Mid-width vertical slices, common speed scale. Cases have different inlet flows and thermal conditions; this is a descriptive comparison, not a controlled buoyancy test. Buoyant snapshot is not converged. Midplane sampling excludes boundary faces.')
     fig,axes=plt.subplots(2,1,figsize=(12,6.5),layout='constrained')
     lo=min(data[k]['T'].min() for k in ('control','thermal'))
     hi=max(data[k]['T'].max() for k in ('control','thermal'))
     for ax,key in zip(axes,('control','thermal')):
-        image=sideplot(ax,data[key]['T'],LABELS[key],Normalize(lo,hi),'inferno')
+        image=sideplot(ax,data[key]['T'],labels[key],Normalize(lo,hi),'inferno')
     fig.colorbar(image,ax=list(axes),label='Temperature (°C)',shrink=.7)
     save(fig,'03_longitudinal_temperature','Cold supply and walls fixed at lab temperature (unmeasured wall-temperature surrogate). Zero-gravity control converged; buoyant iterate 967 has not. SIMPLE iteration is not physical time.')
     for key,index in (('iso','04'),('thermal','05'),('control','06')):
@@ -224,8 +260,8 @@ def main():
             ax.set(xlabel='Width x (m)',ylabel='Height above floor (m)',title=f'{s} ft | z={pos[0,2]:.3f} m')
             ax.set_aspect('equal')
         fig.colorbar(image,ax=list(axes.flat),label='Speed (m/s)',shrink=.6)
-        fig.suptitle(LABELS[key]+'\nNine sections of one numerical field; shared scale within this figure')
-        save(fig,index+'_'+key+'_speed_sections','Nine source-coordinate planes from '+LABELS[key]+'. All panels use a common scale within this figure. Heights subtract the actual local CFD floor. These are CFD fields, not nine independently matched experimental runs.')
+        fig.suptitle(labels[key]+'\nNine sections of one numerical field; shared scale within this figure')
+        save(fig,index+'_'+key+'_speed_sections','Nine source-coordinate planes from '+labels[key]+'. All panels use a common scale within this figure. Heights subtract the actual local CFD floor. These are CFD fields, not nine independently matched experimental runs.')
     fig,axes=plt.subplots(3,3,figsize=(9,11),layout='constrained')
     for i,(ax,s) in enumerate(zip(axes.flat,STATIONS)):
         pos=plane_points[i]
@@ -234,7 +270,7 @@ def main():
         ax.set(xlabel='Width x (m)',ylabel='Height above floor (m)',title=f'{s} ft | z={pos[0,2]:.3f} m')
         ax.set_aspect('equal')
     fig.colorbar(image,ax=list(axes.flat),label='Temperature (°C)',shrink=.6)
-    fig.suptitle(LABELS['thermal']+'\nTemperature sections; fixed lab-temperature walls are a surrogate')
+    fig.suptitle(labels['thermal']+'\nTemperature sections; fixed lab-temperature walls are a surrogate')
     save(fig,'07_thermal_temperature_sections','Provisional buoyant temperature cross-sections. The cold lower layer is a feature of this unconverged snapshot, not a validated prediction of thermal stratification.')
     fig,axes=plt.subplots(2,1,figsize=(12,6.5),layout='constrained')
     for ax,field,label in zip(axes,('speed','T'),('Speed difference (m/s)','Temperature difference (K)')):
@@ -246,7 +282,7 @@ def main():
     # Physical projected velocity components: arrows are not scalar-speed gradients.
     fig,axes=plt.subplots(3,1,figsize=(12,9),layout='constrained')
     for ax,key in zip(axes,cases):
-        image=sideplot(ax,data[key]['speed'],LABELS[key],Normalize(0,vmax),'viridis')
+        image=sideplot(ax,data[key]['speed'],labels[key],Normalize(0,vmax),'viridis')
         u=data[key]['U'][count:].reshape(nh,nz,3)
         sel=(slice(2,None,5),slice(3,None,9))
         quiver=ax.quiver(sz[sel],sy[sel],u[:,:,2][sel],u[:,:,1][sel],color='white',angles='xy',scale_units='xy',scale=1.4,width=.0022)
@@ -284,7 +320,7 @@ def main():
     if str(comparison_status['thermal']['time'])!='967' or str(comparison_status['zero_gravity_control']['time'])!='733':
         raise ValueError('Thermal sensor-comparison snapshots differ from report fields')
     iso_status=json.loads((args.iso_comparisons/'manifest.json').read_text())
-    if str(iso_status['time'])!='237':
+    if str(iso_status['time'])!=args.iso_time:
         raise ValueError('Isothermal comparison snapshot differs from report field')
     np.testing.assert_allclose(therm[['x_m','y_m','z_m','speed_mps','temperature_C']],
                                control[['x_m','y_m','z_m','speed_mps','temperature_C']],rtol=0,atol=1e-12)
@@ -334,7 +370,7 @@ def main():
         history.to_csv(out/f'residuals_{key}.csv',index=False)
         for field,part in history.groupby('field'):
             ax.semilogy(part.iteration,part.residual,label=field,lw=1)
-        ax.set(xlabel='SIMPLE iteration (not seconds)',ylabel='Initial linear-solver residual',title=LABELS[key].replace(' | ','\n'))
+        ax.set(xlabel='SIMPLE iteration (not seconds)',ylabel='Initial linear-solver residual',title=labels[key].replace(' | ','\n'))
         ax.legend(ncol=2,fontsize=7)
         ax.grid(alpha=.2)
     save(fig,'14_residual_histories','First initial residual per field per SIMPLE iteration. Cases have different initialization and relaxation, so histories do not isolate the effect of gravity. Configured solver convergence is not experimental validation; buoyant run remains unconverged at iteration 1000 although its latest saved field is 967.')
@@ -364,9 +400,9 @@ def main():
     fig.suptitle('Equal-weight samples across nine sections | thermal snapshot NOT CONVERGED')
     save(fig,'16_section_sample_distributions','Empirical cumulative distributions of equal-weight samples across nine sections. Not whole-volume distributions, experimental uncertainty or statistical confidence. Buoyant snapshot is unconverged; iso/control use different operating conditions.')
     manifest={'python':platform.python_version(),'packages':{p:version(p) for p in ('numpy','pandas','scipy','matplotlib')},
-              'cases':{k:{'path':str(p),'saved_iteration':t,'status':LABELS[k]} for k,(p,t) in cases.items()},
+              'cases':{k:{'path':str(p),'saved_iteration':t,'status':labels[k]} for k,(p,t) in cases.items()},
               'sampling':'cellPoint; 32x48 midpoint samples per section, 181x48 mid-width side samples; unique XYZ checked within 1 micrometre (raw writer has 8 significant digits)',
-              'figure_count':len(captions),'script_sha256':sha256(Path(__file__).read_bytes()).hexdigest(),
+              'figure_count':len(captions),'replayed_sample_tables':bool(args.replay_tables),'script_sha256':sha256(Path(__file__).read_bytes()).hexdigest(),
               'source_sha256':source_hashes,
               'limitations':['No new simulation, mesh study or physical validation','Thermal wall temperature is an unmeasured lab-temperature surrogate',
                              'Initial divergent thermal field excluded','Sample statistics are not mesh-integrated conservation checks']}

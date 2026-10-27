@@ -1,0 +1,37 @@
+{
+  "run": "S01-AC-10-HN-1",
+  "no_buoyancy_control": true,
+  "inlet_temperature_K": 294.4392857142857,
+  "ambient_temperature_K": 297.525,
+  "supply_minus_lab_K": -3.085714285714289,
+  "flow_m3ps": 0.5317607142857144,
+  "stable_window_epoch": [
+    1744666320.0,
+    1744666600.0
+  ],
+  "valid_hvac_counts": {
+    "T.db.SA (\u00b0C)": 56,
+    "Tdb.Lab (\u00b0C)": 56,
+    "Q.FS (lps)": 56
+  },
+  "beta_per_K": 0.003361062095622217,
+  "relative_density_variation": 0.01037127732363428,
+  "wall_temperature": "Fixed at lab mean: surrogate, NOT measured wall temperature",
+  "assumptions": [
+    "steady Boussinesq, k-epsilon without explicit buoyancy turbulence production correction",
+    "full-face inlet, sealed walls, no manikins or conjugate wall conduction",
+    "baseline geometry unchanged, known ceiling discrepancy retained",
+    "initial ambient temperature and outlet backflow use lab mean",
+    "outlet fixed reduced hydrostatic pressure p_rgh=0",
+    "temperature field uses Kelvin; source experimental temperatures use Celsius"
+  ],
+  "sha256": {
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/05-HVAC/S01-AC-10-HN-1.csv": "4f66452ed2ebc25760ec4a5ab879f29b1f4292f14ab90447303125d84cf0248b",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-AC-10-HN-1.txt": "58f528278c9b2236181dea8ce89269a5c23765e628c8521c75f0d1b2fe87844e",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/T-S01-AC-10-HN-1.txt": "a5f1644bae9d0450d345b1679690d2957d78a351c58d169cc655d6cf91a05ce3",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/06-Periods/Periods.csv": "2e619f608c40f1ab336361fef1d37a5732aaae27ade39c36f4fadd87996b9ed7",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/Data Dictionary.csv": "e0daf957b239c144492c41722efca40e6236131f57125bc2f21900bb6e9c1a89",
+    "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/cfd/cases/empty_bridge_s01_a_10_hn_1/system/blockMeshDict": "3206f4c8d7c3410434c792a91a5f80508f5c9f64327691d763f44e28b194f872"
+  },
+  "generator_sha256": "7b6dc368e2f02eaa2a2f7a36fa345d13d7273427312faf1c780cc71de4c46f08"
+}

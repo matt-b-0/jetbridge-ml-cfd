@@ -62,3 +62,6 @@ The user's earlier OpenFOAM work imposed the volumetric flow rate **reported by 
 
 ## Work ownership and honesty
 AI may assist with code planning, prototyping, tests, documentation and diagnostics, but the student must verify results, select assumptions and reflect on assistance. Do not describe a mesh, solver, or ML model as validated until the relevant checks have actually run.
+
+## Current demo and quality workflow on 27 October 2026
+The repository now includes the attributed study input subset and compact archived numerical evidence. Use the root run_all.py driver and docs/LIVE_DEMO.md for one-clone execution; older commands above describe the original research runs. Static checking uses python -m ruff check src tests run_all.py; numerical tests use python -m pytest -q; API documentation uses python -m pdoc jetbridge_ml -o docs/html. See docs/DEVELOPMENT.md for scope and limitations. Live/full execute fresh isothermal CFD in new output folders; archived unconverged thermal evidence remains explicitly separate.

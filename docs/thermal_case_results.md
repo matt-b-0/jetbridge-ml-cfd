@@ -63,3 +63,6 @@ Figures include speed/temperature cross-sections and point deltas, height profil
 
 ## Next scientific checks
 Do not use these buoyant fields as validated training/benchmark truth. Investigate numerical robustness, a transient buoyant formulation with appropriate time-step/time-convergence checks, wall thermal boundary evidence or conjugate heat transfer, buoyant turbulence treatment, wall resolution/y+, energy balance, mesh sensitivity, pressure/backflow assumptions and diffuser representation. No parameters should be tuned on final test sensors. Keep this thermal extension bounded so the interpolation-versus-ML comparison remains the main project objective.
+
+## Current demo and quality workflow on 27 October 2026
+The repository now includes the attributed study input subset and compact archived numerical evidence. Use the root run_all.py driver and docs/LIVE_DEMO.md for one-clone execution; older commands above describe the original research runs. Static checking uses python -m ruff check src tests run_all.py; numerical tests use python -m pytest -q; API documentation uses python -m pdoc jetbridge_ml -o docs/html. See docs/DEVELOPMENT.md for scope and limitations. Live/full execute fresh isothermal CFD in new output folders; archived unconverged thermal evidence remains explicitly separate.

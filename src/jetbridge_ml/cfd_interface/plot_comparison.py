@@ -79,106 +79,122 @@ def main():
     parser.add_argument("--dataset", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--time", default="237")
+    parser.add_argument("--replay-inputs", type=Path, help="Redraw archived samples without OpenFOAM")
     parser.add_argument("--foam-bashrc", type=Path,
                         default=Path("/usr/lib/openfoam/openfoam2412/etc/bashrc"))
     args = parser.parse_args()
     if args.output.exists():
         parser.error("Choose a new output directory; existing results are preserved")
     case, output = args.case.resolve(), args.output.resolve()
-    if not (case / args.time / "U").exists():
+    if not args.replay_inputs and not (case / args.time / "U").exists():
         parser.error("Requested saved CFD velocity field not found")
     frames = {s: read_speed_average(args.dataset / f"03-Averages/V-S01-A-{s}-HN-1.txt")
               for s in STATIONS}
     width, zs, floors, ceilings = mesh_profile(case / "system/blockMeshDict")
-    planes, sets = [], []
-    for station, frame in frames.items():
-        z = float(frame.z_m.iloc[0])
-        points = "\n".join(f"({r.x_m:.9g} {r.y_m:.9g} {r.z_m:.9g})" for r in frame.itertuples())
-        planes.append(f"""plane{station}
-        {{
-            type cuttingPlane;
-            planeType pointAndNormal;
-            pointAndNormalDict {{ basePoint (0 0 {z:.9g}); normalVector (0 0 1); }}
-            interpolate true;
-        }}""")
-        sets.append(f"""station{station}
-        {{
-            type cloud;
-            axis xyz;
-            points ({points});
-        }}""")
-    dictionary = """FoamFile { version 2.0; format ascii; class dictionary; object sliceExport; }
-functions
-{
-    visualSlices
+    if args.replay_inputs:
+        output.mkdir(parents=True)
+        observations=pd.read_csv(args.replay_inputs/'sensor_deltas.csv')
+        surfaces={station:np.loadtxt(args.replay_inputs/f'cfd_slice_{station}ft.csv',delimiter=',',skiprows=1) for station in STATIONS}
+        if not np.isfinite(observations[['speed_mps','cfd_speed_mps','delta_mps']]).all().all() or not all(np.isfinite(v).all() for v in surfaces.values()):
+            raise ValueError('Nonfinite archived comparison values')
+        observations.to_csv(output/'sensor_deltas.csv',index=False)
+        config=args.replay_inputs/'manifest.json'
+        if str(json.loads(config.read_text())['time'])!=args.time:
+            raise ValueError('Archived comparison iterate differs from requested time')
+        expected=pd.concat([f[['x_m','y_m','z_m']] for f in frames.values()],ignore_index=True)
+        np.testing.assert_allclose(observations[['x_m','y_m','z_m']],expected,rtol=0,atol=1e-10)
+        summary=[dict(station_ft=int(station),sensors=len(frame),boundary_matched_run=station==10,**regression_metrics(frame.speed_mps,frame.cfd_speed_mps)) for station,frame in observations.groupby('station_ft')]
+        pd.DataFrame(summary).to_csv(output/'station_metrics.csv',index=False)
+    else:
+        planes, sets = [], []
+        for station, frame in frames.items():
+            z = float(frame.z_m.iloc[0])
+            points = "\n".join(f"({r.x_m:.9g} {r.y_m:.9g} {r.z_m:.9g})" for r in frame.itertuples())
+            planes.append(f"""plane{station}
+            {{
+                type cuttingPlane;
+                planeType pointAndNormal;
+                pointAndNormalDict {{ basePoint (0 0 {z:.9g}); normalVector (0 0 1); }}
+                interpolate true;
+            }}""")
+            sets.append(f"""station{station}
+            {{
+                type cloud;
+                axis xyz;
+                points ({points});
+            }}""")
+        dictionary = """FoamFile { version 2.0; format ascii; class dictionary; object sliceExport; }
+    functions
     {
-        type surfaces;
-        libs ("libsampling.so");
-        writeControl writeTime;
-        surfaceFormat raw;
-        interpolationScheme cellPoint;
-        fields (U);
-        surfaces (PLANES);
+        visualSlices
+        {
+            type surfaces;
+            libs ("libsampling.so");
+            writeControl writeTime;
+            surfaceFormat raw;
+            interpolationScheme cellPoint;
+            fields (U);
+            surfaces (PLANES);
+        }
+        comparisonPoints
+        {
+            type sets;
+            libs ("libsampling.so");
+            writeControl writeTime;
+            setFormat raw;
+            interpolationScheme cell;
+            fields (U);
+            sets (SETS);
+        }
     }
-    comparisonPoints
-    {
-        type sets;
-        libs ("libsampling.so");
-        writeControl writeTime;
-        setFormat raw;
-        interpolationScheme cell;
-        fields (U);
-        sets (SETS);
-    }
-}
-""".replace("PLANES", "\n".join(planes)).replace("SETS", "\n".join(sets))
-    output.mkdir(parents=True)
-    config = output / "sliceExportDict"
-    config.write_text(dictionary)
-    command = ["simpleFoam", "-case", str(case), "-postProcess", "-dict", str(config),
-               "-time", args.time]
-    shell = f"source {shlex.quote(str(args.foam_bashrc))}; exec {shlex.join(command)}"
-    with (output / "log.sliceExport").open("w") as log:
-        subprocess.run(["bash", "-lc", shell], stdout=log, stderr=subprocess.STDOUT, check=True, cwd=case)
-    rows, surfaces = [], {}
-    for station, frame in frames.items():
-        point_path = case / f"postProcessing/comparisonPoints/{args.time}/station{station}_U.xy"
-        if not point_path.exists():
-            candidates = list((case / f"postProcessing/comparisonPoints/{args.time}").glob(f"station{station}_U.*"))
-            if len(candidates) != 1:
-                raise ValueError(f"Cannot identify sampled sensor file for station {station}")
-            point_path = candidates[0]
-        sampled = align_samples(frame[["x_m", "y_m", "z_m"]], np.loadtxt(point_path))
-        frame = frame.copy()
-        frame["sensor_id"] = frame.source_row + 1
-        frame["cfd_speed_mps"] = np.linalg.norm(sampled[:, 3:6], axis=1)
-        frame["delta_mps"] = frame.cfd_speed_mps - frame.speed_mps
-        frame["floor_y_m"] = np.interp(frame.z_m, zs, floors)
-        frame["local_height_m"] = frame.y_m - frame.floor_y_m
-        frame["boundary_matched_run"] = station == 10
-        rows.append(frame)
-        surface_path = case / f"postProcessing/visualSlices/{args.time}/U_plane{station}.raw"
-        surface = np.loadtxt(surface_path)
-        if surface.ndim != 2 or surface.shape[1] != 6 or not np.isfinite(surface).all():
-            raise ValueError(f"Unexpected slice columns at {surface_path}")
-        surfaces[station] = surface
-        np.savetxt(output / f"cfd_slice_{station}ft.csv", surface, delimiter=",",
-                   header="x_m,y_m,z_m,Ux_mps,Uy_mps,Uz_mps", comments="")
-    observations = pd.concat(rows, ignore_index=True)
-    observations.to_csv(output / "sensor_deltas.csv", index=False)
-    summary = []
-    for station, frame in observations.groupby("station_ft"):
-        summary.append(dict(station_ft=int(station), sensors=len(frame),
-                            boundary_matched_run=bool(station == 10),
-                            **regression_metrics(frame.speed_mps, frame.cfd_speed_mps)))
-    pd.DataFrame(summary).to_csv(output / "station_metrics.csv", index=False)
-    # Check the matched station against the independently saved solver probe comparison.
-    previous = case / "data/processed/cfd_vs_experiment.csv"
-    if previous.exists():
-        reference = pd.read_csv(previous)
-        current = observations[observations.station_ft == 10]
-        np.testing.assert_allclose(current.cfd_speed_mps, reference.cfd_speed_mps,
-                                   rtol=1e-6, atol=1e-8)
+    """.replace("PLANES", "\n".join(planes)).replace("SETS", "\n".join(sets))
+        output.mkdir(parents=True)
+        config = output / "sliceExportDict"
+        config.write_text(dictionary)
+        command = ["simpleFoam", "-case", str(case), "-postProcess", "-dict", str(config),
+                   "-time", args.time]
+        shell = f"source {shlex.quote(str(args.foam_bashrc))}; exec {shlex.join(command)}"
+        with (output / "log.sliceExport").open("w") as log:
+            subprocess.run(["bash", "-lc", shell], stdout=log, stderr=subprocess.STDOUT, check=True, cwd=case)
+        rows, surfaces = [], {}
+        for station, frame in frames.items():
+            point_path = case / f"postProcessing/comparisonPoints/{args.time}/station{station}_U.xy"
+            if not point_path.exists():
+                candidates = list((case / f"postProcessing/comparisonPoints/{args.time}").glob(f"station{station}_U.*"))
+                if len(candidates) != 1:
+                    raise ValueError(f"Cannot identify sampled sensor file for station {station}")
+                point_path = candidates[0]
+            sampled = align_samples(frame[["x_m", "y_m", "z_m"]], np.loadtxt(point_path))
+            frame = frame.copy()
+            frame["sensor_id"] = frame.source_row + 1
+            frame["cfd_speed_mps"] = np.linalg.norm(sampled[:, 3:6], axis=1)
+            frame["delta_mps"] = frame.cfd_speed_mps - frame.speed_mps
+            frame["floor_y_m"] = np.interp(frame.z_m, zs, floors)
+            frame["local_height_m"] = frame.y_m - frame.floor_y_m
+            frame["boundary_matched_run"] = station == 10
+            rows.append(frame)
+            surface_path = case / f"postProcessing/visualSlices/{args.time}/U_plane{station}.raw"
+            surface = np.loadtxt(surface_path)
+            if surface.ndim != 2 or surface.shape[1] != 6 or not np.isfinite(surface).all():
+                raise ValueError(f"Unexpected slice columns at {surface_path}")
+            surfaces[station] = surface
+            np.savetxt(output / f"cfd_slice_{station}ft.csv", surface, delimiter=",",
+                       header="x_m,y_m,z_m,Ux_mps,Uy_mps,Uz_mps", comments="")
+        observations = pd.concat(rows, ignore_index=True)
+        observations.to_csv(output / "sensor_deltas.csv", index=False)
+        summary = []
+        for station, frame in observations.groupby("station_ft"):
+            summary.append(dict(station_ft=int(station), sensors=len(frame),
+                                boundary_matched_run=bool(station == 10),
+                                **regression_metrics(frame.speed_mps, frame.cfd_speed_mps)))
+        pd.DataFrame(summary).to_csv(output / "station_metrics.csv", index=False)
+        # Check the matched station against the independently saved solver probe comparison.
+        previous = case / "data/processed/cfd_vs_experiment.csv"
+        if previous.exists():
+            reference = pd.read_csv(previous)
+            current = observations[observations.station_ft == 10]
+            np.testing.assert_allclose(current.cfd_speed_mps, reference.cfd_speed_mps,
+                                       rtol=1e-6, atol=1e-8)
 
     plt.rcParams.update({"font.size": 10, "axes.spines.top": False,
                          "axes.spines.right": False, "savefig.facecolor": "white"})
@@ -207,7 +223,7 @@ functions
     field = axes[1].tricontourf(slice10[:, 0], slice10[:, 1], speed10,
                                levels=np.linspace(0, vmax, 24), norm=norm, cmap="viridis")
     axes[1].scatter(matched.x_m, matched.y_m, facecolors="none", edgecolors="white", s=90)
-    axes[1].set_title("CFD speed magnitude |U|\nFinal iteration 237")
+    axes[1].set_title(f"CFD speed magnitude |U|\nSaved iteration {args.time}")
     delta = axes[2].scatter(matched.x_m, matched.y_m, c=matched.delta_mps,
                             norm=delta_norm, cmap="RdBu_r", s=150, edgecolors="black",
                             linewidths=.6)
@@ -279,7 +295,8 @@ functions
                     speed="sqrt(Ux^2 + Uy^2 + Uz^2)", delta="CFD minus measured mean",
                     surface_interpolation="cellPoint", sensor_interpolation="cell",
                     coordinate_frame="source absolute metres; galleries subtract actual mesh floor only for display",
-                    sha256={str(p): sha256(p.read_bytes()).hexdigest() for p in inputs},
+                    replayed_archived_samples=bool(args.replay_inputs),
+                    sha256={str(p): sha256(p.read_bytes()).hexdigest() for p in inputs if p.exists()},
                     source_code_sha256=sha256(Path(__file__).read_bytes()).hexdigest(),
                     limitations=["Only 10 ft inlet flow was selected from its matching run",
                                  "Single mesh, steady isothermal k-epsilon, full-face supply",

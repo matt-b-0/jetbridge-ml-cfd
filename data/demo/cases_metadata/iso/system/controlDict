@@ -1,0 +1,76 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    
+    object controlDict;
+}
+
+application simpleFoam;
+startFrom startTime;
+startTime 0;
+stopAt endTime;
+endTime 3000; // SIMPLE iterations, not physical seconds
+
+deltaT 1;
+writeControl timeStep;
+writeInterval 500;
+purgeWrite 3;
+writeFormat ascii;
+writePrecision 8;
+writeCompression off;
+timeFormat general;
+timePrecision 8;
+runTimeModifiable true;
+
+functions
+{
+    sensors
+    {
+        type probes;
+        libs ("libsampling.so");
+        fields (U p);
+        probeLocations
+        (
+            (0.35000 2.48000 3.05000)
+            (0.35000 2.08000 3.05000)
+            (0.35000 1.67000 3.05000)
+            (0.35000 1.26000 3.05000)
+            (0.35000 0.86000 3.05000)
+            (0.35000 0.45000 3.05000)
+            (1.04000 2.48000 3.05000)
+            (1.04000 2.08000 3.05000)
+            (1.04000 1.67000 3.05000)
+            (1.04000 1.26000 3.05000)
+            (1.04000 0.86000 3.05000)
+            (1.04000 0.45000 3.05000)
+        );
+        writeControl timeStep;
+        writeInterval 100;
+    }
+    inletFlux
+    {
+        type surfaceFieldValue;
+        libs ("libfieldFunctionObjects.so");
+        regionType patch;
+        name inlet;
+        operation sum;
+        writeFields false;
+        fields (phi);
+        writeControl timeStep;
+        writeInterval 100;
+    }
+    outletFlux
+    {
+        type surfaceFieldValue;
+        libs ("libfieldFunctionObjects.so");
+        regionType patch;
+        name outlet;
+        operation sum;
+        writeFields false;
+        fields (phi);
+        writeControl timeStep;
+        writeInterval 100;
+    }
+}

@@ -1,0 +1,481 @@
+{
+  "profile": "full",
+  "verified_input_files": 2333,
+  "quality_checks": true,
+  "thermal": "archived, unconverged; not training/reference data",
+  "status": "complete",
+  "figure_count": 80,
+  "stages": [
+    {
+      "stage": "lint",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "ruff",
+        "check",
+        "src",
+        "tests",
+        "run_all.py"
+      ],
+      "lineage": "static correctness checks",
+      "log": "log.lint",
+      "elapsed_seconds": 0.128,
+      "status": "complete"
+    },
+    {
+      "stage": "tests",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/test-results.xml"
+      ],
+      "lineage": "numerical/software tests",
+      "log": "log.tests",
+      "elapsed_seconds": 5.292,
+      "status": "complete"
+    },
+    {
+      "stage": "blockMesh",
+      "command": [
+        "bash",
+        "-lc",
+        "source /usr/lib/openfoam/openfoam2412/etc/bashrc; set -e; exec blockMesh"
+      ],
+      "lineage": "fresh CFD execution",
+      "log": "log.blockMesh",
+      "elapsed_seconds": 1.071,
+      "status": "complete"
+    },
+    {
+      "stage": "checkMesh",
+      "command": [
+        "bash",
+        "-lc",
+        "source /usr/lib/openfoam/openfoam2412/etc/bashrc; set -e; exec checkMesh"
+      ],
+      "lineage": "fresh CFD execution",
+      "log": "log.checkMesh",
+      "elapsed_seconds": 1.077,
+      "status": "complete"
+    },
+    {
+      "stage": "simpleFoam",
+      "command": [
+        "bash",
+        "-lc",
+        "source /usr/lib/openfoam/openfoam2412/etc/bashrc; set -e; exec simpleFoam"
+      ],
+      "lineage": "fresh CFD execution",
+      "log": "log.simpleFoam",
+      "elapsed_seconds": 58.666,
+      "status": "complete"
+    },
+    {
+      "stage": "yPlus",
+      "command": [
+        "bash",
+        "-lc",
+        "source /usr/lib/openfoam/openfoam2412/etc/bashrc; set -e; exec simpleFoam -postProcess -func yPlus -time 237"
+      ],
+      "lineage": "fresh CFD execution",
+      "log": "log.yPlus",
+      "elapsed_seconds": 1.317,
+      "status": "complete"
+    },
+    {
+      "stage": "fresh_report_grid",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.demo_grid",
+        "--case",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline",
+        "--dataset",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/demo/experimental",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/fresh_grid",
+        "--time",
+        "237"
+      ],
+      "lineage": "fresh isothermal samples",
+      "log": "log.fresh_report_grid",
+      "elapsed_seconds": 4.173,
+      "status": "complete"
+    },
+    {
+      "stage": "iso_comparisons",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.cfd_interface.plot_comparison",
+        "--case",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline",
+        "--dataset",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/demo/experimental",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/iso_comparisons",
+        "--time",
+        "237"
+      ],
+      "lineage": "fresh isothermal versus experimental means",
+      "log": "log.iso_comparisons",
+      "elapsed_seconds": 9.317,
+      "status": "complete"
+    },
+    {
+      "stage": "matched",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.cfd_interface.matched_audit",
+        "--case",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline",
+        "--dataset",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/demo/experimental",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/matched_fresh"
+      ],
+      "lineage": "fresh matched sensor samples",
+      "log": "log.matched",
+      "elapsed_seconds": 7.567,
+      "status": "complete"
+    },
+    {
+      "stage": "virtual_samples",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.cfd_interface.virtual_sensors",
+        "--case",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline",
+        "--dataset",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/demo/experimental",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/virtual_samples",
+        "--time",
+        "237"
+      ],
+      "lineage": "fresh numerical virtual sensors",
+      "log": "log.virtual_samples",
+      "elapsed_seconds": 4.799,
+      "status": "complete"
+    },
+    {
+      "stage": "virtual_svr",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.virtual_benchmark",
+        "--samples",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/virtual_samples",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/virtual_svr"
+      ],
+      "lineage": "fresh CFD reference; not physical truth",
+      "log": "log.virtual_svr",
+      "elapsed_seconds": 11.725,
+      "status": "complete"
+    },
+    {
+      "stage": "verification_cases",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.cfd_interface.verification_study",
+        "--baseline",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline",
+        "--dataset",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/demo/experimental",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/verification_cases"
+      ],
+      "lineage": "fresh coarse/fine/flow80 CFD solves",
+      "log": "log.verification_cases",
+      "elapsed_seconds": 449.488,
+      "status": "complete"
+    },
+    {
+      "stage": "verification_summary",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.cfd_interface.verification_results",
+        "--study",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/verification_cases",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/verification_summary"
+      ],
+      "lineage": "fresh verification cases",
+      "log": "log.verification_summary",
+      "elapsed_seconds": 4.318,
+      "status": "complete"
+    },
+    {
+      "stage": "experimental",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.experimental_svr",
+        "--dataset",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/demo/experimental",
+        "--mesh",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/cfd/cases/empty_bridge_s01_a_10_hn_1/system/blockMeshDict",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/analysis/experimental"
+      ],
+      "lineage": "computed from included inputs",
+      "log": "log.experimental",
+      "elapsed_seconds": 38.456,
+      "status": "complete"
+    },
+    {
+      "stage": "legacy_interpolation",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.benchmark",
+        "--dataset",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/demo/experimental",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/legacy_interpolation"
+      ],
+      "lineage": "computed from included inputs",
+      "log": "log.legacy_interpolation",
+      "elapsed_seconds": 7.316,
+      "status": "complete"
+    },
+    {
+      "stage": "paired",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.paired_analysis",
+        "--metrics",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/analysis/experimental/metrics.csv",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/analysis/paired"
+      ],
+      "lineage": "computed from included inputs",
+      "log": "log.paired",
+      "elapsed_seconds": 1.981,
+      "status": "complete"
+    },
+    {
+      "stage": "stability",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.stability_study",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/analysis/stability"
+      ],
+      "lineage": "computed from included inputs",
+      "log": "log.stability",
+      "elapsed_seconds": 6.287,
+      "status": "complete"
+    },
+    {
+      "stage": "sensor_design",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.sensor_design_study",
+        "--candidates",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/field_tables/sampled_iso.csv",
+        "--reference",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/virtual_samples/dense_test.csv",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/analysis/sensor_design"
+      ],
+      "lineage": "fresh baseline samples",
+      "log": "log.sensor_design",
+      "elapsed_seconds": 15.271,
+      "status": "complete"
+    },
+    {
+      "stage": "thermal_comparisons",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.cfd_interface.plot_thermal",
+        "--case",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/demo/cases_metadata/thermal",
+        "--control",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/demo/cases_metadata/control",
+        "--replay-inputs",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/demo/thermal_comparisons",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/thermal_comparisons"
+      ],
+      "lineage": "ARCHIVED unconverged thermal diagnostics",
+      "log": "log.thermal_comparisons",
+      "elapsed_seconds": 6.242,
+      "status": "complete"
+    },
+    {
+      "stage": "thermal_diagnostics",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.cfd_interface.thermal_audit",
+        "--restart-source",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/demo/cases_metadata/thermal",
+        "--continuation",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/demo/cases_metadata/continuation",
+        "--archived-inputs",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/demo/reference/thermal",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/thermal_diagnostics"
+      ],
+      "lineage": "ARCHIVED unconverged thermal diagnostics",
+      "log": "log.thermal_diagnostics",
+      "elapsed_seconds": 2.833,
+      "status": "complete"
+    },
+    {
+      "stage": "field_gallery",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.cfd_interface.report_figures",
+        "--isothermal",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline",
+        "--thermal",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/demo/cases_metadata/thermal",
+        "--control",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/demo/cases_metadata/control",
+        "--dataset",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/data/demo/experimental",
+        "--iso-comparisons",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/iso_comparisons",
+        "--thermal-comparisons",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/thermal_comparisons",
+        "--replay-tables",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/field_tables",
+        "--iso-time",
+        "237",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/field_gallery"
+      ],
+      "lineage": "fresh iso / archived thermal",
+      "log": "log.field_gallery",
+      "elapsed_seconds": 33.112,
+      "status": "complete"
+    },
+    {
+      "stage": "additional_figures",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.report_synthesis",
+        "--analysis",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/analysis",
+        "--verification-samples",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/verification_cases",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/additional_figures"
+      ],
+      "lineage": "computed from included inputs",
+      "log": "log.additional_figures",
+      "elapsed_seconds": 14.947,
+      "status": "complete"
+    },
+    {
+      "stage": "performance",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.controlled_performance",
+        "--predictions",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/analysis/experimental/predictions.csv",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/performance",
+        "--repeats",
+        "20"
+      ],
+      "lineage": "new hardware-dependent repeated timings",
+      "log": "log.performance",
+      "elapsed_seconds": 20.081,
+      "status": "complete"
+    },
+    {
+      "stage": "compact_figures",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.revision_figures",
+        "--analysis",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/analysis",
+        "--mesh",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/cfd/cases/empty_bridge_s01_a_10_hn_1/system/blockMeshDict",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/compact_figures"
+      ],
+      "lineage": "computed from included inputs",
+      "log": "log.compact_figures",
+      "elapsed_seconds": 3.982,
+      "status": "complete"
+    },
+    {
+      "stage": "report_evidence",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.report_evidence",
+        "--analysis",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/analysis",
+        "--performance",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/performance",
+        "--mesh",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/cfd/cases/empty_bridge_s01_a_10_hn_1/system/blockMeshDict",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/report_evidence"
+      ],
+      "lineage": "computed from included inputs",
+      "log": "log.report_evidence",
+      "elapsed_seconds": 6.455,
+      "status": "complete"
+    },
+    {
+      "stage": "final_checks",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "jetbridge_ml.final_report_checks",
+        "--predictions",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/analysis/experimental/predictions.csv",
+        "--evidence",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/report_evidence",
+        "--mesh",
+        "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd/cfd/cases/empty_bridge_s01_a_10_hn_1/system/blockMeshDict",
+        "--output",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/final_checks"
+      ],
+      "lineage": "computed from included inputs",
+      "log": "log.final_checks",
+      "elapsed_seconds": 50.551,
+      "status": "complete"
+    },
+    {
+      "stage": "api_docs",
+      "command": [
+        "/home/mattb/projects/jetbridge-python-env/bin/python",
+        "-m",
+        "pdoc",
+        "jetbridge_ml",
+        "-o",
+        "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/html"
+      ],
+      "lineage": "regenerated API documentation",
+      "log": "log.api_docs",
+      "elapsed_seconds": 5.851,
+      "status": "complete"
+    }
+  ],
+  "runner_sha256": "55581f6e70c0184d66f75556400ba600b0d529f2a38a2d1db99b68fde3e0d0d3"
+}

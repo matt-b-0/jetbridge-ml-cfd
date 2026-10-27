@@ -92,3 +92,6 @@ The tracked starter case now includes the two writeFields false compatibility en
 
 ## Additional report visuals
 Nine captioned figure pairs are included under docs/results/additional_figures. Regenerate them with python -m jetbridge_ml.report_synthesis --analysis /path/to/completed-analysis --verification-samples /path/to/verification-study --output /path/to/new-figures. The local ZIP is under data/processed/report_synthesis; large original fields remain excluded. These figures add descriptive views of existing results, not new validation.
+
+## Current demo and quality workflow on 27 October 2026
+The repository now includes the attributed study input subset and compact archived numerical evidence. Use the root run_all.py driver and docs/LIVE_DEMO.md for one-clone execution; older commands above describe the original research runs. Static checking uses python -m ruff check src tests run_all.py; numerical tests use python -m pytest -q; API documentation uses python -m pdoc jetbridge_ml -o docs/html. See docs/DEVELOPMENT.md for scope and limitations. Live/full execute fresh isothermal CFD in new output folders; archived unconverged thermal evidence remains explicitly separate.

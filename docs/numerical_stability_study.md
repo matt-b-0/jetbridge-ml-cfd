@@ -151,3 +151,6 @@ Outputs include six PNG/PDF figures, raw numerical CSV tables and a manifest of 
 All 36 tests passed, including discrete-mode amplification, explicit stability boundary, implicit/CN damping, temporal/spatial order, known linear-system solution, interpolation-noise bounds, and the saved-iteration window regression test. Repeated diffusion, temporal-refinement and relaxation tables matched byte-for-byte. PNG figures were visually inspected; crowded refinement tick labels and obscured stable relaxation curves were corrected.
 
 Local findings were saved without pushing to GitHub. Existing raw experimental records and CFD solution fields were not modified.
+
+## Current demo and quality workflow on 27 October 2026
+The repository now includes the attributed study input subset and compact archived numerical evidence. Use the root run_all.py driver and docs/LIVE_DEMO.md for one-clone execution; older commands above describe the original research runs. Static checking uses python -m ruff check src tests run_all.py; numerical tests use python -m pytest -q; API documentation uses python -m pdoc jetbridge_ml -o docs/html. See docs/DEVELOPMENT.md for scope and limitations. Live/full execute fresh isothermal CFD in new output folders; archived unconverged thermal evidence remains explicitly separate.

@@ -1,0 +1,82 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2412                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    arch        "LSB;label=32;scalar=64";
+    class       dictionary;
+    location    "733/uniform/functionObjects";
+    object      functionObjectProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+cdf7e925f5746741c316f5fbcf39ad0dfca90775
+{
+    sensors
+    {
+        scalar
+        {
+            average(T)      294.6564831424508;
+            min(T)          294.5096849945499;
+            max(T)          294.9491456292603;
+            average(p_rgh)  0.0005556506278675839;
+            min(p_rgh)      0.0005357634973359078;
+            max(p_rgh)      0.000574680827866684;
+        }
+        label
+        {
+            size(T)         12;
+            size(p_rgh)     12;
+            size(U)         12;
+        }
+        vector
+        {
+            average(U)      ( -1.869441846e-10 -0.0136469188 -0.169820467 );
+            min(U)          ( -0.0002871477619 -0.0148696222 -0.1825583849 );
+            max(U)          ( 0.0002871475641 -0.01158250121 -0.1458955255 );
+        }
+    }
+    inletFlux
+    {
+        scalar
+        {
+            sum(inlet,phi)  -0.5317607142859974;
+        }
+    }
+    outletFlux
+    {
+        scalar
+        {
+            sum(outlet,phi) 0.5317607142556343;
+        }
+    }
+    temperatureBounds
+    {
+        scalar
+        {
+            min(T)          294.439285714;
+            max(T)          297.525;
+        }
+        label
+        {
+            min(T)_cell     140544;
+            min(T)_processor 0;
+            max(T)_cell     0;
+            max(T)_processor 0;
+        }
+        vector
+        {
+            min(T)_position ( 0.02892954166 1.381172625 18.10512 );
+            max(T)_position ( 0.02892954166 0.004006547619 0.04936369047 );
+        }
+    }
+}
+
+
+// ************************************************************************* //

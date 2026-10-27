@@ -1,0 +1,101 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2412                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _b8cf4d35-20260127 OPENFOAM=2412 patch=260127 version=2412
+Arch   : "LSB;label=32;scalar=64"
+Exec   : checkMesh
+Date   : Oct 24 2026
+Time   : 15:03:47
+Host   : MBRASA22-OSM
+PID    : 8284
+I/O    : uncollated
+Case   : /home/mattb/projects/jetbridge-thermal-stabilized-s01-ac-10-hn-1
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+--> FOAM Warning : 
+    From void Foam::Time::setControls()
+    in file db/Time/Time.C at line 337
+    Reading "0/uniform/time" at line 19 to 27
+    Time read from time dictionary 733 differs from actual time 0.
+    This may cause unexpected database behaviour. If you are not interested
+    in preserving time state delete the time dictionary.
+Create mesh for time = 0
+
+Check mesh...
+
+Time = 0
+
+Mesh stats 
+    points:           152625
+    faces:            435008
+    internal faces:   412864
+    cells:            141312
+    faces per cell:   6
+    boundary patches: 3
+    point zones:      0
+    face zones:       0
+    cell zones:       0
+
+Overall number of cells of each type:
+    hexahedra:     141312
+    prisms:        0
+    wedges:        0
+    pyramids:      0
+    tet wedges:    0
+    tetrahedra:    0
+    polyhedra:     0
+
+Checking topology...
+    Boundary definition OK.
+    Cell to face addressing OK.
+    Point usage OK.
+    Upper triangular ordering OK.
+    Face vertices OK.
+    Number of regions: 1 (OK).
+
+Checking patch topology for multiply connected surfaces...
+    Patch               Faces    Points     Surface topology
+    inlet               768      825      ok (non-closed singly connected)  
+    outlet              768      825      ok (non-closed singly connected)  
+    walls               20608    20720    ok (non-closed singly connected)  
+    ".*"                22144    22146    ok (closed singly connected)      
+
+
+Checking faceZone topology for multiply connected surfaces...
+    No faceZones found.
+
+Checking basic cellZone addressing...
+    No cellZones found.
+
+Checking basic pointZone addressing...
+    No pointZones found.
+
+Checking geometry...
+    Overall domain bounding box (0 0 0) (1.388618 3.784473 18.10512)
+    Mesh has 3 geometric (non-empty/wedge) directions (1 1 1)
+    Mesh has 3 solution (non-empty) directions (1 1 1)
+    Boundary openness (-5.45970633e-15 9.148123682e-16 2.655761571e-16) OK.
+    Max cell openness = 2.222635052e-16 OK.
+    Max aspect ratio = 1.731601743 OK.
+    Minimum face area = 0.004414373173. Maximum face area = 0.007643936333.  Face area magnitudes OK.
+    Min volume = 0.0004311345685. Max volume = 0.0004422711544.  Total volume = 61.38067739.  Cell volumes OK.
+    Mesh non-orthogonality Max: 4.781688632 average: 3.663957234
+    Non-orthogonality check OK.
+    Face pyramids OK.
+    Max skewness = 0.1070815942 OK.
+    Coupled point location match (average 0) OK.
+
+Mesh OK.
+
+End
+

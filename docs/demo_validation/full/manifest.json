@@ -1,0 +1,107 @@
+{
+  "cases": {
+    "baseline": {
+      "cells": 141312,
+      "flow_factor": 1.0,
+      "mesh_counts": [
+        24,
+        32,
+        84,
+        18,
+        82
+      ],
+      "case": "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline",
+      "saved_iteration": "237",
+      "solver_converged": true,
+      "mesh_ok": true,
+      "pressure_drop_kinematic_m2s2": 0.0042844954,
+      "inlet_m3s": -0.53386552,
+      "outlet_m3s": 0.53386552,
+      "relative_flux_imbalance": 0.0,
+      "sample_sha256": "6bb7b34757d76c6cbbe416d90c91cb1ab6c912c4c737ca1109b400fd06bd3403"
+    },
+    "coarse": {
+      "cells": 17664,
+      "flow_factor": 1.0,
+      "mesh_counts": [
+        12,
+        16,
+        42,
+        9,
+        41
+      ],
+      "cold_start": true,
+      "case": "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/verification_cases/coarse",
+      "saved_iteration": "115",
+      "solver_converged": true,
+      "mesh_ok": true,
+      "pressure_drop_kinematic_m2s2": 0.0039596529,
+      "inlet_m3s": -0.53386552,
+      "outlet_m3s": 0.53386552,
+      "relative_flux_imbalance": 0.0,
+      "sample_sha256": "86e1815f9c593a79e32afa861ad8ed7ba8c43eddbb191467beeee7e75f34d768"
+    },
+    "fine": {
+      "cells": 476928,
+      "flow_factor": 1.0,
+      "mesh_counts": [
+        36,
+        48,
+        126,
+        27,
+        123
+      ],
+      "cold_start": true,
+      "case": "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/verification_cases/fine",
+      "saved_iteration": "380",
+      "solver_converged": true,
+      "mesh_ok": true,
+      "pressure_drop_kinematic_m2s2": 0.0044620035,
+      "inlet_m3s": -0.53386551,
+      "outlet_m3s": 0.53386552,
+      "relative_flux_imbalance": 1.8731309200373872e-08,
+      "sample_sha256": "b551f01e8491a28fa123c13953b8dcd04c6535b455826a7275418563e7e37897"
+    },
+    "flow80": {
+      "cells": 141312,
+      "flow_factor": 0.8,
+      "mesh_counts": [
+        24,
+        32,
+        84,
+        18,
+        82
+      ],
+      "cold_start": true,
+      "case": "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/verification_cases/flow80",
+      "saved_iteration": "237",
+      "solver_converged": true,
+      "mesh_ok": true,
+      "pressure_drop_kinematic_m2s2": 0.0029004374,
+      "inlet_m3s": -0.42709241,
+      "outlet_m3s": 0.42709241,
+      "relative_flux_imbalance": 0.0,
+      "sample_sha256": "01099ca180baf7fc2b756590c34b40e526bc4910e194c0477750d8d2e93e2e04"
+    }
+  },
+  "source_sha256": {
+    "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline/0/epsilon": "7155600ba083291af1c32f2af4cf981156f41408d70046b43d9f0080b1044db7",
+    "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline/0/k": "83c0dfe777cce179a60b8f52ecd4c0b2cb5839f84d2a610b4246c7534ec10530",
+    "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline/0/p": "442c17aa946197d4c260b9abfa0d84167da83e22f64ec711fdf6fcc0bd80d2e3",
+    "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline/0/nut": "e068b589eafd792fcadc7234ab011f0265c2efaddaca07e623fe3ce2fadb1c9c",
+    "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline/0/U": "b38ecbd0045b7498d5c9c1e8e693b1133d17b785c0e990ca8e17dc18c86c472f",
+    "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline/system/blockMeshDict": "3206f4c8d7c3410434c792a91a5f80508f5c9f64327691d763f44e28b194f872",
+    "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline/system/fvSchemes": "5a326f1f6d8e970b78bf9bbbac445771936fba2b34cbce9c88db475daed859b5",
+    "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline/system/controlDict": "6c96b41e3bbd025b7ee0e1c776d88b2d19405706d956a8c85cfe6b0666a6c6e1",
+    "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline/system/fvSolution": "3d1a13ce1106057c68ae8f1e68c4b571b650cc7851529e7a169386c6696da0d1",
+    "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline/constant/turbulenceProperties": "80f2a829dd8861b15e0713aab197e9a5b1228c686a7d5621d5f487e35bb9b836",
+    "/home/mattb/projects/jetbridge-run-all-full-20261027-r2/cfd/baseline/constant/transportProperties": "07146fb386303175a750fe060cf1afade1c73052a468fb268c2a9ae5ae4b7e7b"
+  },
+  "script_sha256": "17e2b7d0987a83d4be05cab235dfe9affc155534f78323e41b7892d2595d20aa",
+  "transfer_protocol": "Predefined 24-sensor hybrid; test at synthetic 80 percent baseline flow; retrain values and training-only SVR tuning, no layout adjustment",
+  "limits": [
+    "Mesh counts differ with unequal refinement factors; no Richardson/GCI claim",
+    "Coordinate comparison is sensitivity to nominal-inch mapping, not a correction to published coordinates",
+    "Flow80 adjusts inlet U, k and epsilon to retain intensity and length-scale assumptions; not matched to a measured run"
+  ]
+}

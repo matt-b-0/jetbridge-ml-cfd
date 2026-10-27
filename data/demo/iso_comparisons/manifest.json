@@ -1,0 +1,35 @@
+{
+  "time": "237",
+  "case": "/home/mattb/projects/jetbridge-baseline-20261024",
+  "matched_run": "S01-A-10-HN-1",
+  "speed": "sqrt(Ux^2 + Uy^2 + Uz^2)",
+  "delta": "CFD minus measured mean",
+  "surface_interpolation": "cellPoint",
+  "sensor_interpolation": "cell",
+  "coordinate_frame": "source absolute metres; galleries subtract actual mesh floor only for display",
+  "sha256": {
+    "/home/mattb/projects/jetbridge-baseline-20261024/237/U": "a5e9029063c694b37e86dc6bebd1385f9fb31612f96ddcc59e6c07545754940c",
+    "/home/mattb/projects/jetbridge-baseline-20261024/system/blockMeshDict": "3206f4c8d7c3410434c792a91a5f80508f5c9f64327691d763f44e28b194f872",
+    "/home/mattb/projects/jetbridge-baseline-20261024/system/controlDict": "3037f63f58c2d02afcf0fb9b4ccfcada51ead0a38e773be6a7748aa9d298bb96",
+    "/home/mattb/projects/jetbridge-baseline-20261024/0/U": "b38ecbd0045b7498d5c9c1e8e693b1133d17b785c0e990ca8e17dc18c86c472f",
+    "/home/mattb/projects/jetbridge-visuals-20261024-v2/sliceExportDict": "cf1ea62e7b29e3404af6fb047d186bc25c0f3bbb1ebc3211113740cfd0124897",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-10-HN-1.txt": "f0bea3828c570daee25f5436daa3950abcfecc6d275747edc13407d588aef692",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-16-HN-1.txt": "2b616a5e2dcc36b23aeba8517c3420eef30b6f69fd6d30c760aa540c7e56e16c",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-22-HN-1.txt": "737a1965f2d71c49475d80bfbd1f85575ce999ab9f845e41c8a5e43192f3e712",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-28-HN-1.txt": "335d78bc1c1b3d5305a9e79d79e6b3e552a9746f88ff74e35c72dbf665f7cef5",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-34-HN-1.txt": "aee5ca977426e5e29266927e65717f039b211f0b1da2c7f9e00baedcec4c3452",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-40-HN-1.txt": "093f6aa9eb3dd13c01ef5328efafc53297f17e502aed46a28459d32b9af97231",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-46-HN-1.txt": "b8a3ba4773735b344666a00116994346944037b7a931f2a4371ad50974a9a3d0",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-52-HN-1.txt": "028f0b31321bd274c5c4c2b9b153d822ed9bb4638feeb6ba49c0c9f32a41a3e8",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-58-HN-1.txt": "919fde59f8696fe09a883890a7cb4ea92cacd3dff514829ddb1487510d13aadb"
+  },
+  "source_code_sha256": "18366456c1f5f415f4e80ee7685053322a333e0296a713494b0de5907c34a4ba",
+  "limitations": [
+    "Only 10 ft inlet flow was selected from its matching run",
+    "Single mesh, steady isothermal k-epsilon, full-face supply",
+    "Known upper ceiling source discrepancy retained",
+    "Convergence is not experimental validation",
+    "Measured speeds are sparse scalar magnitudes, not vectors",
+    "Cross-station runs and CFD do not share a time-resolved measurement window"
+  ]
+}

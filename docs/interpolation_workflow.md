@@ -45,3 +45,6 @@ No random split or random seed is needed. Prediction results are deterministic w
 - common_hull_rmse.png and station_rmse.png: aggregate and station-separated diagnostic plots.
 
 Outputs live under ignored data/processed or an external folder. Raw datasets are not copied, modified, committed or pushed. See the initial results note for measured results and limitations.
+
+## Current demo and quality workflow on 27 October 2026
+The repository now includes the attributed study input subset and compact archived numerical evidence. Use the root run_all.py driver and docs/LIVE_DEMO.md for one-clone execution; older commands above describe the original research runs. Static checking uses python -m ruff check src tests run_all.py; numerical tests use python -m pytest -q; API documentation uses python -m pdoc jetbridge_ml -o docs/html. See docs/DEVELOPMENT.md for scope and limitations. Live/full execute fresh isothermal CFD in new output folders; archived unconverged thermal evidence remains explicitly separate.

@@ -18,6 +18,7 @@ jobs:
           python-version: ${{ matrix.python }}
           cache: pip
       - run: python -m pip install -e '.[dev]'
+      - run: python -m ruff check src tests run_all.py
       - run: python -m pytest -q --junitxml=test-results.xml
       - uses: actions/upload-artifact@v7
         if: always()

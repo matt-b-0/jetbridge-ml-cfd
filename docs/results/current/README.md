@@ -57,3 +57,5 @@ Derived plots and small summary tables only. Experimental prediction, CFD recons
 [Run summary](SUMMARY.md)
 
 Thermal results remain unconverged; no experimental validation is claimed. Mesh checks assess sensitivity, not automatic mesh independence.
+
+Current execution entry point: run_all.py at the repository root. The guide docs/LIVE_DEMO.md covers included data and fresh versus archived results; docs/DEVELOPMENT.md documents Ruff linting, pytest and pdoc. These current instructions supplement the dated research results above.

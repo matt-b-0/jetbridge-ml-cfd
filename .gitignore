@@ -32,3 +32,7 @@ cfd/cases/**/data/source/*
 
 # Regenerated Word authoring output; retain final deliverables separately
 /docs/report/*_output/
+
+# Isolated demo runs and linter cache
+/demo_runs/
+.ruff_cache/

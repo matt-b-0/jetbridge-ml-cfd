@@ -1,0 +1,45 @@
+{
+  "case": "/home/mattb/projects/jetbridge-baseline-20261024",
+  "time": "237",
+  "train_stations": [
+    10,
+    22,
+    34,
+    46,
+    58
+  ],
+  "test_stations": [
+    16,
+    28,
+    40,
+    52
+  ],
+  "nx": 40,
+  "ny": 60,
+  "sampling": "cellPoint for both sparse inputs and dense reference; speed=norm(U)",
+  "coordinate_frame": "absolute source xyz metres retained; local height is a separate derived feature",
+  "sha256": {
+    "/home/mattb/projects/jetbridge-baseline-20261024/237/U": "a5e9029063c694b37e86dc6bebd1385f9fb31612f96ddcc59e6c07545754940c",
+    "/home/mattb/projects/jetbridge-baseline-20261024/system/blockMeshDict": "3206f4c8d7c3410434c792a91a5f80508f5c9f64327691d763f44e28b194f872",
+    "/home/mattb/projects/jetbridge-baseline-20261024/system/controlDict": "3037f63f58c2d02afcf0fb9b4ccfcada51ead0a38e773be6a7748aa9d298bb96",
+    "/home/mattb/projects/jetbridge-baseline-20261024/log.simpleFoam": "46931b8e5a5e4e8f774fde7629cd219ad90ebae4f2e720b77d4169c9140b9b01",
+    "/home/mattb/projects/jetbridge-baseline-20261024/log.checkMesh": "6103eda8cc37b8fc3b458ab30ef2b196e52f2d611dd662551364378eb41075a8",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-10-HN-1.txt": "f0bea3828c570daee25f5436daa3950abcfecc6d275747edc13407d588aef692",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-16-HN-1.txt": "2b616a5e2dcc36b23aeba8517c3420eef30b6f69fd6d30c760aa540c7e56e16c",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-22-HN-1.txt": "737a1965f2d71c49475d80bfbd1f85575ce999ab9f845e41c8a5e43192f3e712",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-28-HN-1.txt": "335d78bc1c1b3d5305a9e79d79e6b3e552a9746f88ff74e35c72dbf665f7cef5",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-34-HN-1.txt": "aee5ca977426e5e29266927e65717f039b211f0b1da2c7f9e00baedcec4c3452",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-40-HN-1.txt": "093f6aa9eb3dd13c01ef5328efafc53297f17e502aed46a28459d32b9af97231",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-46-HN-1.txt": "b8a3ba4773735b344666a00116994346944037b7a931f2a4371ad50974a9a3d0",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-52-HN-1.txt": "028f0b31321bd274c5c4c2b9b153d822ed9bb4638feeb6ba49c0c9f32a41a3e8",
+    "/mnt/c/Users/mattb_ar68ij9/Downloads/dot_92577_DS3/JetBridge_2026/03-Averages/V-S01-A-58-HN-1.txt": "919fde59f8696fe09a883890a7cb4ea92cacd3dff514829ddb1487510d13aadb"
+  },
+  "exporter_sha256": "25099dceb826de94cec0f892162f33975757d99d60b46ab54480eaed2534fa0d",
+  "limitations": [
+    "Single CFD solution, not experimental truth",
+    "Mesh sensitivity and physical validation remain outstanding",
+    "No thermal failed/unconverged fields used",
+    "Dense queries oversample the discrete CFD field; they are not independent experiments",
+    "Actual geometry retains documented upper-ceiling discrepancy"
+  ]
+}
