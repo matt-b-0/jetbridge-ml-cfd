@@ -33,9 +33,9 @@ Run python docs/report/build_evidence_report.py to rebuild the evidence report f
 
 ## Final review revision on 26 October
 
-See [final-review audit](FINAL_REVIEW_AUDIT.md) for the 58 ft reconstruction, hatched extrapolation, expanded-C sensitivity, larger typography and included representative inputs. Run python docs/report/build_submission_report.py for the current draft. The AI paragraph and undecided licence are retained under direct student instruction.
+See [final-review audit](FINAL_REVIEW_AUDIT.md) for the 58 ft reconstruction, hatched extrapolation, expanded-C sensitivity, larger typography and included representative inputs. Run python docs/report/build_submission_report.py for the current draft. The author supplied the current four-paragraph AI statement verbatim and selected MIT on 27 October 2026; ai_statement.txt is the retained source.
 
-The current draft is MMA3001_Jet_Bridge_Submission_Draft.docx. Its published implementation is 6c6cf81103f9644dcc6b3adebfcd3ff01775537e; a fresh public clone rebuilt it, passed 75 tests and reproduced the full final diagnostic summary. Hosted checks passed in run 40262525830. The licence and personal AI reflection remain intentionally incomplete under student instruction.
+The current draft is MMA3001_Jet_Bridge_Submission_Draft.docx. Its published implementation is 6c6cf81103f9644dcc6b3adebfcd3ff01775537e; a fresh public clone rebuilt it, passed 75 tests and reproduced the full final diagnostic summary. Hosted checks passed in run 40262525830. The current report supersedes this earlier publication: MIT and the author-supplied AI reflection were added on 27 October 2026.
 
 ## Current demo and quality workflow on 27 October 2026
 The repository now includes the attributed study input subset and compact archived numerical evidence. Use the root run_all.py driver and docs/LIVE_DEMO.md for one-clone execution; older commands above describe the original research runs. Static checking uses python -m ruff check src tests run_all.py; numerical tests use python -m pytest -q; API documentation uses python -m pdoc jetbridge_ml -o docs/html. See docs/DEVELOPMENT.md for scope and limitations. Live/full execute fresh isothermal CFD in new output folders; archived unconverged thermal evidence remains explicitly separate.

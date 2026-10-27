@@ -7,6 +7,7 @@ name = "jetbridge-ml"
 version = "0.1.0"
 description = "Numerical interpolation and ML for sparse jet bridge measurement reconstruction"
 readme = "README.md"
+license = {file = "LICENSE"}
 requires-python = ">=3.10"
 dependencies = [
     "numpy>=1.24",

@@ -6,7 +6,7 @@
 - The full demo reproduced all four isothermal mesh/convergence checks and regenerated 80 PNG figures. This is numerical consistency, not physical validation.
 - Matched raw/HVAC windows, unique averaged sensor positions and nested held-location splits are documented in the existing audits. Separate replicate files are not pooled.
 - Experimental speed prediction, CFD-field reconstruction and net signed flux remain separate comparisons.
-- The official FAA/NRC data record identifies CC BY 4.0; the included subset has attribution and hashes in data/demo. The project-code licence remains undecided under the author's instruction.
+- The official FAA/NRC data record identifies CC BY 4.0; the included subset has attribution and hashes in data/demo. The author selected MIT for project code on 27 October 2026; external data retain CC BY 4.0.
 
 ## Remaining scientific questions
 

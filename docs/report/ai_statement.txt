@@ -1,0 +1,7 @@
+This project developed from my previous experience investigating CFD simulations of the jet bridge and identifying discrepancies between experimental airflow measurements and numerical predictions. I established the engineering objectives and directed the investigation towards comparing numerical interpolation and machine learning methods, with OpenFOAM providing an additional reference for evaluating spatial reconstruction.
+
+I used ChatGPT to assist with initial project planning and Codex extensively to support Python implementation, debugging, automated testing, visualisation and report development. My focus was on understanding the numerical methods, assessing their suitability and critically interpreting the results rather than relying solely on generated outputs.
+
+Throughout the project, issues involving coordinate conversion, sensor measurement windows and CFD convergence highlighted the importance of verification. In particular, investigating the disagreement between experimental measurements and mass-conserving CFD predictions reinforced my understanding that numerical convergence does not establish physical accuracy.
+
+The project strengthened my understanding of interpolation, regression, numerical validation and computational modelling. AI accelerated the development process, while the engineering objectives, interpretation of limitations and final conclusions remained central to my contribution.

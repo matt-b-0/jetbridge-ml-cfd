@@ -33,7 +33,7 @@ That broader audit may report legacy findings; it is not the current CI acceptan
 
 Keep source parsers, interpolation, fitted ML, CFD export and validation in their existing modules. `run_all.py` orchestrates them; it must not introduce a second implementation of the physical model or tune against outer test targets. Add a NumPy-style docstring for new public scientific functions and meaningful regression checks for changed behaviour.
 
-The demo data manifest verifies bundled file hashes. Original FAA/NRC files are preserved; changes to generated exports need new provenance. `.gitattributes` preserves demo input bytes across Windows/Linux clones. Output directories are fresh and ignored. Never commit generated meshes or full time folders. The data attribution is independent of the still-undecided project-code licence.
+The demo data manifest verifies bundled file hashes. Original FAA/NRC files are preserved; changes to generated exports need new provenance. `.gitattributes` preserves demo input bytes across Windows/Linux clones. Output directories are fresh and ignored. Never commit generated meshes or full time folders. The data attribution is independent of the MIT project-code licence.
 
 Use `python run_all.py --profile replay` to test included-data figure generation and live/full profiles for real OpenFOAM execution. [LIVE_DEMO.md](LIVE_DEMO.md) defines what is fresh and what is archived in each profile. The tracked report builders regenerate Word files separately and require python-docx plus a layout render; a successful Python figure run does not update a Word report automatically.
 

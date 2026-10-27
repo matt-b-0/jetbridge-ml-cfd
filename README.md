@@ -98,7 +98,11 @@ The [revised report and controlled performance workflow](docs/report/README.md) 
 
 [Second report review evidence and submission audit](docs/report/SECOND_REVIEW_AUDIT.md) includes spatial reconstructions, physical hull coverage, selection/sensitivity diagnostics and the current reproducibility gaps. Generated [HTML API documentation](docs/html/index.html) and the [local test report](docs/report/test-results.xml) are included.
 
-The [final report review and representative reproduction commands](docs/report/FINAL_REVIEW_AUDIT.md) add explicit physical coverage, the decisive 58 ft example and an exploratory lower-C check. The licence remains undecided; the final-review audit separates implementation, document packaging and publication revisions.
+The [final report review and representative reproduction commands](docs/report/FINAL_REVIEW_AUDIT.md) add explicit physical coverage, the decisive 58 ft example and an exploratory lower-C check. Project code is available under the [MIT licence](LICENSE); the final-review audit separates implementation, document packaging and publication revisions.
 
 
 [Demo verification](docs/demo_validation/README.md): 82 tests and Ruff pass; fresh public-clone live/replay workflows pass. Measured stage times were about 4.8 minutes for live, 3.5 for replay and 12.9 for full, excluding initial hashing. Live/full produce 80 PNG output files; thermal diagnostics remain explicitly archived and unconverged.
+
+## Licence
+
+Project code and original documentation are published under the [MIT licence](LICENSE), copyright 2026 Matthew Brasacchio. External FAA/NRC data retain their separate [CC BY 4.0 attribution](data/demo/ATTRIBUTION.md); third-party dependencies retain their own licences.

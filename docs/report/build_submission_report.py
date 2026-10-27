@@ -70,4 +70,16 @@ p('The measured contrast could reflect local flow structure or sequential/operat
 
 """
 source=source.replace(anchor,extra+anchor)
+# The author supplied this personal reflection verbatim on 27 October 2026.
+old_ai = "AI assistance supported parsing, workflow and plotting code, numerical checks, documentation and this report scaffold. Verification included unit tests, coordinate/source audits, repeated outputs, mesh checks, solver logs and hosted CI. Errors found during development included a probe-window bug and coordinate-dependent geometric tie selection; these were corrected and recorded in the AI-use log [4]."
+old_call = 'p(' + repr(old_ai) + ')'
+assert old_call in source, 'AI statement replacement target missing'
+paragraphs = Path(__file__).with_name('ai_statement.txt').read_text(encoding='utf-8').strip().split('\n\n')
+source = source.replace(old_call, '\n'.join('p(' + repr(text) + ')' for text in paragraphs))
+source = source.replace('AI use and individual learning', 'AI Use and Individual Learning')
+source = source.replace('75 tests pass', '82 tests pass')
+source = source.replace('26 October 2026', '27 October 2026')
+source = source.replace('The licence remains undecided by the author.', 'Project code is published under the MIT licence; external FAA/NRC data retain CC BY 4.0 attribution.')
+source = source.replace('Raw FAA records and large CFD fields remain external, with acquisition and regeneration instructions.', 'The required FAA/NRC subset and archived CFD samples are bundled with hashes and attribution. The run_all.py live profile regenerates figures and runs the baseline CFD case; full fields are regenerated rather than committed.')
+source = source.replace('This figure documents an unsuccessful numerical extension. They must not', 'These results document an unsuccessful numerical extension. They must not')
 exec(compile(source,str(previous),'exec'))

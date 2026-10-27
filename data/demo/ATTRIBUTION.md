@@ -14,4 +14,4 @@ The selection includes source geometry templates, statistical-average files, HVA
 
 `manifest.json` records each included input's path, size, origin, role and SHA-256. The runner verifies it before use. Figure modules that explicitly replay these tables record that fact in their own manifests; the demo manifest records the fresh/archived split for each stage.
 
-The dataset's CC BY 4.0 statement is independent of the student's project code. The project-code licence remains undecided under the author's instruction; this notice does not select one.
+The dataset's CC BY 4.0 statement is independent of the student's project code. Project code is licensed under MIT (see the root LICENSE); this does not change the external dataset licence.

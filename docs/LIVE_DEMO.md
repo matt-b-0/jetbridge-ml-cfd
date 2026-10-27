@@ -15,7 +15,7 @@ python -m pip install -r requirements-benchmark.txt
 python -m pip install --no-deps -e .
 ```
 
-All data required by the commands below is included in the ordinary Git clone: no LFS pull, private download path or manual CSV copying. The experimental subset has a separate CC BY 4.0 attribution notice in `data/demo/ATTRIBUTION.md`. This does not assign a licence to the student's code, which remains undecided.
+All data required by the commands below is included in the ordinary Git clone: no LFS pull, private download path or manual CSV copying. The experimental subset has a separate CC BY 4.0 attribution notice in `data/demo/ATTRIBUTION.md`. The student's project code is separately published under MIT; see the root LICENSE.
 
 ## Demonstrate a real CFD run
 
