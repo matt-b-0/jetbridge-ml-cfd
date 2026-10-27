@@ -1,0 +1,298 @@
+[
+  {
+    "path": "additional_figures/00_overview.png",
+    "sha256": "f08c40e4260f1254bbf627d526615878e8208468717d2984de9f3f154f73480d"
+  },
+  {
+    "path": "additional_figures/01_model_skill.png",
+    "sha256": "50cf911f71dda3071d3dbc5db2abb92d57fc32e22fbf55ceb303f5a8e532a50b"
+  },
+  {
+    "path": "additional_figures/02_station_error_heatmap.png",
+    "sha256": "47589851354a56503a59fdd39066b16c48f728c0416bdbca0965b93d991d2453"
+  },
+  {
+    "path": "additional_figures/03_layout_stratified_comparison.png",
+    "sha256": "ef8de24a274d3f990e98f8461da3dcb935239ecdbd55f8370ea479b82b0afc77"
+  },
+  {
+    "path": "additional_figures/04_experimental_error_distributions.png",
+    "sha256": "a293753d3f985b7d646dcf2d92b441fa6191a3e0b365b0cd70f096c1f6f792e9"
+  },
+  {
+    "path": "additional_figures/05_matched_agreement.png",
+    "sha256": "bdabec1f419d627803cfadefe6cb7ad036a28b98b922a7f100de16f25797d36c"
+  },
+  {
+    "path": "additional_figures/06_mesh_height_profiles.png",
+    "sha256": "641715b1cb7b51598857b30adf51f324bb162e22e179dc2256bdaacc5f8b03ea"
+  },
+  {
+    "path": "additional_figures/07_flow_transfer_error_maps.png",
+    "sha256": "1db52e7bbfde7874b90b99b38bc10384dcb627894f896140410465b6d1445a29"
+  },
+  {
+    "path": "additional_figures/08_layout_transfer_gain.png",
+    "sha256": "6516db3689ced75f21a26029be884c1fcb7ecc6ffa3e466107296a5893a33709"
+  },
+  {
+    "path": "additional_figures/09_thermal_numerical_screens.png",
+    "sha256": "a1f31895577ada611b4d111f6571432927d455ea22c723f9e93e836b3c038b14"
+  },
+  {
+    "path": "analysis/experimental/experimental_nested_errors.png",
+    "sha256": "76790b0e6cfecd0bf5fd23facada930fecd7e703b53bdfab06a499568f001ba9"
+  },
+  {
+    "path": "analysis/experimental/experimental_parity.png",
+    "sha256": "8ebaf46306424cd9cfcc6429e3d79f3522568877fcf481910db867f606db7473"
+  },
+  {
+    "path": "analysis/experimental/experimental_spatial_errors.png",
+    "sha256": "9efc4a4e0fde951b74164a8ddc14d2e7a4cee2429059e10c5219ac701fc310c2"
+  },
+  {
+    "path": "analysis/paired/paired_model_errors.png",
+    "sha256": "5676141cf47daa734c8e6a05d46e3ef86c9924232b28100c4516703ba6b704fa"
+  },
+  {
+    "path": "analysis/sensor_design/sensor_count_errors.png",
+    "sha256": "e6ebdedd8b66d3b01a0d4fff26261331afe4b6ffb6839015d7da3e5865a46b31"
+  },
+  {
+    "path": "analysis/sensor_design/sensor_placement_examples.png",
+    "sha256": "95bea72aeb462bc0fd43a35308866e53c03253c8b956b5f44cf57f175f91d125"
+  },
+  {
+    "path": "analysis/stability/accuracy_refinement.png",
+    "sha256": "05abca2e5a8413a1b7209fa81d9e82b4f2d058dbd9b16ea80e560b95b15404cf"
+  },
+  {
+    "path": "analysis/stability/diffusion_stability.png",
+    "sha256": "e1a5532f5fedec901ea9c225599447c642974b6a2df4052d49c7d988e0a08809"
+  },
+  {
+    "path": "analysis/stability/high_frequency_damping.png",
+    "sha256": "762c9cf1ad92a0bfd85e2c27192bc759c1667d7debd1c7a24a7aae4d27e2436e"
+  },
+  {
+    "path": "analysis/stability/interpolation_noise_amplification.png",
+    "sha256": "f59deca9b2a9473dde28771a362c31137be829a10b0059211b830f9102ae8f56"
+  },
+  {
+    "path": "analysis/stability/relaxation_stability.png",
+    "sha256": "75ceb2a8e5993e3a8e90e0da81cd49968f72e72e0666080c25d46be67aab3f41"
+  },
+  {
+    "path": "analysis/thermal/thermal_continuation_diagnostics.png",
+    "sha256": "c7c095c425d50e37201bc7e06cc3f87780f7054b6792d6a7ccca1db1c78c6b46"
+  },
+  {
+    "path": "analysis/verification/flow_transfer.png",
+    "sha256": "9f748d3593ec56c69d47649754e8defd3370b3b7f72a5d79fba93020a493b51a"
+  },
+  {
+    "path": "analysis/verification/mesh_coordinate_sensitivity.png",
+    "sha256": "cefd0bef3ba67a5c45750f73a12f74374354adb7cfb262686c4bf20641014808"
+  },
+  {
+    "path": "compact_figures/geometry_compact.png",
+    "sha256": "83a212497a1df5c6fce3eb11a209efe132ae26b347aaf6b47a6a3a83619a4507"
+  },
+  {
+    "path": "compact_figures/matched_parity_compact.png",
+    "sha256": "015a382daeeb5a3b059deb06f3f7e41052d8171b727a371df46030924586255e"
+  },
+  {
+    "path": "compact_figures/paired_station_compact.png",
+    "sha256": "f5eb32582ccd3df6c93fbba0378a094a46316c87d78bd697c41a899dcf91d001"
+  },
+  {
+    "path": "compact_figures/scaled_noise_gain.png",
+    "sha256": "d81c785e77437ca8efcdc29fd6de6c38e92760c2957aaf23ac445086afda0c44"
+  },
+  {
+    "path": "compact_figures/transfer_compact.png",
+    "sha256": "ab26a6b9a2817225f65bc0e28c0380ad25b175f139f818c03014ffadcf7863f9"
+  },
+  {
+    "path": "field_gallery/00_contact_sheet.png",
+    "sha256": "4fa6f6ff58ad24071514e5ee62aa111de335f8ad202fd7045e3568b5d877e609"
+  },
+  {
+    "path": "field_gallery/01_geometry_and_sensors.png",
+    "sha256": "41795cb002a4704ef3c253926ba419b1bbda941afad63592f9d9cf06ed77d70f"
+  },
+  {
+    "path": "field_gallery/02_longitudinal_speed_shared_scale.png",
+    "sha256": "5b249c223d33283f54facf7f8430448e1cfbf61f4ad011e0918d21ef92a6c56a"
+  },
+  {
+    "path": "field_gallery/03_longitudinal_temperature.png",
+    "sha256": "344111ac857dd35eaebbcdb60b418f9ed81091d108f11903f6280af315d9fb2f"
+  },
+  {
+    "path": "field_gallery/04_iso_speed_sections.png",
+    "sha256": "cf62392e645062c3b77e2c922a3123d56d1bda61b9c3dacd0618409a6c3b4172"
+  },
+  {
+    "path": "field_gallery/05_thermal_speed_sections.png",
+    "sha256": "1d04e2a00c442d4389703c3be69a97613f57f25340fa3fbdaa2b3dc4987d53ac"
+  },
+  {
+    "path": "field_gallery/06_control_speed_sections.png",
+    "sha256": "4d22b4cd5f21ca8c5bb3a5ff0587cf1ee9e7aae8e7fd2992aa55b4d021300a48"
+  },
+  {
+    "path": "field_gallery/07_thermal_temperature_sections.png",
+    "sha256": "02a1524e5d0a6956e03a8b765100b78148b4e77ba961126b359013ae9c46ce0b"
+  },
+  {
+    "path": "field_gallery/08_thermal_minus_control.png",
+    "sha256": "3dadc42bf647ffe6370e76f36c28494415948095bdf238062989eeb55667d3f7"
+  },
+  {
+    "path": "field_gallery/09_midplane_velocity_arrows.png",
+    "sha256": "f64d2fe32b41f17c1673df00514b3b3cbdca4dc6ac90d39a14f919e5e45cebbd"
+  },
+  {
+    "path": "field_gallery/10_axial_section_statistics.png",
+    "sha256": "d0e0fd2f1a9dd9c7347382724260cb0156f594e0540cabfb8079c9503ef15331"
+  },
+  {
+    "path": "field_gallery/11_sensor_parity.png",
+    "sha256": "fd8c0457d9cb18061846c3e1dc42f66728bb898d83c7c3437c096cbd6f5e6f51"
+  },
+  {
+    "path": "field_gallery/12_signed_sensor_differences.png",
+    "sha256": "ade8d095c8f6985c5d7c68440f3fcefc580eed4445b5d9df1b8f2d37daebb1d0"
+  },
+  {
+    "path": "field_gallery/13_thermal_sensor_height_profiles.png",
+    "sha256": "a55ed3697d95805db63eba0101941d794cef187e63b458f097d5fa82276fe11b"
+  },
+  {
+    "path": "field_gallery/14_residual_histories.png",
+    "sha256": "b65d05129b7e52b3d49f5323705983dd044245bbef1a0e3b2c250392049de1c4"
+  },
+  {
+    "path": "field_gallery/15_thermal_probe_stationarity.png",
+    "sha256": "b7aad70ea30ac7e28e038b25703d2354f18b1ecf551dde47497a9f5896159226"
+  },
+  {
+    "path": "field_gallery/16_section_sample_distributions.png",
+    "sha256": "a3e29b03bad22b4fae1b2763c95863ed4df5016ff0412083190b09bbd4b1a502"
+  },
+  {
+    "path": "final_checks/cfd_reconstruction_large.png",
+    "sha256": "ac17463a44e3595085c9fbf3202f91864450ef70724cf756291a59a7dc0453f5"
+  },
+  {
+    "path": "final_checks/experimental_10ft_coverage.png",
+    "sha256": "3df8b6082372f7dbc55e981e674b4f6587f9609633b97abba2f4d94754205b9b"
+  },
+  {
+    "path": "final_checks/experimental_58ft_coverage.png",
+    "sha256": "6510f391bc704c78b05236cdf88703a155f8187b6a8c14ac0e9130f4878e335c"
+  },
+  {
+    "path": "final_checks/perturbation_large.png",
+    "sha256": "4b9168fac9e802b5def05d1a0b30706175f320818eee823a8f726d1f6bab43d1"
+  },
+  {
+    "path": "iso_comparisons/cfd_nine_slices.png",
+    "sha256": "cc54f1eac690369c1f1b93e518fbd77fff6b084b1e2b4659e841a3e487e3667f"
+  },
+  {
+    "path": "iso_comparisons/matched_10ft_profiles_and_errors.png",
+    "sha256": "9baec4ee3371209f4dd7755dc231c00e6a7252389429f42bc8257a725af354b9"
+  },
+  {
+    "path": "iso_comparisons/matched_10ft_slice_and_delta.png",
+    "sha256": "b88a5386e1868c74415856f7c7189b7e2fb8004e81090df99ce3c2e91783670e"
+  },
+  {
+    "path": "iso_comparisons/nine_station_sensor_deltas.png",
+    "sha256": "df4a3da31a4b28b033633b76fd7a41189fb500c57af4d5831e36cd5015850c3d"
+  },
+  {
+    "path": "legacy_interpolation/common_hull_rmse.png",
+    "sha256": "4cfc02965972dea44475e3c16af6c2324210efca9b28cd04a73ad714d79b3048"
+  },
+  {
+    "path": "legacy_interpolation/station_rmse.png",
+    "sha256": "0192bafccb057c7d5c188d8804b61d182e62009f32d3127b2eddb50fe6ad6348"
+  },
+  {
+    "path": "performance/controlled_runtime.png",
+    "sha256": "48b68248fa4aabca88abe2df0ddedcb4beb1c3f3ec7bf41d2e937cf4285be039"
+  },
+  {
+    "path": "report_evidence/cfd_reconstruction.png",
+    "sha256": "933f02a06d807a46d6ede4a77cc8fe5ffe06ca09b32e09287305f53e083474b5"
+  },
+  {
+    "path": "report_evidence/empirical_perturbation.png",
+    "sha256": "8a9d866962813839e321f30634bd583c8d21c14bc7aea2af937b6297b01992be"
+  },
+  {
+    "path": "report_evidence/experimental_reconstruction.png",
+    "sha256": "b614b187c447f687754f4b2c147e71008632801f4c49cbb059fc2b5d918bad5a"
+  },
+  {
+    "path": "report_evidence/matched_with_variation.png",
+    "sha256": "2c0d7c76a1ab728b9f99725cf04e7219e4a972b10a4b63abec55e728cb7fc49e"
+  },
+  {
+    "path": "report_evidence/parameter_selection.png",
+    "sha256": "b77acf3acf806eb2bba0e7460f623591b8a1c29f17ba42b0c629737a47fa63a8"
+  },
+  {
+    "path": "thermal_comparisons/thermal_convergence_history.png",
+    "sha256": "6cce5fb00245ecb7d5e296e45d3e6f519192219ed0b21082a07a044498a42845"
+  },
+  {
+    "path": "thermal_comparisons/thermal_longitudinal_slices.png",
+    "sha256": "d844e51f719ef6dcac59c94a6ca2efaa31a56108797ee30ca957594496b582f7"
+  },
+  {
+    "path": "thermal_comparisons/thermal_profiles_and_control.png",
+    "sha256": "012658e859b18644c3a684a5d89736f4b2633fd0cd8733e23e43e7cd2dff6fce"
+  },
+  {
+    "path": "thermal_comparisons/thermal_slices_and_deltas.png",
+    "sha256": "a3dd501a6fd085fecbf21c5f655cb9049995fbcc0fce4ec5e0cf38cb0b121b6c"
+  },
+  {
+    "path": "thermal_diagnostics/thermal_continuation_diagnostics.png",
+    "sha256": "c7c095c425d50e37201bc7e06cc3f87780f7054b6792d6a7ccca1db1c78c6b46"
+  },
+  {
+    "path": "verification_summary/flow_transfer.png",
+    "sha256": "9f748d3593ec56c69d47649754e8defd3370b3b7f72a5d79fba93020a493b51a"
+  },
+  {
+    "path": "verification_summary/mesh_coordinate_sensitivity.png",
+    "sha256": "cefd0bef3ba67a5c45750f73a12f74374354adb7cfb262686c4bf20641014808"
+  },
+  {
+    "path": "virtual_svr/heldout_station_errors.png",
+    "sha256": "1576a41df8511a3e5ece718735ba2a37bbedf5e369adf62818e4dff14f41e7bc"
+  },
+  {
+    "path": "virtual_svr/interpolation_svr_delta_slices.png",
+    "sha256": "081327eed4583a26e2b82013d6bd284d27ad04a48cd2d0062842d07aa13a8ebd"
+  },
+  {
+    "path": "virtual_svr/svr_heldout_slices.png",
+    "sha256": "a98c5f18a5e9fdac6b39e764c02d740d01c55e180002988db1e9d9dcb46efd60"
+  },
+  {
+    "path": "virtual_svr/svr_learning_and_search.png",
+    "sha256": "1091fe6c326ff276f5b4879f402b8644653e7a0ae444c6833dbdd99f49ae7984"
+  },
+  {
+    "path": "virtual_svr/svr_solver_iteration_error.png",
+    "sha256": "f6a65b85c92d89305bb9f549bb9ee5d34183b90e4c0e9b816f65e24d48f3a111"
+  }
+]

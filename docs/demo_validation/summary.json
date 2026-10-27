@@ -1,0 +1,23 @@
+{
+  "full": {
+    "png_outputs": 80,
+    "stage_seconds": 772.303,
+    "all_stages_passed": true,
+    "primary_experimental_scores_preserved": true
+  },
+  "replay": {
+    "png_outputs": 74,
+    "stage_seconds": 210.089,
+    "all_stages_passed": true,
+    "primary_experimental_scores_preserved": true
+  },
+  "live": {
+    "png_outputs": 80,
+    "stage_seconds": 285.81,
+    "all_stages_passed": true,
+    "primary_experimental_scores_preserved": true
+  },
+  "implementation_commit": "42814365cd0fcc86ccd49b29a3be330f0c74935c",
+  "quality": "Ruff gate passed; 82 tests passed locally and on hosted CI",
+  "thermal": "Archived unconverged diagnostics, not fresh solves or training references"
+}

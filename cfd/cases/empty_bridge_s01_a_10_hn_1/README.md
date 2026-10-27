@@ -81,3 +81,6 @@ Allrun / Allclean       execution helpers
 ```
 
 Report acknowledgement: National Research Council of Canada / FAA, *Communicable Disease Transmission in Air Travel: Jet Bridge Ventilation*, DOT/FAA/AM-25/28 (July 2026), linked above. Confirm associated dataset terms before redistributing selected source files.
+
+## Current demo and quality workflow on 27 October 2026
+The repository now includes the attributed study input subset and compact archived numerical evidence. Use the root run_all.py driver and docs/LIVE_DEMO.md for one-clone execution; older commands above describe the original research runs. Static checking uses python -m ruff check src tests run_all.py; numerical tests use python -m pytest -q; API documentation uses python -m pdoc jetbridge_ml -o docs/html. See docs/DEVELOPMENT.md for scope and limitations. Live/full execute fresh isothermal CFD in new output folders; archived unconverged thermal evidence remains explicitly separate.

@@ -62,3 +62,5 @@ See [development and linting](DEVELOPMENT.md) for the quality commands and [data
 
 ## Measured workstation check on 27 October 2026
 The development full run regenerated 80 PNG figures in 27 logged stages. Stage execution totalled approximately 772 seconds (12.9 minutes), excluding initial input hashing. Its fresh solves converged at baseline 237, coarse 115, fine 380 and flow80 237, with all meshes passing checkMesh. These are numerical checks, not physical validation. The final live/replay clone checks and current test count are recorded under docs/demo_validation. Do not try to fit this full run into a five-minute presentation.
+
+Final public-clone checks passed at implementation 42814365cd0fcc86ccd49b29a3be330f0c74935c. Replay produced 74 PNG outputs in about 3.5 minutes; live produced 80 in about 4.8 minutes. These exclude initial hashing and vary by hardware. The full run produced 80 in about 12.9 minutes. See [verification records](demo_validation/README.md) for stage manifests, counts, measured times, CI and preservation of the original experimental metrics.

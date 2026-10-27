@@ -1,9 +1,19 @@
-# Research questions to resolve before claiming validity
+# Resolved implementation checks and remaining research questions
 
-1. Which OpenFOAM distribution/version is installed, and what are the supported solvers/BC syntax?
-2. Can the numerical mass balance, mesh quality, residual convergence and probe extraction be reproduced locally?
-3. What exact data windows were used for reporting the experimental air speeds and HVAC Q.FS per replicate?
-4. Can wall leakage or geometric boundary details explain any pressure/flow mismatch? Is independent evidence available?
-5. Which station/location splits are valid for the small observed grids, avoiding train/test leakage?
-6. How will the project distinguish agreement to simulated CFD fields from agreement to physical measurements?
-7. What dataset attribution/licence and repo licensing terms apply to a public GitHub release?
+## Reproduced implementation
+
+- OpenCFD v2412 is the tested solver distribution; its runtime is sourced by the demo driver.
+- The full demo reproduced all four isothermal mesh/convergence checks and regenerated 80 PNG figures. This is numerical consistency, not physical validation.
+- Matched raw/HVAC windows, unique averaged sensor positions and nested held-location splits are documented in the existing audits. Separate replicate files are not pooled.
+- Experimental speed prediction, CFD-field reconstruction and net signed flux remain separate comparisons.
+- The official FAA/NRC data record identifies CC BY 4.0; the included subset has attribution and hashes in data/demo. The project-code licence remains undecided under the author's instruction.
+
+## Remaining scientific questions
+
+1. What wall treatment, inlet diffuser detail, leakage and pressure-boundary evidence are needed to explain the local CFD/experiment discrepancy?
+2. Can matched-condition comparisons across stations resolve the motivating upstream/downstream pattern without pooling asynchronous or different-flow observations?
+3. What independent sensor layout or operating case and engineering acceptance threshold should support a stronger prediction claim?
+4. Can thermal assumptions and numerical settings be tested systematically until an eligible converged thermal reference exists? Current thermal evidence remains unconverged.
+5. How do documented instrument uncertainty and spatially correlated flow variations change reconstruction sensitivity?
+
+For execution and quality checks use [LIVE_DEMO.md](LIVE_DEMO.md) and [DEVELOPMENT.md](DEVELOPMENT.md): python run_all.py, Ruff linting, pytest and generated API documentation. Passing these checks does not resolve the scientific questions above.

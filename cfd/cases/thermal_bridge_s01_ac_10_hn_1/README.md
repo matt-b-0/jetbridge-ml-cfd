@@ -43,7 +43,7 @@ python -m jetbridge_ml.cfd_interface.plot_thermal \
 ```
 This exports final saved speed/temperature planes and sensor values with source coordinates checked. It labels convergence status rather than assuming it.
 
-Raw sources and large results remain external. The runtime Linux case holds logs, fields and processed experiment data. Consult docs/thermal_case_results.md for actual run status and scientific limitations.
+Selected experimental records and archived diagnostic exports are now included under data/demo; full raw archives and large solved fields remain external. The runtime Linux case holds logs, fields and processed experiment data. Consult docs/thermal_case_results.md for actual run status and scientific limitations.
 
 ## Recorded run status
 
@@ -54,3 +54,7 @@ To reproduce the warm start, run scripts/stabilize.py with --thermal, --control,
 
 ## Bounded continuation audit
 The new scripts/continue_saved.py copies a selected saved field into a fresh case, preserves physical and numerical settings, and extends the iteration cap. The recorded continuation from 967 to 1967 still failed residual and probe-stationarity checks; it is not a reference field or a validated thermal result. See docs/four_workstreams_results.md in the repository root for commands and diagnostics. Original case dictionaries and prior result figures are unchanged.
+
+## Current one-clone demonstration
+The root run_all.py driver regenerates thermal graphics from explicitly archived unconverged evidence; it does not claim a new successful thermal solve. See docs/LIVE_DEMO.md and docs/DEVELOPMENT.md in the repository root for profiles, python -m ruff check src tests run_all.py, pytest and API documentation. Existing physical assumptions and failed status remain unchanged.
+
