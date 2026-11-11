@@ -89,33 +89,63 @@
 </span><span id="regression_metrics-17"><a href="#regression_metrics-17"><span class="linenos">17</span></a><span class="sd">    -------</span>
 </span><span id="regression_metrics-18"><a href="#regression_metrics-18"><span class="linenos">18</span></a><span class="sd">    dict of str to float</span>
 </span><span id="regression_metrics-19"><a href="#regression_metrics-19"><span class="linenos">19</span></a><span class="sd">        ``rmse``, ``mae`` and ``bias`` (predicted minus actual).</span>
-</span><span id="regression_metrics-20"><a href="#regression_metrics-20"><span class="linenos">20</span></a><span class="sd">    """</span>
-</span><span id="regression_metrics-21"><a href="#regression_metrics-21"><span class="linenos">21</span></a>    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="regression_metrics-22"><a href="#regression_metrics-22"><span class="linenos">22</span></a>    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">predicted</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="regression_metrics-23"><a href="#regression_metrics-23"><span class="linenos">23</span></a>    <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">p</span><span class="o">.</span><span class="n">shape</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
-</span><span id="regression_metrics-24"><a href="#regression_metrics-24"><span class="linenos">24</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'actual and predicted must be equal-size finite nonempty arrays'</span><span class="p">)</span>
-</span><span id="regression_metrics-25"><a href="#regression_metrics-25"><span class="linenos">25</span></a>    <span class="n">err</span> <span class="o">=</span> <span class="n">p</span><span class="o">-</span><span class="n">a</span>
-</span><span id="regression_metrics-26"><a href="#regression_metrics-26"><span class="linenos">26</span></a>    <span class="k">return</span> <span class="p">{</span>
-</span><span id="regression_metrics-27"><a href="#regression_metrics-27"><span class="linenos">27</span></a>        <span class="s1">'rmse'</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">err</span><span class="o">**</span><span class="mi">2</span><span class="p">))),</span>
-</span><span id="regression_metrics-28"><a href="#regression_metrics-28"><span class="linenos">28</span></a>        <span class="s1">'mae'</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">err</span><span class="p">))),</span>
-</span><span id="regression_metrics-29"><a href="#regression_metrics-29"><span class="linenos">29</span></a>        <span class="s1">'bias'</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">err</span><span class="p">)),</span>
-</span><span id="regression_metrics-30"><a href="#regression_metrics-30"><span class="linenos">30</span></a>    <span class="p">}</span>
+</span><span id="regression_metrics-20"><a href="#regression_metrics-20"><span class="linenos">20</span></a>
+</span><span id="regression_metrics-21"><a href="#regression_metrics-21"><span class="linenos">21</span></a><span class="sd">    Raises</span>
+</span><span id="regression_metrics-22"><a href="#regression_metrics-22"><span class="linenos">22</span></a><span class="sd">    ------</span>
+</span><span id="regression_metrics-23"><a href="#regression_metrics-23"><span class="linenos">23</span></a><span class="sd">    ValueError</span>
+</span><span id="regression_metrics-24"><a href="#regression_metrics-24"><span class="linenos">24</span></a><span class="sd">        If arrays are empty, have unequal flattened lengths, or contain</span>
+</span><span id="regression_metrics-25"><a href="#regression_metrics-25"><span class="linenos">25</span></a><span class="sd">        non-finite values. Restrict to common supported targets explicitly</span>
+</span><span id="regression_metrics-26"><a href="#regression_metrics-26"><span class="linenos">26</span></a><span class="sd">        before calling; unsupported predictions are not silently dropped.</span>
+</span><span id="regression_metrics-27"><a href="#regression_metrics-27"><span class="linenos">27</span></a>
+</span><span id="regression_metrics-28"><a href="#regression_metrics-28"><span class="linenos">28</span></a><span class="sd">    Notes</span>
+</span><span id="regression_metrics-29"><a href="#regression_metrics-29"><span class="linenos">29</span></a><span class="sd">    -----</span>
+</span><span id="regression_metrics-30"><a href="#regression_metrics-30"><span class="linenos">30</span></a><span class="sd">    Positive bias means overprediction. Opposite errors can cancel in bias</span>
+</span><span id="regression_metrics-31"><a href="#regression_metrics-31"><span class="linenos">31</span></a><span class="sd">    while RMSE and MAE remain positive. With speeds in m/s, all three metrics</span>
+</span><span id="regression_metrics-32"><a href="#regression_metrics-32"><span class="linenos">32</span></a><span class="sd">    are in m/s. These metrics do not certify physical validation.</span>
+</span><span id="regression_metrics-33"><a href="#regression_metrics-33"><span class="linenos">33</span></a><span class="sd">    """</span>
+</span><span id="regression_metrics-34"><a href="#regression_metrics-34"><span class="linenos">34</span></a>    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="regression_metrics-35"><a href="#regression_metrics-35"><span class="linenos">35</span></a>    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">predicted</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="regression_metrics-36"><a href="#regression_metrics-36"><span class="linenos">36</span></a>    <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">p</span><span class="o">.</span><span class="n">shape</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+</span><span id="regression_metrics-37"><a href="#regression_metrics-37"><span class="linenos">37</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'actual and predicted must be equal-size finite nonempty arrays'</span><span class="p">)</span>
+</span><span id="regression_metrics-38"><a href="#regression_metrics-38"><span class="linenos">38</span></a>    <span class="n">err</span> <span class="o">=</span> <span class="n">p</span><span class="o">-</span><span class="n">a</span>
+</span><span id="regression_metrics-39"><a href="#regression_metrics-39"><span class="linenos">39</span></a>    <span class="k">return</span> <span class="p">{</span>
+</span><span id="regression_metrics-40"><a href="#regression_metrics-40"><span class="linenos">40</span></a>        <span class="s1">'rmse'</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">err</span><span class="o">**</span><span class="mi">2</span><span class="p">))),</span>
+</span><span id="regression_metrics-41"><a href="#regression_metrics-41"><span class="linenos">41</span></a>        <span class="s1">'mae'</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">err</span><span class="p">))),</span>
+</span><span id="regression_metrics-42"><a href="#regression_metrics-42"><span class="linenos">42</span></a>        <span class="s1">'bias'</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">err</span><span class="p">)),</span>
+</span><span id="regression_metrics-43"><a href="#regression_metrics-43"><span class="linenos">43</span></a>    <span class="p">}</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Return RMSE, MAE and signed mean prediction bias in input units.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>actual : numpy.ndarray
-    Held-out reference observations, shape (n,).
-predicted : numpy.ndarray
-    Predictions at identical locations, shape (n,).</p>
+<ul>
+<li><strong>actual</strong> (numpy.ndarray):
+Held-out reference observations, shape (n,).</li>
+<li><strong>predicted</strong> (numpy.ndarray):
+Predictions at identical locations, shape (n,).</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>dict of str to float
-    <code>rmse</code>, <code>mae</code> and <code>bias</code> (predicted minus actual).</p>
+<ul>
+<li><strong>dict of str to float</strong>: <code>rmse</code>, <code>mae</code> and <code>bias</code> (predicted minus actual).</li>
+</ul>
+
+<h6 id="raises">Raises</h6>
+
+<ul>
+<li><strong>ValueError</strong>: If arrays are empty, have unequal flattened lengths, or contain
+non-finite values. Restrict to common supported targets explicitly
+before calling; unsupported predictions are not silently dropped.</li>
+</ul>
+
+<h6 id="notes">Notes</h6>
+
+<p>Positive bias means overprediction. Opposite errors can cancel in bias
+while RMSE and MAE remain positive. With speeds in m/s, all three metrics
+are in m/s. These metrics do not certify physical validation.</p>
 </div>
 
 

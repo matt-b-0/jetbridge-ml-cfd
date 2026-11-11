@@ -1,0 +1,98 @@
+{
+  "date": "2026-11-05",
+  "mesh_cells": 141312,
+  "experiment": "S01-A-10-HN-1",
+  "hardware": "Intel Core i7-1165G7: 4 physical cores, 8 WSL logical CPUs",
+  "runtime": "Ubuntu 24.04 / OpenFOAM v2412 / Open MPI 4.1.6",
+  "protocol": "Sequential single runs at 1,2,4 processes; Linux-native output; same physical inputs and convergence criteria. Not repeated statistical timing trials. Stage totals include shell startup, partitioning, parallel mesh checks, reconstruction and sampling; exclude Python reconstruction/plotting.",
+  "numerical_equivalence_screen_relative_l2": 0.01,
+  "physical_validation": "not established",
+  "runs": [
+    {
+      "processes": 1,
+      "solver_seconds": 57.003,
+      "all_cfd_stage_seconds": 61.821,
+      "stages": {
+        "blockMesh": 1.228,
+        "checkMesh": 1.317,
+        "simpleFoam": 57.003,
+        "sampling": 2.273
+      },
+      "iterations": 237,
+      "relative_l2_velocity_difference": 0.0,
+      "max_speed_difference_mps": 0.0,
+      "flux": {
+        "inlet_m3s": -0.53386552,
+        "outlet_m3s": 0.53386552,
+        "relative_imbalance": 0.0,
+        "declared_screen": 1e-05
+      },
+      "original_case_unchanged": true,
+      "status": "complete",
+      "residual_samples": 1422,
+      "source": "/home/mattb/jetbridge-gui-checks/mpi-benchmark-standard-p1-20261105",
+      "solver_speedup": 1.0,
+      "cfd_stage_speedup": 1.0
+    },
+    {
+      "processes": 2,
+      "solver_seconds": 37.937,
+      "all_cfd_stage_seconds": 47.704,
+      "stages": {
+        "blockMesh": 1.187,
+        "checkMesh": 1.042,
+        "mpi_version": 0.424,
+        "decomposePar": 1.819,
+        "parallelCheckMesh": 1.157,
+        "simpleFoam": 37.937,
+        "reconstructPar": 1.843,
+        "sampling": 2.295
+      },
+      "iterations": 238,
+      "relative_l2_velocity_difference": 4.036326199118058e-08,
+      "max_speed_difference_mps": 2.0811078194071797e-08,
+      "flux": {
+        "inlet_m3s": -0.53386552,
+        "outlet_m3s": 0.53386552,
+        "relative_imbalance": 0.0,
+        "declared_screen": 1e-05
+      },
+      "original_case_unchanged": true,
+      "status": "complete",
+      "residual_samples": 1428,
+      "source": "/home/mattb/jetbridge-gui-checks/mpi-benchmark-standard-p2-20261105",
+      "solver_speedup": 1.5025700503466275,
+      "cfd_stage_speedup": 1.2959290625524065
+    },
+    {
+      "processes": 4,
+      "solver_seconds": 32.743,
+      "all_cfd_stage_seconds": 42.300000000000004,
+      "stages": {
+        "blockMesh": 1.054,
+        "checkMesh": 1.128,
+        "mpi_version": 0.42,
+        "decomposePar": 1.715,
+        "parallelCheckMesh": 1.112,
+        "simpleFoam": 32.743,
+        "reconstructPar": 1.857,
+        "sampling": 2.271
+      },
+      "iterations": 238,
+      "relative_l2_velocity_difference": 2.3119094848268198e-07,
+      "max_speed_difference_mps": 8.50993841505776e-08,
+      "flux": {
+        "inlet_m3s": -0.53386552,
+        "outlet_m3s": 0.53386552,
+        "relative_imbalance": 0.0,
+        "declared_screen": 1e-05
+      },
+      "original_case_unchanged": true,
+      "status": "complete",
+      "residual_samples": 1428,
+      "source": "/home/mattb/jetbridge-gui-checks/mpi-benchmark-standard-p4-20261105",
+      "solver_speedup": 1.7409217237272088,
+      "cfd_stage_speedup": 1.4614893617021274
+    }
+  ]
+}

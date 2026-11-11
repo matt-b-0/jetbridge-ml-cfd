@@ -410,17 +410,20 @@
 
             <div class="docstring"><p>Select only predeclared training stations before fitting or scaling.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>sparse : pandas.DataFrame
-    Exported virtual sensors, with features, station_ft and speed_mps.
-train_stations, test_stations : sequence of int
-    Disjoint station groups.</p>
+<ul>
+<li><strong>sparse</strong> (pandas.DataFrame):
+Exported virtual sensors, with features, station_ft and speed_mps.</li>
+<li><strong>train_stations, test_stations</strong> (sequence of int):
+Disjoint station groups.</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>pandas.DataFrame
-    Training rows only. Held-out sparse values are not training targets.</p>
+<ul>
+<li><strong>pandas.DataFrame</strong>: Training rows only. Held-out sparse values are not training targets.</li>
+</ul>
 </div>
 
 

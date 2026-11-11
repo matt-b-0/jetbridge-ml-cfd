@@ -22,6 +22,19 @@ def predict_plane(method: str, locations, values, queries) -> np.ndarray:
     numpy.ndarray
         Predictions; linear returns NaN outside the training convex hull.
         RBF may extrapolate or predict negative values; no clipping is applied.
+
+    Raises
+    ------
+    ValueError
+        If the method is unknown, arrays have incompatible shapes, values are
+        non-finite, or fewer than three unique non-collinear sensors are given.
+
+    Notes
+    -----
+    This function uses the coordinates supplied by its caller. The nested
+    experimental workflow supplies training-only standardised coordinates;
+    direct calls may supply metre coordinates. These distance conventions
+    should not be mixed when comparing experiments.
     """
     x, q = np.asarray(locations, float), np.asarray(queries, float)
     y = np.asarray(values, float)

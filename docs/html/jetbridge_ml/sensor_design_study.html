@@ -305,19 +305,22 @@
 
             <div class="docstring"><p>Select a rectangular sensor layout without looking at CFD target values.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>points : array-like
-    Candidate x/local-height coordinates.
-nx, ny : int
-    Numbers of sensor columns and rows.
-placement : str
-    interior, wall_aware or hybrid, with fixed fractional coordinate ranges.</p>
+<ul>
+<li><strong>points</strong> (array-like):
+Candidate x/local-height coordinates.</li>
+<li><strong>nx, ny</strong> (int):
+Numbers of sensor columns and rows.</li>
+<li><strong>placement</strong> (str):
+interior, wall_aware or hybrid, with fixed fractional coordinate ranges.</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>numpy.ndarray
-    Unique candidate indices in layout order.</p>
+<ul>
+<li><strong>numpy.ndarray</strong>: Unique candidate indices in layout order.</li>
+</ul>
 </div>
 
 

@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-11",
+  "generated_at": "2026-11-11T13:35:56",
+  "passed": 128,
+  "skipped": 1,
+  "failures": 0,
+  "junit_sha256": "b25b24fdc7aa920a2eb1ec399d1dd639eec95039fdc0e6f8ca729d097ad532f2",
+  "test_source_sha256": {
+    "tests\\test_cfd_alignment.py": "999bfded4943c0b125c7509c569c643da76faea80ba3d1f7aba701c7d61c22c5",
+    "tests\\test_controlled_performance.py": "a9c2a07efe79435c6cbc007ec9c71755c8e66ee9fc68e352c60fdb6c8886cfc3",
+    "tests\\test_demo_runner.py": "cea69e58a6381a084a5650b10b7448618b6112eb7a7a9f2aa99a586bf487d469",
+    "tests\\test_final_report_checks.py": "6f15a65fa363e97bdf5c02f5aa318538388ec0c6ad5041e7f4bfeb590b144a9d",
+    "tests\\test_four_workstreams.py": "39195534eed2f7213f9ffcc566a812832930ee77264ae34b3342ffca60c48823",
+    "tests\\test_gui_layout.py": "dc04cb48853e336a322e366222af3fab208692d0041c978239580dbdf07f6dd0",
+    "tests\\test_gui_parallel.py": "3db6c07b8e3d38b8f22b1f3bcbe06150dd98d0a33f0afeb03743a8fd78891969",
+    "tests\\test_gui_residuals.py": "fd561b01b83c3bade2660d4893235a65b9a2ff6f2934c3358d67c4f0d9c0c60a",
+    "tests\\test_gui_workflow.py": "bee4784a6e2294aafe0c1682c9a26d9cad94e4fda0788cfb3da008c73fb7bfa1",
+    "tests\\test_interpolation.py": "8ed89427e594067d8ee8ba19c701ab739093a406380afc512a009ed8bb71e96b",
+    "tests\\test_interpolation_sensitivity.py": "5dbbf3758a45cc8748c1d813a8ba2c4d5b2a60ec22feb390a5686a522dfba320",
+    "tests\\test_plane_benchmark.py": "5ca18d0e5b89eb991a5bff4cf77491352fcfada908cbec89b81d1b8fa9fa0c86",
+    "tests\\test_presentation_examples.py": "9daebed152e6e60ae9d08fb52db6e31cdbdfe957c335aeb6e4612e0b5581feeb",
+    "tests\\test_reconstruction_lab.py": "93a1dd83cef84be0589f1c1c0e0971d25879c1e5a35e6524083d4eaf79555fcd",
+    "tests\\test_report_evidence.py": "d23cdb43f29e1d657cc5116a05dac4120af600a01d9f4372f62eef01de231875",
+    "tests\\test_sensors.py": "a497a791495d615569b888b3fb1bd65b71885575c71910e4fd659caeeaaa6d0c",
+    "tests\\test_stability.py": "7494e1c3b75c836106d6e313507578bef450b153658481a3f934832be22cdef2",
+    "tests\\test_submission_workflow.py": "9a7a07bb0978a51ee6899ed00add7c32337b1b86ba7b1d703269b344d4a375ab",
+    "tests\\test_thermal_setup.py": "97de1fd5595214fabd745cd18f1a7fd09d369baed9001d1b466bb3ee36e81bfa",
+    "tests\\test_virtual_svr.py": "061db9eb27678b9d4fe787b5cc9bd976e21795ca43c940f5e785c9f8a4815cfd"
+  },
+  "documentation": "pdoc scientific API; AST source references for two Tk-only modules",
+  "physical_validation": false
+}

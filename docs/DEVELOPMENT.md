@@ -16,7 +16,8 @@ Ruff is the selected fast static checker. It fills the requested Pylint-like rol
 python -m ruff check src tests run_all.py
 python -m pytest -q
 python -m pytest -q --junitxml=test-results.xml
-python -m pdoc jetbridge_ml -o docs/html
+PYTHONPATH=src python tools/build_api_docs.py
+python tools/build_presentation_guide.py
 ```
 
 GitHub Actions runs the same lint gate and automated tests on Python 3.10 and 3.12 and saves the JUnit reports. A lint pass is not a numerical test, and neither establishes physical validation of the CFD. The demo runner runs lint/tests first unless `--skip-quality` is explicitly selected and recorded.
@@ -37,4 +38,17 @@ The demo data manifest verifies bundled file hashes. Original FAA/NRC files are 
 
 Use `python run_all.py --profile replay` to test included-data figure generation and live/full profiles for real OpenFOAM execution. [LIVE_DEMO.md](LIVE_DEMO.md) defines what is fresh and what is archived in each profile. The tracked report builders regenerate Word files separately and require python-docx plus a layout render; a successful Python figure run does not update a Word report automatically.
 
-The current gate passes Ruff plus 82 tests, including bundled-byte integrity, refusal to overwrite sources, failure records, archived-grid validation, plan-only behaviour and convergence-log preservation. Live and replay have also passed from a fresh public clone; see [demo verification](demo_validation/README.md).
+The 27 October gate passed Ruff plus 82 tests, including bundled-byte integrity, refusal to overwrite sources, failure records, archived-grid validation, plan-only behaviour and convergence-log preservation. Live and replay also passed from a fresh public clone at that time; see [demo verification](demo_validation/README.md). The current 11 November verification is **128 passed, 1 skipped**, with Ruff passing. The skipped native Tk layout module requires Tk and a display; it was not verified by this headless run. See the [fresh report](presentation/test_report.html).
+
+
+## Desktop GUI development
+
+The Tk frontend (`launch_gui.py`, `jetbridge_ml.gui.app`) depends only on the standard library. Scientific work remains in a separate Linux/WSL process (`jetbridge_ml.gui.workflow`) and reuses data readers, interpolation/ML selection and CFD components. Configuration validation is dependency-free. See GUI.md for the numerical contract and reproducible CLI. Include launch_gui.py in manual Ruff checks. GUI job outputs under gui_runs are ignored. Tests cover request restrictions, output/source isolation, HVAC conversion, probe/turbulence updates, input integrity and cooperative subprocess cancellation.
+
+The Reconstruction Lab keeps numerical experiments in validation/reconstruction_lab.py, presentation in gui/lab_views.py and job/data orchestration in gui/lab.py. Run the full pytest suite and Ruff after changes. The dashboard is offline HTML/canvas; a Python-only scientific worker suffices for both lab modes. See GUI.md for splits, audits, figure exports and interpretation.
+
+## Complete API and presentation documentation
+
+Use `PYTHONPATH=src python tools/build_api_docs.py` to explicitly include all current modules: package `__all__` lists can otherwise hide submodule pages. The builder uses the installed pdoc and NumPy docstring format. In a headless environment without Tk, app/progress pages are supplied as clearly labelled AST source references by the guide builder. With a Tk-capable environment, normal pdoc pages are preserved.
+
+Run `python tools/build_presentation_guide.py` after refreshing the JUnit report and API pages. It builds the tutorial, annotated actual test lines, complete test source catalogue, readable test report and source-hash manifest; broken local links fail the build. These tools need no new scientific dependencies. The complete command sequence and presentation fallback are in [the tutorial](presentation/PRESENTATION_TUTORIAL.md).

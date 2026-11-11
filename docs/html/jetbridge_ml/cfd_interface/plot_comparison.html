@@ -434,17 +434,20 @@
 
             <div class="docstring"><p>Match raw xyz/U rows to source positions, rejecting ambiguous locations.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>expected : array-like
-    Source xyz positions of shape (n, 3), metres.
-sampled : array-like
-    OpenFOAM xyz/Ux/Uy/Uz rows of shape (n, 6).</p>
+<ul>
+<li><strong>expected</strong> (array-like):
+Source xyz positions of shape (n, 3), metres.</li>
+<li><strong>sampled</strong> (array-like):
+OpenFOAM xyz/Ux/Uy/Uz rows of shape (n, 6).</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>numpy.ndarray
-    Sampled rows in the source coordinate order.</p>
+<ul>
+<li><strong>numpy.ndarray</strong>: Sampled rows in the source coordinate order.</li>
+</ul>
 </div>
 
 
@@ -487,15 +490,18 @@ sampled : array-like
 
             <div class="docstring"><p>Extract z, floor and ceiling elevations from the actual 16-vertex case.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>path : str or Path
-    Case blockMeshDict path, with SI coordinates.</p>
+<ul>
+<li><strong>path</strong> (str or Path):
+Case blockMeshDict path, with SI coordinates.</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>tuple
-    Width, station z values, floor and ceiling elevations in metres.</p>
+<ul>
+<li><strong>tuple</strong>: Width, station z values, floor and ceiling elevations in metres.</li>
+</ul>
 </div>
 
 

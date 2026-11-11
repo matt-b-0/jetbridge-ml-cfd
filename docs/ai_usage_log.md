@@ -33,3 +33,80 @@ Update this table as work develops; do not claim checks you haven't done yoursel
 ## 27 October 2026 — Author reflection and licence
 
 The author supplied the four-paragraph AI Use and Individual Learning statement, retained verbatim in docs/report/ai_statement.txt and the current report builder. This supersedes the earlier request to leave the personal statement unchanged. The author explicitly selected MIT for project code; root LICENSE and package metadata record that choice. External FAA/NRC data remain separately attributed under CC BY 4.0. No scientific results or validation claims were changed.
+
+
+## 5 November 2026 — Desktop CFD and reconstruction GUI
+
+The student requested a GUI with experimental setup, run type, reconstruction method and qualitative mesh controls. Codex implemented a native Tk frontend with a separate Linux/WSL scientific worker, reusing the existing scientific modules. Resolution labels expose exact counts rather than promising mesh quality. Fresh isothermal jobs read the selected entire-set HVAC flow, recompute initial U/k/epsilon consistently with the existing assumptions, update probes, and copy original inputs into isolated cases. Existing mesh, residual, saved-field, alignment and final flux screens gate comparisons. No original CFD dictionary or published research result was changed.
+
+The 58 ft sequential A/B layouts remain reconstruction-only. Archived CFD is fixed to the recorded matched baseline; archived thermal views remain unconverged and excluded from ML fitting/reference use. Full-array refits and nested held-location errors remain distinct. Input hashes, source-code hashes, package versions, case status, cancellation and preserved-source checks are recorded per job. A fresh coarse baseline solve and another measured setup, archived views, native Windows-to-WSL preview and regression checks form the functional verification. Detailed check outcomes are retained in docs/gui_verification.json. This implementation is not evidence of physical CFD validation or optimal sensor placement.
+
+
+## 5 November 2026 — Laptop GUI layout correction
+
+The student reported that the desktop GUI did not rescale properly on a laptop. Codex replaced the fixed 1370 × 880 window and 1100 × 740 minimum with screen-aware starting dimensions and a smaller minimum. Settings now scroll with pinned Run/Cancel actions, results adapt to narrower/shorter panels, and figure previews fit their actual viewport after resize events. Complete summaries remain accessible in a compact results menu. Optional Pillow enables smooth image resizing; a standard-Tk fallback remains available. Scientific computations, CFD dictionaries and result metrics were unchanged. Native Tk geometry/image-bound checks cover smaller windows and multiple font-scaling factors, including the Pillow-free path.
+
+
+## 5 November 2026 — GUI interpretation and live residual history
+
+The student requested an explanation section and a residual progression plot. Codex added contextual Help, clarified that physical validation concerns agreement with the real apparatus for a defined engineering use, and replaced the blanket status label with mode-specific evidence wording. A standard-library frontend plots streamed initial residuals from the actual solver log. CSV preserves first initial and final residuals for each field/iteration; archived histories remain labelled and their unavailable final values remain empty. Final scientific PNG/PDF histories accompany the run evidence. Parser, streaming and interpretation tests were added. A live integration check also exposed OpenFOAM's rejection of whitespace in case paths; fresh output paths now fail early with a clear instruction. Physics and solver stopping criteria were unchanged.
+
+
+### 5 November 2026 — MPI CFD execution
+Codex added an explicit GUI/worker process count, Scotch domain decomposition,
+parallel mesh checks and solver execution, and converged-field reconstruction.
+The original physical cases and numerical stopping criteria were preserved.
+Serial remains available because parallel overhead may exceed savings on small
+meshes. Resource/request tests and actual WSL/Open MPI runs check the execution
+path. Timing and numerical comparisons are reported separately from physical
+validation; generated processor fields remain outside tracked inputs.
+
+The standard 141,312-cell 1/2/4-process checks all passed. Four-process CFD
+stages took 42.300 s versus 61.821 s serial; sampled-vector relative L2
+change was 2.31e-7. See docs/mpi_verification.json for the single-trial timing
+protocol and limits. Native Windows Tk MPI controls/help and actual two-rank
+cancellation also passed. No physical-validation or mesh-independence claim
+is made from these execution checks.
+
+
+## 5 November 2026 — Visual reconstruction lab
+
+At the student's request, Codex made interpolation and fitting the default GUI
+focus. A local offline dashboard and PNG/PDF exports compare nearest, linear,
+thin-plate RBF and training-only selected SVR. Existing nested experimental
+held-location evaluation is reused. A separate seeded learning/noise study
+retains hull anchors and fixed withheld targets; noise is synthetic and paired,
+not measured instrument uncertainty. Timing includes SVR search and is distinct
+from held-out accuracy. The virtual mode uses an explicitly archived converged
+16 ft CFD plane with disjoint candidate/test coordinates; no thermal field,
+new simulation or physical-validation claim is introduced. Original source
+files and published aggregate research scores remain unchanged. Affine-field,
+split nesting/support and held-out-target perturbation checks were added.
+Both actual workflows ran; native Tk and headless Edge responsive interaction
+checks passed. See reconstruction_lab_verification.json for evidence and scope.
+
+## 11 November 2026 — Rubric-aligned presentation and test tutorial
+
+At the student's request, Codex mapped pages 8–15 of the supplied brief to the
+existing presentation, added a timed repository/API/test demonstration and
+backup explanations, and prepared an offline tutorial. Added independent
+checks for signed-error cancellation, paired sensor-row permutation, metric
+unit scaling and explicit rejection of unsupported predictions. Updated core
+docstrings, corrected the stale upcoming-parser wording, regenerated API
+pages, and refreshed JUnit evidence. The WSL suite reports 128 passed and
+1 skipped; the native Tk layout module was skipped because Tk is unavailable.
+Ruff passed. Two Tk-only API pages are explicitly source-based AST references;
+they are not evidence of successful native desktop execution. No CFD solve,
+scientific result changes or publication were performed. The student's supplied
+personal AI statement remains unchanged. The student should rehearse and
+verify understanding of the actual examples; agent-run checks are not claimed
+as independent student verification.
+
+At the student's explicit request to publish the presentation changes, Codex
+packaged the reviewed PPTX, all twenty rendered slide previews, extracted
+delivery notes and GitHub-readable tutorial/test walkthrough under
+docs/presentation. The PPTX copy has the same SHA-256 as the reviewed artifact.
+The associated GUI/Reconstruction Lab source, tests and documentation are
+included so the presentation's described features are available from a clone.
+GitHub HTML files require downloading/extracting the repository to run; the
+Markdown guide and PNG slides provide a browser-readable fallback on GitHub.

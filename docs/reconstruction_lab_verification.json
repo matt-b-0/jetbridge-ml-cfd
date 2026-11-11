@@ -1,0 +1,267 @@
+{
+  "date": "2026-11-05",
+  "pytest": "122 passed, 1 skipped",
+  "ruff": "passed",
+  "browser_checks": [
+    {
+      "type": "experimental",
+      "width": 1280,
+      "cards": 4,
+      "maps": 4,
+      "overflow": false,
+      "firstpixel": 255
+    },
+    {
+      "type": "experimental",
+      "width": 800,
+      "cards": 4,
+      "maps": 4,
+      "overflow": false,
+      "firstpixel": 255
+    },
+    {
+      "type": "experimental",
+      "width": 390,
+      "cards": 4,
+      "maps": 4,
+      "overflow": false,
+      "firstpixel": 255
+    },
+    {
+      "type": "experimental",
+      "nav": {
+        "views": [
+          "maps",
+          "held",
+          "density",
+          "noise",
+          "cost"
+        ],
+        "visible": 1,
+        "broken": 0
+      }
+    },
+    {
+      "type": "virtual",
+      "width": 1280,
+      "cards": 4,
+      "maps": 4,
+      "overflow": false,
+      "firstpixel": 255
+    },
+    {
+      "type": "virtual",
+      "width": 800,
+      "cards": 4,
+      "maps": 4,
+      "overflow": false,
+      "firstpixel": 255
+    },
+    {
+      "type": "virtual",
+      "width": 390,
+      "cards": 4,
+      "maps": 4,
+      "overflow": false,
+      "firstpixel": 255
+    },
+    {
+      "type": "virtual",
+      "nav": {
+        "views": [
+          "maps",
+          "held",
+          "density",
+          "noise",
+          "cost"
+        ],
+        "visible": 1,
+        "broken": 0
+      }
+    }
+  ],
+  "native_gui": "Default mode, disabled controls, experimental/virtual previews and gallery target passed at 800x500",
+  "limitations": [
+    "Single-replicate and single-CFD-plane demonstrations, not physical validation.",
+    "Fixed hull anchors preserve support and may favour designs over arbitrary deployment.",
+    "Synthetic noise and three-trial ranges are not instrument uncertainty or confidence intervals."
+  ],
+  "runs": [
+    {
+      "kind": "experimental",
+      "status": "complete",
+      "original_case_unchanged": true,
+      "sources": {
+        "files": {
+          "experimental/03-Averages/V-S01-A-10-HN-1.txt": "f0bea3828c570daee25f5436daa3950abcfecc6d275747edc13407d588aef692",
+          "experimental/Data Dictionary.csv": "e0daf957b239c144492c41722efca40e6236131f57125bc2f21900bb6e9c1a89"
+        },
+        "bundle_manifest_sha256": "8d3384e7f1e2d05681c2868fe28127c51e582fdb0cd84fd9fa61d1a3111b7551"
+      },
+      "study": {
+        "lineage": "EXPERIMENTAL means \u00b7 S01-A-10-HN-1",
+        "evaluation": "Each source sensor is withheld in turn. SVR parameters are selected by grouped inner cross-validation using only the remaining locations. Maps use a separate full-array refit. Replicates are not pooled.",
+        "protocol": "Seed 3001; three nested layouts with fixed hull anchors; separate fixed test locations; paired training-only Gaussian perturbations; no clipping.",
+        "methods": [
+          "nearest",
+          "linear",
+          "rbf",
+          "svr"
+        ],
+        "sensor_count": 12,
+        "reference_plane_station_ft": 10,
+        "physical_validation": "not established",
+        "dashboard": "reconstruction_lab.html",
+        "thermal_fields_used": false,
+        "metrics": [
+          {
+            "run_id": "S01-A-10-HN-1",
+            "method": "linear",
+            "subset": "common_hull",
+            "n_requested": 8,
+            "n_predicted": 8,
+            "coverage": 1.0,
+            "negative_predictions": 0,
+            "rmse": 0.014441523261649047,
+            "mae": 0.011933641975308641,
+            "bias": -0.006554012345679004
+          },
+          {
+            "run_id": "S01-A-10-HN-1",
+            "method": "nearest",
+            "subset": "common_hull",
+            "n_requested": 8,
+            "n_predicted": 8,
+            "coverage": 1.0,
+            "negative_predictions": 0,
+            "rmse": 0.02057607834355225,
+            "mae": 0.019875,
+            "bias": -0.004375
+          },
+          {
+            "run_id": "S01-A-10-HN-1",
+            "method": "rbf",
+            "subset": "common_hull",
+            "n_requested": 8,
+            "n_predicted": 8,
+            "coverage": 1.0,
+            "negative_predictions": 0,
+            "rmse": 0.015040714620900382,
+            "mae": 0.013114812799974968,
+            "bias": -0.0026641626670670417
+          },
+          {
+            "run_id": "S01-A-10-HN-1",
+            "method": "svr",
+            "subset": "common_hull",
+            "n_requested": 8,
+            "n_predicted": 8,
+            "coverage": 1.0,
+            "negative_predictions": 0,
+            "rmse": 0.01550261558431543,
+            "mae": 0.01287776631378365,
+            "bias": -0.0054074671735221125
+          }
+        ]
+      },
+      "figures": [
+        "01_method_comparison.png",
+        "02_heldout_predictions.png",
+        "02b_local_errors.png",
+        "03_sensor_learning.png",
+        "04_noise_sensitivity.png",
+        "05_accuracy_cost.png"
+      ],
+      "output": "C:\\Users\\mattb_ar68ij9\\OneDrive\\Documents\\UNI\\2026\\MMA3001\\Project\\jetbridge-ml-cfd\\gui_runs\\reconstruction_lab_experimental_20261105"
+    },
+    {
+      "kind": "virtual",
+      "status": "complete",
+      "original_case_unchanged": true,
+      "sources": {
+        "files": {
+          "virtual_samples/dense_test.csv": "953ac94e8c6a2efdf6db948a6b12f236d8d8b113e1546323783a398207de3f46",
+          "virtual_samples/sampling_manifest.json": "5512d60d5087d6319391e38977d5420683c586fdc3b6d5388e83e14db33da53c",
+          "cases_metadata/iso/log.simpleFoam": "46931b8e5a5e4e8f774fde7629cd219ad90ebae4f2e720b77d4169c9140b9b01"
+        },
+        "bundle_manifest_sha256": "8d3384e7f1e2d05681c2868fe28127c51e582fdb0cd84fd9fa61d1a3111b7551"
+      },
+      "study": {
+        "lineage": "ARCHIVED converged CFD \u00b7 virtual sensors \u00b7 16 ft",
+        "evaluation": "A fixed 24-sensor design predicts a disjoint dense test grid in one archived CFD plane. Common-hull RMSE measures numerical reconstruction, not experimental accuracy. No new CFD run.",
+        "protocol": "Seed 3001; three nested layouts with fixed hull anchors; separate fixed test locations; paired training-only Gaussian perturbations; no clipping.",
+        "methods": [
+          "nearest",
+          "linear",
+          "rbf",
+          "svr"
+        ],
+        "sensor_count": 24,
+        "reference_plane_station_ft": 16,
+        "physical_validation": "not established",
+        "dashboard": "reconstruction_lab.html",
+        "thermal_fields_used": false,
+        "metrics": [
+          {
+            "run_id": "S01-A-16-HN-1",
+            "method": "linear",
+            "subset": "common_hull",
+            "n_requested": 1959,
+            "n_predicted": 1959,
+            "coverage": 1.0,
+            "negative_predictions": 0,
+            "rmse": 0.011665363542273538,
+            "mae": 0.009038636609456694,
+            "bias": -0.008985046819785474
+          },
+          {
+            "run_id": "S01-A-16-HN-1",
+            "method": "nearest",
+            "subset": "common_hull",
+            "n_requested": 1959,
+            "n_predicted": 1959,
+            "coverage": 1.0,
+            "negative_predictions": 0,
+            "rmse": 0.01516480406189027,
+            "mae": 0.010060075136362475,
+            "bias": -0.0038464205920487856
+          },
+          {
+            "run_id": "S01-A-16-HN-1",
+            "method": "rbf",
+            "subset": "common_hull",
+            "n_requested": 1959,
+            "n_predicted": 1959,
+            "coverage": 1.0,
+            "negative_predictions": 0,
+            "rmse": 0.006854422178805865,
+            "mae": 0.004882628475580451,
+            "bias": -0.000700038263075119
+          },
+          {
+            "run_id": "S01-A-16-HN-1",
+            "method": "svr",
+            "subset": "common_hull",
+            "n_requested": 1959,
+            "n_predicted": 1959,
+            "coverage": 1.0,
+            "negative_predictions": 0,
+            "rmse": 0.011645006119043646,
+            "mae": 0.009678071603257505,
+            "bias": -0.004253375131582622
+          }
+        ]
+      },
+      "figures": [
+        "01_method_comparison.png",
+        "01b_virtual_field_errors.png",
+        "02_heldout_predictions.png",
+        "02b_local_errors.png",
+        "03_sensor_learning.png",
+        "04_noise_sensitivity.png",
+        "05_accuracy_cost.png"
+      ],
+      "output": "C:\\Users\\mattb_ar68ij9\\OneDrive\\Documents\\UNI\\2026\\MMA3001\\Project\\jetbridge-ml-cfd\\gui_runs\\reconstruction_lab_virtual_20261105"
+    }
+  ]
+}

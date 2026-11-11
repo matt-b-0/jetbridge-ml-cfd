@@ -36,3 +36,6 @@ cfd/cases/**/data/source/*
 # Isolated demo runs and linter cache
 /demo_runs/
 .ruff_cache/
+
+# Isolated desktop GUI jobs
+/gui_runs/

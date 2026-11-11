@@ -1,0 +1,28 @@
+{
+  "deck": "Jet_Bridge_Presentation.pptx",
+  "deck_sha256": "e8869b333f9d9e95d80a29d487972ac33da1431e2475c9627d2aec75b29ba132",
+  "main_slides": 9,
+  "total_slides": 20,
+  "previews": {
+    "slides/slide-01.png": "446a9e2ef99f74ee17433404c3b08ff2f6ae40479cdb3692f8a056c039274672",
+    "slides/slide-02.png": "ced333be9952ffe5bb90c2e154e2dc884b660d260863a0ce67f1b2df2afcc95a",
+    "slides/slide-03.png": "8576bb41e887f555c64e36328ab1aea4d2d1739c3a2128bdb8288f95a6214372",
+    "slides/slide-04.png": "f5361875d1b6f8e1bc5682e7d5f677e4bd15babd239ac6fcc4f82d773d1c181e",
+    "slides/slide-05.png": "b3044011fbd6c9b892e3bd4c4e6834e28293ac3cb9675b4b386a1eac37df557e",
+    "slides/slide-06.png": "ed527bd4f9e1bad28fb1828b43cd9d2d8288ee82fce53270af78379c9b2356c7",
+    "slides/slide-07.png": "b24cb2e3ba77dd2b03ed40d1621a8c5c2d9376713af21bf25d60c745605a768e",
+    "slides/slide-08.png": "ec50ca841ea28e62c9de530d3255039f7b4526db3868421d295a84712dba6bad",
+    "slides/slide-09.png": "7c714d7a2ae2f964f46651a8dedc09f24999a02c6d4778e719d814bab76bbaa8",
+    "slides/slide-10.png": "5cb08dc29246007b7e267279e07ff03f5c69c80e186216ac9d1b01c8f107cc17",
+    "slides/slide-11.png": "cd7389b9e829b7c2a58a58739768b31d73dccaf6c4d5862ba9b5310781aa2ab8",
+    "slides/slide-12.png": "6edddef65f4db94ed145bf698a5a8781ac458864f57c99a96856a2c3d89d4cda",
+    "slides/slide-13.png": "780880bf7bac7e8f8e8760b563f9cb1619eaeba085aa664242a8fff6059c622f",
+    "slides/slide-14.png": "19add7340b581f074adbbb28001d08ff3a9803cd586524780e142b09c9a9e9f1",
+    "slides/slide-15.png": "b40ccee264f85e14b39b42b7fc6bacf33550a18675c732dc06c4b156ed231bce",
+    "slides/slide-16.png": "609e25cb3c33967485d91a57a2b22bf336da00af0bd50aa41e59529031713660",
+    "slides/slide-17.png": "36e043afabfbf802cf19257d6f6032902ba4346812162f4678b7c2eaad9e403d",
+    "slides/slide-18.png": "f3f0805b696a4fdd92d1e242c848b126734432909dda5f0b080f15b3801fe045",
+    "slides/slide-19.png": "a1112121a8bbfefc8c624be9544df7c372643a8050c638502f54b3bda1a40c4b",
+    "slides/slide-20.png": "685e4e81e30b8bbca9b9958fc40db297f336aaa0ebc77422e2113133fd4119c6"
+  }
+}

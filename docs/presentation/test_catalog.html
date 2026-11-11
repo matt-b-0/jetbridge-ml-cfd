@@ -1,0 +1,1224 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Complete test source catalogue</title><style>
+body{font:19px/1.6 system-ui,sans-serif;color:#142d3e;background:#fafbfc;margin:auto;max-width:1120px;padding:32px}
+h1{font-size:40px;line-height:1.2}h2{margin-top:42px;color:#007f85}h3{margin-top:28px}
+a{color:#006c76}nav{display:flex;gap:22px;flex-wrap:wrap;border-block:1px solid #cddadd;padding:16px 0}
+table{border-collapse:collapse;width:100%;margin:18px 0}td,th{border:1px solid #cbd5db;padding:10px;text-align:left;vertical-align:top}
+th{background:#e8f1f2}pre{overflow:auto;padding:18px;background:#edf2f5;font-size:15px}code{font-size:.9em}
+.lines td:nth-child(1){width:42px;color:#64748b}.lines td:nth-child(2){width:52%;white-space:pre-wrap;overflow-wrap:anywhere;font:15px/1.55 Consolas,monospace}
+.lines td:nth-child(3){font-size:17px}.notice{border-left:5px solid #007f85;padding:12px 20px;background:#eaf4f4}
+details{margin:16px 0}summary{cursor:pointer;font-weight:650}button{font:inherit;padding:7px 15px;background:white;border:1px solid #007f85;border-radius:4px}
+@media(max-width:700px){body{padding:16px;font-size:17px}h1{font-size:30px}.lines td:nth-child(2){width:45%}.lines td:nth-child(3){font-size:14px}nav{gap:12px}}
+@media print{nav,button{display:none}body{max-width:none}details{display:block}}
+</style></head>
+<body><h1>Complete test source catalogue</h1><nav><a href="index.html">Presentation tutorial</a><a href="test_walkthrough.html">Tests line by line</a>
+<a href="test_report.html">Fresh test report</a><a href="test_catalog.html">All test source</a><a href="../html/jetbridge_ml.html">HTML API</a>
+<a href="../../README.md">README source</a></nav><p>All current test modules, with exact expandable source. Parametrisation can produce multiple pytest cases per function. See the fresh report for executed case names and skip reasons.</p><details><summary>test_cfd_alignment.py — 4 test functions</summary><p><a href="../../tests/test_cfd_alignment.py">Open Python source</a></p><ul><li><code>test_sample_alignment_uses_xyz_not_row_order</code>: sample alignment uses xyz not row order</li><li><code>test_sample_alignment_rejects_shifted_plane</code>: sample alignment rejects shifted plane</li><li><code>test_sample_alignment_rejects_duplicate_and_nonfinite_samples</code>: sample alignment rejects duplicate and nonfinite samples</li><li><code>test_probe_drift_does_not_include_iterations_after_saved_field</code>: probe drift does not include iterations after saved field</li></ul><pre>&quot;&quot;&quot;Check coordinate alignment before interpreting CFD-to-sensor deltas.&quot;&quot;&quot;
+import numpy as np
+import pytest
+
+from jetbridge_ml.cfd_interface.plot_comparison import align_samples
+
+
+def test_sample_alignment_uses_xyz_not_row_order():
+    expected = np.array([[.35, 2.48, 3.05], [1.04, .45, 3.05]])
+    sampled = np.array([[1.04, .45, 3.05, 0, 0, -.2],
+                        [.35, 2.48, 3.05, 0, 0, -.1]])
+    result = align_samples(expected, sampled)
+    np.testing.assert_allclose(result[:, :3], expected)
+    np.testing.assert_allclose(np.linalg.norm(result[:, 3:], axis=1), [.1, .2])
+
+
+def test_sample_alignment_rejects_shifted_plane():
+    expected = np.array([[.35, 2.48, 3.05]])
+    with pytest.raises(ValueError, match=&quot;match&quot;):
+        align_samples(expected, [[.35, 2.48, 3.048, 0, 0, -.1]])
+
+
+def test_sample_alignment_rejects_duplicate_and_nonfinite_samples():
+    expected = np.array([[.35, 2.48, 3.05], [1.04, .45, 3.05]])
+    repeated = np.array([[.35, 2.48, 3.05, 0, 0, -.1]] * 2)
+    with pytest.raises(ValueError, match=&quot;match&quot;):
+        align_samples(expected, repeated)
+    with pytest.raises(ValueError, match=&quot;finite&quot;):
+        align_samples(expected[:1], [[.35, 2.48, 3.05, 0, 0, np.nan]])
+
+
+def test_probe_drift_does_not_include_iterations_after_saved_field():
+    from jetbridge_ml.cfd_interface.plot_thermal import _probe_temperature_drift
+    trace=np.array([[850,0,0],[900,10,20],[950,11,22],[1000,1000,2000]],float)
+    assert _probe_temperature_drift(trace,950,50)==pytest.approx(2)
+</pre></details><details><summary>test_controlled_performance.py — 3 test functions</summary><p><a href="../../tests/test_controlled_performance.py">Open Python source</a></p><ul><li><code>test_timed_wrapper_preserves_existing_scaled_prediction</code>: timed wrapper preserves existing scaled prediction</li><li><code>test_mean_and_svr_match_reference_training</code>: mean and svr match reference training</li><li><code>test_unknown_method_rejected</code>: unknown method rejected</li></ul><pre>import numpy as np
+import pytest
+from sklearn.preprocessing import StandardScaler
+from jetbridge_ml.controlled_performance import fit_predictor
+from jetbridge_ml.interpolation.plane import predict_plane
+from jetbridge_ml.machine_learning.svr import fit_svr
+
+X=np.array([[0.,0.],[2.,0.],[0.,5.],[2.,5.],[.8,2.]])
+Y=np.array([.1,.2,.15,.3,.18])
+Q=np.array([[.2,.7],[1.5,3.],[3.,8.]])
+PARAMS=dict(C=1.,gamma=.1,epsilon=.002)
+
+@pytest.mark.parametrize(&#x27;method&#x27;,[&#x27;nearest&#x27;,&#x27;linear&#x27;,&#x27;rbf&#x27;])
+def test_timed_wrapper_preserves_existing_scaled_prediction(method):
+    scale=StandardScaler().fit(X)
+    expected=predict_plane(method,scale.transform(X),Y,scale.transform(Q))
+    np.testing.assert_allclose(fit_predictor(method,X,Y,PARAMS)(Q),expected,equal_nan=True)
+
+def test_mean_and_svr_match_reference_training():
+    np.testing.assert_allclose(fit_predictor(&#x27;mean&#x27;,X,Y,PARAMS)(Q),np.mean(Y))
+    model,warning=fit_svr(X,Y,np.arange(len(X)),PARAMS)
+    assert not warning
+    np.testing.assert_allclose(fit_predictor(&#x27;svr&#x27;,X,Y,PARAMS)(Q),model.predict(Q))
+
+def test_unknown_method_rejected():
+    with pytest.raises(ValueError,match=&#x27;Unknown model&#x27;):
+        fit_predictor(&#x27;not-a-model&#x27;,X,Y,PARAMS)
+</pre></details><details><summary>test_demo_runner.py — 7 test functions</summary><p><a href="../../tests/test_demo_runner.py">Open Python source</a></p><ul><li><code>test_bundle_hash_and_escape_checks</code>: bundle hash and escape checks</li><li><code>test_no_output_overwrite_or_source_write</code>: no output overwrite or source write</li><li><code>test_failed_stage_is_recorded_and_logs_preserved</code>: failed stage is recorded and logs preserved</li><li><code>test_archived_field_requires_matching_finite_coordinates</code>: archived field requires matching finite coordinates</li><li><code>test_yplus_does_not_replace_solver_convergence_evidence</code>: yplus does not replace solver convergence evidence</li><li><code>test_included_research_inputs_survive_a_git_checkout</code>: included research inputs survive a git checkout</li><li><code>test_plan_is_safe_without_creating_an_output</code>: plan is safe without creating an output</li></ul><pre>&quot;&quot;&quot;Demo isolation, provenance and archive validation regression tests.&quot;&quot;&quot;
+import importlib.util
+import json
+from hashlib import sha256
+from pathlib import Path
+import subprocess
+import sys
+import numpy as np
+import pandas as pd
+import pytest
+from jetbridge_ml.cfd_interface.report_figures import read_archived_grid
+
+spec=importlib.util.spec_from_file_location(&#x27;demo_runner&#x27;,Path(__file__).resolve().parents[1]/&#x27;run_all.py&#x27;)
+runner=importlib.util.module_from_spec(spec)
+spec.loader.exec_module(runner)
+
+
+def test_bundle_hash_and_escape_checks(tmp_path):
+    value=tmp_path/&#x27;data.csv&#x27;;value.write_text(&#x27;measured\n&#x27;)
+    manifest=tmp_path/&#x27;manifest.json&#x27;
+    record=dict(path=&#x27;data.csv&#x27;,sha256=sha256(value.read_bytes()).hexdigest())
+    manifest.write_text(json.dumps(dict(files=[record])))
+    assert runner.verify_bundle(tmp_path)==1
+    value.write_text(&#x27;changed\n&#x27;)
+    with pytest.raises(ValueError,match=&#x27;missing or changed&#x27;):runner.verify_bundle(tmp_path)
+    record[&#x27;path&#x27;]=&#x27;../outside.csv&#x27;;manifest.write_text(json.dumps(dict(files=[record])))
+    with pytest.raises(ValueError,match=&#x27;escapes&#x27;):runner.verify_bundle(tmp_path)
+
+
+def test_no_output_overwrite_or_source_write(tmp_path):
+    with pytest.raises(ValueError,match=&#x27;exists&#x27;):runner.validate_destination(tmp_path)
+    with pytest.raises(ValueError,match=&#x27;cannot be inside&#x27;):
+        runner.validate_destination(runner.ROOT/&#x27;data/demo/new-output&#x27;)
+
+
+def test_failed_stage_is_recorded_and_logs_preserved(tmp_path):
+    demo=runner.Demo(tmp_path,&#x27;replay&#x27;)
+    with pytest.raises(subprocess.CalledProcessError):
+        demo.command(&#x27;intentional_failure&#x27;,[sys.executable,&#x27;-c&#x27;,&#x27;print(&quot;diagnostic&quot;); raise SystemExit(7)&#x27;])
+    assert demo.records[-1][&#x27;status&#x27;]==&#x27;failed&#x27;
+    assert &#x27;diagnostic&#x27; in (tmp_path/&#x27;log.intentional_failure&#x27;).read_text()
+
+
+def test_archived_field_requires_matching_finite_coordinates(tmp_path):
+    points=np.array([[0.,0.,1.],[1.,0.,1.]])
+    frame=pd.DataFrame(points,columns=[&#x27;x_m&#x27;,&#x27;y_m&#x27;,&#x27;z_m&#x27;])
+    frame[[&#x27;Ux_mps&#x27;,&#x27;Uy_mps&#x27;,&#x27;Uz_mps&#x27;]]=0.
+    target=tmp_path/&#x27;samples.csv&#x27;;frame.to_csv(target,index=False)
+    assert read_archived_grid(target,points,False)[&#x27;U&#x27;].shape==(2,3)
+    with pytest.raises(AssertionError):read_archived_grid(target,points+1,False)
+    frame.loc[0,&#x27;Ux_mps&#x27;]=np.nan;frame.to_csv(target,index=False)
+    with pytest.raises(ValueError,match=&#x27;nonfinite&#x27;):read_archived_grid(target,points,False)
+
+
+def test_yplus_does_not_replace_solver_convergence_evidence(tmp_path):
+    case=tmp_path/&#x27;case&#x27;;case.mkdir()
+    original=case/&#x27;log.simpleFoam&#x27;;original.write_text(&#x27;SIMPLE solution converged in 237 iterations&#x27;)
+    demo=runner.Demo(tmp_path,&#x27;live&#x27;)
+    commands=[]
+    def fake(name,command,**kwargs):
+        commands.append(command)
+        (tmp_path/f&#x27;log.{name}&#x27;).write_text(&#x27;yPlus diagnostic&#x27;)
+    demo.command=fake
+    demo.foam(&#x27;yPlus&#x27;,[&#x27;simpleFoam&#x27;,&#x27;-postProcess&#x27;,&#x27;-func&#x27;,&#x27;yPlus&#x27;],case)
+    assert &#x27;converged&#x27; in original.read_text()
+    assert (case/&#x27;log.yPlus&#x27;).read_text()==&#x27;yPlus diagnostic&#x27;
+    shell=commands[0][-1]
+    assert shell.index(&#x27;source &#x27;)&lt;shell.index(&#x27;set -e&#x27;)
+
+
+def test_included_research_inputs_survive_a_git_checkout():
+    assert runner.verify_bundle(runner.BUNDLE)&gt;2000
+
+
+def test_plan_is_safe_without_creating_an_output(tmp_path):
+    output=tmp_path/&#x27;not-created&#x27;
+    result=subprocess.run([sys.executable,str(runner.ROOT/&#x27;run_all.py&#x27;),&#x27;--profile&#x27;,&#x27;full&#x27;,&#x27;--output&#x27;,str(output),&#x27;--plan&#x27;],capture_output=True,text=True,check=True)
+    assert json.loads(result.stdout)[&#x27;fresh_mesh_study&#x27;] is True
+    assert not output.exists()
+</pre></details><details><summary>test_final_report_checks.py — 1 test functions</summary><p><a href="../../tests/test_final_report_checks.py">Open Python source</a></p><ul><li><code>test_extended_search_excludes_outer_target_even_if_it_changes</code>: extended search excludes outer target even if it changes</li></ul><pre>import numpy as np
+import pandas as pd
+from jetbridge_ml.final_report_checks import extended_outer_prediction
+
+
+def test_extended_search_excludes_outer_target_even_if_it_changes():
+    frame=pd.DataFrame(dict(x_m=[0.,1.,0.,1.,.3,.8],y_m=[0.,0.,2.,2.,.7,1.5],speed_mps=[.1,.2,.15,.25,.17,.22],source_row=[10,11,12,13,14,15]))
+    value,params,_,audit=extended_outer_prediction(frame,2)
+    changed=frame.copy();changed.loc[2,&#x27;speed_mps&#x27;]=99.
+    other,other_params,_,_=extended_outer_prediction(changed,2)
+    assert value==other and params==other_params
+    assert all(&#x27;12&#x27; not in rows.split(&#x27;;&#x27;) for rows in audit.outer_training_source_rows)
+    for row in audit.itertuples():
+        train=list(map(int,row.training_indices.split(&#x27;;&#x27;)))
+        valid=list(map(int,row.validation_indices.split(&#x27;;&#x27;)))
+        assert not set(train)&amp;set(valid)
+        expected=frame.drop(index=2).iloc[train][[&#x27;x_m&#x27;,&#x27;y_m&#x27;]].mean().to_numpy()
+        np.testing.assert_allclose(list(map(float,row.scaler_mean.split(&#x27;;&#x27;))),expected)
+</pre></details><details><summary>test_four_workstreams.py — 7 test functions</summary><p><a href="../../tests/test_four_workstreams.py">Open Python source</a></p><ul><li><code>test_nested_test_target_does_not_change_its_model</code>: nested test target does not change its model</li><li><code>test_inner_scaling_and_location_groups_exclude_validation</code>: inner scaling and location groups exclude validation</li><li><code>test_layout_unique_and_value_independent</code>: layout unique and value independent</li><li><code>test_raw_units_sentinel_and_asynchronous_timestamps</code>: raw units sentinel and asynchronous timestamps</li><li><code>test_raw_negative_speed_rejected</code>: raw negative speed rejected</li><li><code>test_probe_restart_segments_sorted_and_deduplicated</code>: probe restart segments sorted and deduplicated</li><li><code>test_experimental_mixed_replicates_rejected</code>: experimental mixed replicates rejected</li></ul><pre>import csv
+from pathlib import Path
+import numpy as np
+import pandas as pd
+import pytest
+from jetbridge_ml.data_processing.raw_speed import read_raw_speed
+from jetbridge_ml.experimental_svr import evaluate_experimental_plane
+from jetbridge_ml.machine_learning.selection import select_plane_svr
+from jetbridge_ml.sensor_design_study import design_indices
+from jetbridge_ml.cfd_interface.thermal_audit import read_probe_trace
+
+GRID=dict(C=[.1],gamma=[.1],epsilon=[.002])
+
+
+def test_nested_test_target_does_not_change_its_model():
+    x,y=np.meshgrid([0.,.5,1.],[0.,.5,1.])
+    frame=pd.DataFrame(dict(x_m=x.ravel(),y_m=y.ravel(),z_m=3.05,
+                            speed_mps=.1+.02*x.ravel()+.01*y.ravel(),source_row=np.arange(9),run_id=&#x27;one&#x27;))
+    first,_,audit=evaluate_experimental_plane(frame,GRID)
+    changed=frame.copy(); changed.loc[0,&#x27;speed_mps&#x27;]=9.
+    second,_,_=evaluate_experimental_plane(changed,GRID)
+    a=first[(first.fold==0)&amp;(first.method==&#x27;svr&#x27;)].iloc[0]
+    b=second[(second.fold==0)&amp;(second.method==&#x27;svr&#x27;)].iloc[0]
+    assert a.prediction_mps==b.prediction_mps
+    for item in audit[audit.outer_source_row==0].itertuples():
+        assert &#x27;0&#x27; not in item.outer_training_source_rows.split(&#x27;;&#x27;)
+        assert set(item.training_indices.split(&#x27;;&#x27;)).isdisjoint(item.validation_indices.split(&#x27;;&#x27;))
+
+
+def test_inner_scaling_and_location_groups_exclude_validation():
+    x=np.array([[0,0],[0,0],[1,0],[1,1],[0,1],[.5,.5]],float)
+    y=.1+.01*x[:,0]
+    _,_,_,audit=select_plane_svr(x,y,grid=GRID)
+    for row in audit.itertuples():
+        train=np.array(list(map(int,row.training_indices.split(&#x27;;&#x27;))))
+        val=np.array(list(map(int,row.validation_indices.split(&#x27;;&#x27;))))
+        np.testing.assert_allclose(list(map(float,row.scaler_mean.split(&#x27;;&#x27;))),x[train].mean(axis=0))
+        assert set(map(tuple,x[train])).isdisjoint(map(tuple,x[val]))
+
+
+@pytest.mark.parametrize(&#x27;placement&#x27;,[&#x27;interior&#x27;,&#x27;wall_aware&#x27;,&#x27;hybrid&#x27;])
+@pytest.mark.parametrize(&#x27;nx,ny&#x27;,[(2,3),(2,6),(4,6),(6,8)])
+def test_layout_unique_and_value_independent(placement,nx,ny):
+    x,y=np.meshgrid((np.arange(32)+.5)/32,(np.arange(48)+.5)/48)
+    points=np.column_stack([x.ravel(),y.ravel()])
+    indices=design_indices(points,nx,ny,placement)
+    assert len(indices)==nx*ny==len(set(indices))
+    shifted=design_indices(points+[2,4],nx,ny,placement)
+    np.testing.assert_array_equal(indices,shifted)
+
+
+def raw_file(path,speed=-9999):
+    rows=[]
+    for label,value in [(&#x27;X (in)&#x27;,10),(&#x27;Y (in)&#x27;,20),(&#x27;Z (in)&#x27;,120),(&#x27;Probe&#x27;,0)]:
+        rows.append([label]+[value]*12)
+    rows.append([&#x27;&#x27;]+[&#x27;Time (sec)&#x27;,&#x27;V (m/s)&#x27;,&#x27;T (°C)&#x27;,&#x27;P (hPa)&#x27;]*3)
+    rows.append([&#x27;&#x27;,1,speed,20,1000,1.1,.2,21,1000,1.2,.3,22,1000])
+    with path.open(&#x27;w&#x27;,encoding=&#x27;cp1252&#x27;,newline=&#x27;&#x27;) as handle:
+        csv.writer(handle).writerows(rows)
+
+
+def test_raw_units_sentinel_and_asynchronous_timestamps(tmp_path):
+    path=tmp_path/&#x27;raw.csv&#x27;; raw_file(path)
+    frame=read_raw_speed(path)
+    assert np.isnan(frame.speed_mps.iloc[0])
+    np.testing.assert_allclose(frame.time_sec,[1,1.1,1.2])
+    np.testing.assert_allclose(frame.raw_x_m,.254)
+    np.testing.assert_allclose(frame.raw_local_height_m,.508)
+    np.testing.assert_allclose(frame.raw_nominal_z_m,3.048)
+
+
+def test_raw_negative_speed_rejected(tmp_path):
+    path=tmp_path/&#x27;raw.csv&#x27;; raw_file(path,-.1)
+    with pytest.raises(ValueError,match=&#x27;Negative&#x27;):
+        read_raw_speed(path)
+
+
+def test_probe_restart_segments_sorted_and_deduplicated(tmp_path):
+    for segment,data in [(&#x27;0&#x27;,[[0,294],[10,295]]),(&#x27;10&#x27;,[[10,295],[20,296]])]:
+        directory=tmp_path/&#x27;postProcessing/sensors&#x27;/segment
+        directory.mkdir(parents=True)
+        np.savetxt(directory/&#x27;T&#x27;,data)
+    data=read_probe_trace(tmp_path)
+    np.testing.assert_allclose(data,[[0,294],[10,295],[20,296]])
+
+
+def test_experimental_mixed_replicates_rejected():
+    frame=pd.DataFrame(dict(run_id=[&#x27;a&#x27;,&#x27;b&#x27;],x_m=[0,1],y_m=[0,1]))
+    with pytest.raises(ValueError,match=&#x27;One replicate&#x27;):
+        evaluate_experimental_plane(frame,GRID)
+</pre></details><details><summary>test_gui_layout.py — 2 test functions</summary><p><a href="../../tests/test_gui_layout.py">Open Python source</a></p><ul><li><code>test_actions_and_preview_fit_the_available_window</code>: actions and preview fit the available window</li><li><code>test_preview_tracks_shrink_and_growth_without_pillow</code>: preview tracks shrink and growth without pillow</li></ul><pre>&quot;&quot;&quot;Native Tk regression checks for laptop-sized windows and preview fitting.&quot;&quot;&quot;
+from pathlib import Path
+from types import SimpleNamespace
+import os
+import time
+import pytest
+
+tk=pytest.importorskip(&#x27;tkinter&#x27;)
+if os.name!=&#x27;nt&#x27; and not os.environ.get(&#x27;DISPLAY&#x27;):
+    pytest.skip(&#x27;Native GUI layout needs a display; scientific worker tests remain headless&#x27;,allow_module_level=True)
+
+from jetbridge_ml.gui.app import App
+
+ROOT=Path(__file__).resolve().parents[1]
+
+
+def settle(window):
+    &quot;&quot;&quot;Process geometry and debounced preview events on this test window.&quot;&quot;&quot;
+    until=time.monotonic()+.25
+    while time.monotonic()&lt;until:
+        window.update()
+        time.sleep(.005)
+
+
+@pytest.fixture(params=[1.0,1.5,2.0])
+def gui(request,tmp_path):
+    window=tk.Tk()
+    window.tk.call(&#x27;tk&#x27;,&#x27;scaling&#x27;,request.param)
+    app=App(window,ROOT)
+    source=tk.PhotoImage(master=window,width=1600,height=900)
+    file=tmp_path/&#x27;preview.png&#x27;;source.write(file,format=&#x27;png&#x27;)
+    app.figure_paths=[file];app.figures.insert(&#x27;end&#x27;,&#x27;preview.png&#x27;);app.figures.selection_set(0)
+    app.tabs.select(1)
+    yield window,app
+    app.residual_plot.stop(SimpleNamespace(widget=app.residual_plot))
+    for event in window.tk.call(&#x27;after&#x27;,&#x27;info&#x27;):
+        window.after_cancel(event)
+    window.destroy()
+
+
+@pytest.mark.parametrize(&#x27;size&#x27;,[(640,420),(800,500),(1024,600),(1280,720)])
+def test_actions_and_preview_fit_the_available_window(gui,size):
+    window,app=gui
+    window.geometry(f&#x27;{size[0]}x{size[1]}&#x27;);settle(window)
+    for widget in (app.run_button,app.cancel_button,app.preview_host):
+        assert widget.winfo_ismapped()
+        x=widget.winfo_rootx()-window.winfo_rootx()
+        y=widget.winfo_rooty()-window.winfo_rooty()
+        assert x&gt;=0 and y&gt;=0
+        assert x+widget.winfo_width()&lt;=window.winfo_width()+2
+        assert y+widget.winfo_height()&lt;=window.winfo_height()+2
+    assert app.image is not None
+    assert app.image.width()&lt;=app.preview_host.winfo_width()
+    assert app.image.height()&lt;=app.preview_host.winfo_height()
+    app.control_canvas.yview_moveto(1);settle(window)
+    assert app.control_canvas.yview()[1]&gt;.99
+    app.control_canvas.yview_moveto(0)
+    app.reveal_focused_control(SimpleNamespace(widget=app.check));settle(window)
+    # Keyboard access to a lower settings button scrolls it into the viewport.
+    top=app.control_canvas.winfo_rooty()
+    assert app.check.winfo_rooty()&gt;=top-2
+    assert app.check.winfo_rooty()+app.check.winfo_height()&lt;=top+app.control_canvas.winfo_height()+3
+
+
+def test_preview_tracks_shrink_and_growth_without_pillow(gui,monkeypatch):
+    import builtins
+    original=builtins.__import__
+    def without_pillow(name,*args,**kwargs):
+        if name==&#x27;PIL&#x27; or name.startswith(&#x27;PIL.&#x27;):
+            raise ImportError(&#x27;Test the dependency-free preview path&#x27;)
+        return original(name,*args,**kwargs)
+    monkeypatch.setattr(builtins,&#x27;__import__&#x27;,without_pillow)
+    window,app=gui
+    for width,height in [(1200,720),(800,500),(1100,650)]:
+        window.geometry(f&#x27;{width}x{height}&#x27;);settle(window);app.preview()
+        assert app.image.width()&lt;=app.preview_host.winfo_width()
+        assert app.image.height()&lt;=app.preview_host.winfo_height()
+</pre></details><details><summary>test_gui_parallel.py — 5 test functions</summary><p><a href="../../tests/test_gui_parallel.py">Open Python source</a></p><ul><li><code>test_invalid_process_count</code>: invalid process count</li><li><code>test_archived_requests_cannot_claim_mpi</code>: archived requests cannot claim mpi</li><li><code>test_cpu_limit</code>: cpu limit</li><li><code>test_decomposition_and_literal_arguments</code>: decomposition and literal arguments</li><li><code>test_cancellation_stops_mpi_ranks</code>: cancellation stops mpi ranks</li></ul><pre>&quot;&quot;&quot;MPI requests must remain explicit and within available hardware.&quot;&quot;&quot;
+import pytest
+from jetbridge_ml.gui.config import RunSpec, worker_arguments
+from jetbridge_ml.gui import parallel
+
+
+@pytest.mark.parametrize(&#x27;count&#x27;, [0, -1, 33, True, 1.5])
+def test_invalid_process_count(count):
+    with pytest.raises(ValueError, match=&#x27;integer&#x27;):
+        RunSpec(processes=count).validate(&#x27;.&#x27;)
+
+
+def test_archived_requests_cannot_claim_mpi():
+    with pytest.raises(ValueError, match=&#x27;fresh&#x27;):
+        RunSpec(kind=&#x27;archive&#x27;, processes=2).validate(&#x27;.&#x27;)
+
+
+def test_cpu_limit(monkeypatch):
+    monkeypatch.setattr(parallel, &#x27;available_cpus&#x27;, lambda: 4)
+    parallel.validate_resources(4)
+    with pytest.raises(ValueError, match=&#x27;only 4&#x27;):
+        parallel.validate_resources(8)
+
+
+def test_decomposition_and_literal_arguments(tmp_path):
+    (tmp_path / &#x27;system&#x27;).mkdir()
+    parallel.write_decomposition(tmp_path, 4)
+    text = (tmp_path / &#x27;system/decomposeParDict&#x27;).read_text()
+    assert &#x27;numberOfSubdomains 4;&#x27; in text
+    assert &#x27;method scotch;&#x27; in text
+    command = parallel.mpi_command(4, &#x27;simpleFoam&#x27;)
+    assert command[-2:] == [&#x27;simpleFoam&#x27;, &#x27;-parallel&#x27;]
+    assert &#x27;--oversubscribe&#x27; not in command
+    assert worker_arguments(tmp_path, tmp_path/&#x27;out&#x27;, RunSpec(kind=&#x27;fresh&#x27;, processes=4))[-2:] == [&#x27;--processes&#x27;, &#x27;4&#x27;]
+
+
+@pytest.mark.skipif(__import__(&#x27;os&#x27;).name == &#x27;nt&#x27; or not __import__(&#x27;shutil&#x27;).which(&#x27;mpirun&#x27;),
+                    reason=&#x27;Requires Linux Open MPI runtime&#x27;)
+def test_cancellation_stops_mpi_ranks(tmp_path):
+    import os
+    import sys
+    import threading
+    import time
+    from pathlib import Path
+    from jetbridge_ml.gui.workflow import Job, Cancelled
+    root = Path(__file__).resolve().parents[1]
+    output = tmp_path/&#x27;job&#x27;
+    output.mkdir()
+    job = Job(root, output, RunSpec(kind=&#x27;fresh&#x27;, processes=2))
+    script = tmp_path/&#x27;rank.py&#x27;
+    script.write_text(&quot;import os,time,pathlib; pathlib.Path(&quot; + repr(str(tmp_path)) +
+                      &quot;, &#x27;rank-&#x27; + os.environ[&#x27;OMPI_COMM_WORLD_RANK&#x27;]).write_text(str(os.getpid())); time.sleep(30)&quot;)
+    def cancel_when_started():
+        for _ in range(100):
+            if len(list(tmp_path.glob(&#x27;rank-*&#x27;))) == 2:
+                break
+            time.sleep(.05)
+        job.cancel_file.write_text(&#x27;cancel&#x27;)
+    thread = threading.Thread(target=cancel_when_started)
+    thread.start()
+    try:
+        with pytest.raises(Cancelled):
+            job.command(&#x27;mpi_cancel&#x27;, [&#x27;mpirun&#x27;, &#x27;--bind-to&#x27;, &#x27;none&#x27;, &#x27;-np&#x27;, &#x27;2&#x27;, sys.executable, str(script)])
+    finally:
+        thread.join()
+    ranks = list(tmp_path.glob(&#x27;rank-*&#x27;))
+    assert len(ranks) == 2
+    for record in ranks:
+        pid = int(record.read_text())
+        status = Path(f&#x27;/proc/{pid}/stat&#x27;)
+        assert not status.exists() or status.read_text().split()[2] == &#x27;Z&#x27;
+</pre></details><details><summary>test_gui_residuals.py — 6 test functions</summary><p><a href="../../tests/test_gui_residuals.py">Open Python source</a></p><ul><li><code>test_records_first_initial_residual_and_preserves_final_and_zero</code>: records first initial residual and preserves final and zero</li><li><code>test_stream_reader_ignores_partial_nonfinite_and_invalid_rows</code>: stream reader ignores partial nonfinite and invalid rows</li><li><code>test_archived_residual_column_can_be_read_without_inventing_final_values</code>: archived residual column can be read without inventing final values</li><li><code>test_even_zero_comparison_error_does_not_certify_physical_accuracy</code>: even zero comparison error does not certify physical accuracy</li><li><code>test_experimental_and_thermal_modes_have_distinct_evidence_messages</code>: experimental and thermal modes have distinct evidence messages</li><li><code>test_fresh_case_paths_reject_spaces_but_archived_outputs_allow_them</code>: fresh case paths reject spaces but archived outputs allow them</li></ul><pre>&quot;&quot;&quot;Residual parsing and interpretation must not imply physical validation.&quot;&quot;&quot;
+from pathlib import Path
+import csv
+import pytest
+from jetbridge_ml.gui.residuals import ResidualRecorder, read_history
+from jetbridge_ml.gui.guidance import validation_message, guide_text
+
+
+def test_records_first_initial_residual_and_preserves_final_and_zero(tmp_path):
+    path=tmp_path/&#x27;history.csv&#x27;;tracker=ResidualRecorder(path)
+    tracker.feed(&#x27;smoothSolver: Solving for Uz, Initial residual = 0.9, Final residual = 1e-7, No Iterations 2&#x27;)
+    tracker.feed(&#x27;Time = 1\n&#x27;)
+    tracker.feed(&#x27;GAMG: Solving for p, Initial residual = 0.03, Final residual = 2e-8, No Iterations 3&#x27;)
+    tracker.feed(&#x27;GAMG: Solving for p, Initial residual = 0.004, Final residual = 1e-9, No Iterations 2&#x27;)
+    tracker.feed(&#x27;smoothSolver: Solving for Ux, Initial residual = 0, Final residual = 0, No Iterations 0&#x27;)
+    tracker.feed(&#x27;Time = 2\n&#x27;)
+    tracker.feed(&#x27;GAMG: Solving for p, Initial residual = 0.001, Final residual = 1e-10, No Iterations 1&#x27;)
+    tracker.close()
+    with path.open() as handle:rows=list(csv.DictReader(handle))
+    assert len(rows)==3
+    assert float(rows[0][&#x27;initial_residual&#x27;])==.03
+    assert float(rows[0][&#x27;final_residual&#x27;])==2e-8
+    assert rows[1][&#x27;field&#x27;]==&#x27;Ux&#x27; and float(rows[1][&#x27;initial_residual&#x27;])==0
+    assert float(rows[2][&#x27;iteration&#x27;])==2
+
+
+def test_stream_reader_ignores_partial_nonfinite_and_invalid_rows(tmp_path):
+    path=tmp_path/&#x27;history.csv&#x27;
+    path.write_text(&#x27;iteration,field,initial_residual,source\n1,p,0.1,fresh\n2,p,nan,fresh\n3,p,-1,fresh\n4,p,&#x27;)
+    rows=read_history(path)
+    assert len(rows)==1 and rows[0][&#x27;initial_residual&#x27;]==.1
+    assert read_history(tmp_path/&#x27;not-yet-created.csv&#x27;)==[]
+
+
+def test_archived_residual_column_can_be_read_without_inventing_final_values(tmp_path):
+    path=tmp_path/&#x27;thermal.csv&#x27;;path.write_text(&#x27;iteration,field,residual\n10,T,0.025\n&#x27;)
+    assert read_history(path)==[dict(iteration=10.,field=&#x27;T&#x27;,initial_residual=.025,source=&#x27;saved history&#x27;)]
+
+
+@pytest.mark.parametrize(&#x27;kind&#x27;,[&#x27;fresh&#x27;,&#x27;archive&#x27;])
+def test_even_zero_comparison_error_does_not_certify_physical_accuracy(kind):
+    text=validation_message(kind,{&#x27;cfd_sensor_metrics&#x27;:{&#x27;rmse&#x27;:0.,&#x27;bias&#x27;:0.},&#x27;solver_converged&#x27;:True})
+    assert &#x27;incomplete&#x27; in text and &#x27;comparison&#x27; in text.lower()
+
+
+def test_experimental_and_thermal_modes_have_distinct_evidence_messages():
+    assert &#x27;not assessed&#x27; in validation_message(&#x27;experimental&#x27;)
+    assert &#x27;unconverged&#x27; in validation_message(&#x27;thermal&#x27;)
+    text=guide_text(&#x27;fresh&#x27;,&#x27;S01-A-10-HN-1&#x27;,&#x27;RBF&#x27;,&#x27;Standard&#x27;)
+    assert &#x27;first reported initial residual&#x27; in text
+    assert &#x27;measurement uncertainty&#x27; in text
+    assert &#x27;not physical seconds&#x27; in text
+
+
+def test_fresh_case_paths_reject_spaces_but_archived_outputs_allow_them(tmp_path):
+    from jetbridge_ml.gui.config import validate_output
+    root=tmp_path/&#x27;repo&#x27;;root.mkdir()
+    output=tmp_path/&#x27;folder with spaces&#x27;/&#x27;new_run&#x27;
+    with pytest.raises(ValueError,match=&#x27;cannot contain spaces&#x27;):
+        validate_output(root,output,fresh_cfd=True)
+    assert validate_output(root,output)==output.resolve()
+</pre></details><details><summary>test_gui_workflow.py — 11 test functions</summary><p><a href="../../tests/test_gui_workflow.py">Open Python source</a></p><ul><li><code>test_resolution_labels_have_exact_counts</code>: resolution labels have exact counts</li><li><code>test_only_single_window_experiments_can_launch_fresh_cfd</code>: only single window experiments can launch fresh cfd</li><li><code>test_archived_mesh_and_case_cannot_be_silently_changed</code>: archived mesh and case cannot be silently changed</li><li><code>test_original_inputs_cannot_be_output</code>: original inputs cannot be output</li><li><code>test_existing_output_and_parent_of_repository_are_rejected</code>: existing output and parent of repository are rejected</li><li><code>test_wsl_paths_remain_literal_arguments</code>: wsl paths remain literal arguments</li><li><code>test_hvac_uses_recorded_window_and_litres_conversion</code>: hvac uses recorded window and litres conversion</li><li><code>test_prepared_case_updates_flow_turbulence_and_selected_probes</code>: prepared case updates flow turbulence and selected probes</li><li><code>test_cancellation_stops_a_silent_child_process_group</code>: cancellation stops a silent child process group</li><li><code>test_selected_hash_check_rejects_tampering_without_reading_unrelated_inputs</code>: selected hash check rejects tampering without reading unrelated inputs</li><li><code>test_hash_check_can_be_cancelled_before_file_io</code>: hash check can be cancelled before file io</li></ul><pre>&quot;&quot;&quot;Scientific request, isolation and cancellation checks for the GUI workflow.&quot;&quot;&quot;
+from dataclasses import replace
+from hashlib import sha256
+from pathlib import Path
+import re
+import os
+import sys
+import threading
+import time
+import numpy as np
+import pytest
+from jetbridge_ml.gui.config import RunSpec, available_runs, cell_count, validate_output, windows_to_wsl, worker_arguments
+from jetbridge_ml.gui.workflow import Job, Cancelled, boundary_inputs, prepare_case
+from jetbridge_ml.data_processing.faa import read_speed_average
+
+ROOT=Path(__file__).resolve().parents[1]
+
+
+def test_resolution_labels_have_exact_counts():
+    assert [cell_count(m) for m in (&#x27;coarse&#x27;,&#x27;standard&#x27;,&#x27;fine&#x27;)]==[17664,141312,476928]
+
+
+def test_only_single_window_experiments_can_launch_fresh_cfd():
+    assert len(available_runs(ROOT,&#x27;experimental&#x27;))==36
+    assert len(available_runs(ROOT,&#x27;fresh&#x27;))==30
+    with pytest.raises(ValueError):RunSpec(&#x27;fresh&#x27;,&#x27;S01-A-58-HN-1&#x27;).validate(ROOT)
+    with pytest.raises(ValueError):RunSpec(run_id=&#x27;../../case&#x27;).validate(ROOT)
+
+
+def test_archived_mesh_and_case_cannot_be_silently_changed():
+    with pytest.raises(ValueError):RunSpec(&#x27;archive&#x27;,&#x27;S01-A-16-HN-1&#x27;).validate(ROOT)
+    with pytest.raises(ValueError):RunSpec(&#x27;archive&#x27;,mesh=&#x27;fine&#x27;).validate(ROOT)
+    with pytest.raises(ValueError):RunSpec(&#x27;thermal&#x27;,&#x27;S01-AC-10-HN-1&#x27;,method=&#x27;svr&#x27;).validate(ROOT)
+
+
+@pytest.mark.parametrize(&#x27;folder&#x27;,[&#x27;src&#x27;,&#x27;data&#x27;,&#x27;cfd&#x27;,&#x27;docs&#x27;,&#x27;.git&#x27;,&#x27;tests&#x27;])
+def test_original_inputs_cannot_be_output(folder):
+    with pytest.raises(ValueError):validate_output(ROOT,ROOT/folder/&#x27;new_gui_job&#x27;)
+
+
+def test_existing_output_and_parent_of_repository_are_rejected(tmp_path):
+    with pytest.raises(ValueError):validate_output(ROOT,tmp_path)
+    with pytest.raises(ValueError):validate_output(ROOT,ROOT.parent)
+
+
+def test_wsl_paths_remain_literal_arguments():
+    path=r&#x27;C:\Users\Student Name\Project&#x27;
+    converted=windows_to_wsl(path)
+    assert converted==&#x27;/mnt/c/Users/Student Name/Project&#x27;
+    args=worker_arguments(converted,&#x27;/tmp/my job&#x27;,RunSpec())
+    assert args[1]==converted and args[3]==&#x27;/tmp/my job&#x27;
+    with pytest.raises(ValueError):windows_to_wsl(r&#x27;\\server\project&#x27;)
+
+
+def test_hvac_uses_recorded_window_and_litres_conversion():
+    boundary=boundary_inputs(ROOT,&#x27;S01-A-10-HN-1&#x27;)
+    assert boundary[&#x27;valid_hvac_readings&#x27;]==58
+    assert boundary[&#x27;flow_m3s&#x27;]==pytest.approx(.5338655172413794)
+    assert boundary[&#x27;windows_equal&#x27;]
+
+
+@pytest.mark.parametrize(&#x27;mesh&#x27;,[&#x27;coarse&#x27;,&#x27;standard&#x27;,&#x27;fine&#x27;])
+def test_prepared_case_updates_flow_turbulence_and_selected_probes(tmp_path,mesh):
+    source=ROOT/&#x27;cfd/cases/empty_bridge_s01_a_10_hn_1&#x27;
+    files=[p for folder in (&#x27;0&#x27;,&#x27;constant&#x27;,&#x27;system&#x27;) for p in (source/folder).rglob(&#x27;*&#x27;) if p.is_file()]
+    before={p:sha256(p.read_bytes()).hexdigest() for p in files}
+    frame=read_speed_average(ROOT/&#x27;data/demo/experimental/03-Averages/V-S01-A-16-HN-1.txt&#x27;)
+    case=tmp_path/&#x27;case&#x27;;q=.4
+    setup=prepare_case(ROOT,case,frame,mesh,q)
+    assert setup[&#x27;cells&#x27;]==cell_count(mesh)
+    text=(case/&#x27;0/U&#x27;).read_text()
+    assert float(re.search(r&#x27;volumetricFlowRate constant ([\d.eE+-]+)&#x27;,text)[1])==q
+    initial=float(re.search(r&#x27;internalField uniform \(0 0 ([\d.eE+-]+)\)&#x27;,text)[1])
+    assert initial==pytest.approx(-q/(1.388618*2.441448))
+    k=float(re.search(r&#x27;internalField uniform ([\d.eE+-]+)&#x27;,(case/&#x27;0/k&#x27;).read_text())[1])
+    assert k==pytest.approx(1.5*(.05*abs(initial))**2)
+    probes=re.search(r&#x27;probeLocations\s*\((.*?)\);&#x27;,(case/&#x27;system/controlDict&#x27;).read_text(),re.S)[1]
+    assert len(re.findall(r&#x27;\([^()]*\)&#x27;,probes))==len(frame)
+    for row in frame.itertuples():assert f&#x27;{row.z_m:.12g}&#x27; in probes
+    assert all(sha256(p.read_bytes()).hexdigest()==digest for p,digest in before.items())
+
+
+@pytest.mark.skipif(os.name == &#x27;nt&#x27;, reason=&#x27;Scientific worker uses Linux process groups; Windows frontend uses WSL&#x27;)
+def test_cancellation_stops_a_silent_child_process_group(tmp_path):
+    output=tmp_path/&#x27;job&#x27;;output.mkdir()
+    job=Job(ROOT,output,RunSpec())
+    timer=threading.Timer(.3,lambda:job.cancel_file.write_text(&#x27;cancel&#x27;))
+    start=time.monotonic();timer.start()
+    try:
+        with pytest.raises(Cancelled):
+            job.command(&#x27;silent&#x27;,[sys.executable,&#x27;-c&#x27;,&#x27;import time;time.sleep(30)&#x27;])
+    finally:timer.cancel()
+    assert time.monotonic()-start&lt;5
+    assert job.manifest[&#x27;stages&#x27;][0][&#x27;status&#x27;]==&#x27;cancelled&#x27;
+
+
+
+def test_selected_hash_check_rejects_tampering_without_reading_unrelated_inputs(tmp_path):
+    import json
+    from jetbridge_ml.gui.workflow import verify_inputs
+    bundle=tmp_path/&#x27;data/demo&#x27;
+    paths=[&#x27;experimental/Data Dictionary.csv&#x27;,&#x27;experimental/03-Averages/V-S01-A-10-HN-1.txt&#x27;,&#x27;unused.csv&#x27;]
+    records=[]
+    for name in paths:
+        path=bundle/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(b&#x27;original&#x27;)
+        records.append(dict(path=name,sha256=sha256(b&#x27;original&#x27;).hexdigest()))
+    (bundle/&#x27;manifest.json&#x27;).write_text(json.dumps(dict(files=records)))
+    (bundle/&#x27;unused.csv&#x27;).write_bytes(b&#x27;not used in this job&#x27;)
+    result=verify_inputs(tmp_path,RunSpec())
+    assert len(result[&#x27;files&#x27;])==2
+    (bundle/paths[1]).write_bytes(b&#x27;changed target&#x27;)
+    with pytest.raises(ValueError,match=&#x27;Changed bundled input&#x27;):verify_inputs(tmp_path,RunSpec())
+
+
+def test_hash_check_can_be_cancelled_before_file_io(tmp_path):
+    import json
+    from jetbridge_ml.gui.workflow import verify_inputs
+    bundle=tmp_path/&#x27;data/demo&#x27;;bundle.mkdir(parents=True)
+    paths=[&#x27;experimental/Data Dictionary.csv&#x27;,&#x27;experimental/03-Averages/V-S01-A-10-HN-1.txt&#x27;]
+    (bundle/&#x27;manifest.json&#x27;).write_text(json.dumps(dict(files=[dict(path=p,sha256=&#x27;irrelevant&#x27;) for p in paths])))
+    cancel=tmp_path/&#x27;cancel&#x27;;cancel.touch()
+    with pytest.raises(Cancelled):verify_inputs(tmp_path,RunSpec(),cancel)
+</pre></details><details><summary>test_interpolation.py — 3 test functions</summary><p><a href="../../tests/test_interpolation.py">Open Python source</a></p><ul><li><code>test_nearest_neighbor_matches_known_locations</code>: nearest neighbor matches known locations</li><li><code>test_rmse_mae_and_signed_bias</code>: rmse mae and signed bias</li><li><code>test_bad_input_is_rejected</code>: bad input is rejected</li></ul><pre>import numpy as np
+import pytest
+from jetbridge_ml.interpolation import nearest_neighbor
+from jetbridge_ml.validation import regression_metrics
+
+
+def test_nearest_neighbor_matches_known_locations():
+    locations = np.array([[0.0, 0.0], [2.0, 0.0], [0.0, 2.0]])
+    values = np.array([1.0, 4.0, 9.0])
+    out = nearest_neighbor(locations, values, np.array([[0.1, 0.1], [1.8, 0.0]]))
+    np.testing.assert_array_equal(out, [1.0, 4.0])
+
+
+def test_rmse_mae_and_signed_bias():
+    result = regression_metrics([1., 2.], [2., 2.])
+    assert result[&#x27;rmse&#x27;] == pytest.approx(2**-0.5)
+    assert result[&#x27;mae&#x27;] == pytest.approx(0.5)
+    assert result[&#x27;bias&#x27;] == pytest.approx(0.5)
+
+
+def test_bad_input_is_rejected():
+    with pytest.raises(ValueError):
+        nearest_neighbor([[0., 0.]], [1.], [[float(&#x27;nan&#x27;), 0.]])
+</pre></details><details><summary>test_interpolation_sensitivity.py — 3 test functions</summary><p><a href="../../tests/test_interpolation_sensitivity.py">Open Python source</a></p><ul><li><code>test_noise_weights_reproduce_direct_predictions</code>: noise weights reproduce direct predictions</li><li><code>test_supported_convex_weights_do_not_amplify_bounded_noise</code>: supported convex weights do not amplify bounded noise</li><li><code>test_rbf_worst_case_noise_bound_is_attained_at_selected_query</code>: rbf worst case noise bound is attained at selected query</li></ul><pre>&quot;&quot;&quot;Check geometry-only interpolation sensitivity against direct predictions.&quot;&quot;&quot;
+import numpy as np
+import pytest
+from jetbridge_ml.interpolation.plane import predict_plane
+from jetbridge_ml.interpolation.sensitivity import interpolation_noise_gain
+
+
+@pytest.mark.parametrize(&quot;method&quot;,[&quot;nearest&quot;,&quot;linear&quot;,&quot;rbf&quot;])
+def test_noise_weights_reproduce_direct_predictions(method):
+    x=np.array([[0.,0.],[0.,1.],[1.,0.],[1.,1.],[.5,.5]])
+    q=np.array([[.2,.3],[.7,.8],[-.2,.5]])
+    values=np.array([.1,.2,.4,.8,.5])
+    gain,weights,_=interpolation_noise_gain(method,x,q)
+    actual=predict_plane(method,x,values,q)
+    valid=np.isfinite(gain)
+    np.testing.assert_allclose(weights[valid]@values,actual[valid],atol=1e-12)
+
+
+@pytest.mark.parametrize(&quot;method&quot;,[&quot;nearest&quot;,&quot;linear&quot;])
+def test_supported_convex_weights_do_not_amplify_bounded_noise(method):
+    x=np.array([[0.,0.],[0.,1.],[1.,0.],[1.,1.]])
+    gain,_,inside=interpolation_noise_gain(method,x,[[.2,.3],[.7,.8]])
+    assert inside.all()
+    np.testing.assert_allclose(gain,[1,1],atol=1e-12)
+
+
+def test_rbf_worst_case_noise_bound_is_attained_at_selected_query():
+    x=np.array([[0.,0.],[0.,1.],[1.,0.],[1.,1.],[.5,.5]])
+    query=np.array([[-.3,.2]])
+    gain,weights,_=interpolation_noise_gain(&quot;rbf&quot;,x,query)
+    base=np.array([.1,.2,.4,.8,.5])
+    epsilon=.001
+    perturbation=epsilon*np.sign(weights[0])
+    delta=predict_plane(&quot;rbf&quot;,x,base+perturbation,query)-predict_plane(&quot;rbf&quot;,x,base,query)
+    assert delta[0]==pytest.approx(epsilon*gain[0],abs=1e-12)
+</pre></details><details><summary>test_plane_benchmark.py — 7 test functions</summary><p><a href="../../tests/test_plane_benchmark.py">Open Python source</a></p><ul><li><code>test_parser_units_metadata_and_missing</code>: parser units metadata and missing</li><li><code>test_parser_rejects_wrong_units_and_truncation</code>: parser rejects wrong units and truncation</li><li><code>test_affine_field_reproduction</code>: affine field reproduction</li><li><code>test_linear_extrapolation_is_explicit</code>: linear extrapolation is explicit</li><li><code>test_repeated_locations_never_cross_split</code>: repeated locations never cross split</li><li><code>test_benchmark_same_folds_and_common_coverage</code>: benchmark same folds and common coverage</li><li><code>test_unseen_target_values_cannot_affect_predictions</code>: unseen target values cannot affect predictions</li></ul><pre>&quot;&quot;&quot;Independent numerical and leakage checks using synthetic source fixtures.&quot;&quot;&quot;
+import numpy as np
+import pandas as pd
+import pytest
+
+from jetbridge_ml.data_processing.faa import read_speed_average
+from jetbridge_ml.interpolation.plane import predict_plane
+from jetbridge_ml.validation.spatial import leave_location_out
+from jetbridge_ml.benchmark import evaluate_plane, summarize
+
+
+def make_source(tmp_path, mean=&quot;1 2 -9999 4&quot;):
+    path = tmp_path / &quot;V-S01-A-10-HN-1.txt&quot;
+    path.write_text(
+        &#x27;TITLE=&quot;synthetic&quot;\nVARIABLES=&quot;X (m)&quot;, &quot;Y (m)&quot;, &quot;Z (m)&quot;, &quot;Mean&quot;, &quot;dMean&quot;, &quot;Median&quot;, &quot;dMedian&quot;, &quot;StdDev&quot;\n&#x27;
+        &#x27;ZONE I=2, J=2, K=1 F=BLOCK\n&#x27;
+        &#x27;0 0 1 1\n0 1 0 1\n3.05 3.05 3.05 3.05\n&#x27;
+        + mean + &#x27;\n&#x27; + &#x27;0 0 0 0\n&#x27; * 4)
+    return path
+
+
+def test_parser_units_metadata_and_missing(tmp_path):
+    frame = read_speed_average(make_source(tmp_path))
+    assert frame.y_m.tolist() == [0, 1, 0, 1]  # No second floor offset.
+    assert frame.z_m.tolist() == [3.05] * 4
+    assert frame.run_id.unique().tolist() == [&quot;S01-A-10-HN-1&quot;]
+    assert frame.station_ft.unique().tolist() == [10]
+    assert np.isnan(frame.speed_mps.iloc[2])
+
+
+def test_parser_rejects_wrong_units_and_truncation(tmp_path):
+    path = make_source(tmp_path)
+    text = path.read_text()
+    path.write_text(text.replace(&quot;X (m)&quot;, &quot;X (in)&quot;))
+    with pytest.raises(ValueError, match=&quot;units&quot;):
+        read_speed_average(path)
+    path.write_text(text.rsplit(&quot;0&quot;, 1)[0])
+    with pytest.raises(ValueError, match=&quot;length&quot;):
+        read_speed_average(path)
+
+
+@pytest.mark.parametrize(&quot;method&quot;, [&quot;linear&quot;, &quot;rbf&quot;])
+def test_affine_field_reproduction(method):
+    x = np.array([[0, 0], [1, 0], [0, 1], [1, 1], [.5, .5]])
+    q = np.array([[.2, .3], [.6, .8]])
+    result = predict_plane(method, x, 2 + 3*x[:, 0] - x[:, 1], q)
+    np.testing.assert_allclose(result, 2 + 3*q[:, 0] - q[:, 1], atol=1e-12)
+
+
+def test_linear_extrapolation_is_explicit():
+    x = np.array([[0, 0], [1, 0], [0, 1]])
+    result = predict_plane(&quot;linear&quot;, x, [1, 1, 1], [[.2, .2], [2, 2]])
+    assert result[0] == pytest.approx(1)
+    assert np.isnan(result[1])
+
+
+def test_repeated_locations_never_cross_split():
+    x = np.array([[0, 0], [0, 0], [1, 0], [1, 0], [0, 1]])
+    folds = list(leave_location_out(x))
+    assert len(folds) == 3
+    for train, test in folds:
+        assert not set(map(tuple, x[train])) &amp; set(map(tuple, x[test]))
+    assert sorted(np.concatenate([test for _, test in folds])) == list(range(5))
+
+
+def test_benchmark_same_folds_and_common_coverage():
+    x = np.repeat([0., 1.], 6)
+    y = np.tile(np.arange(6.), 2)
+    frame = pd.DataFrame(dict(x_m=x, y_m=y, z_m=3., speed_mps=.1 + .01*y,
+                              run_id=&quot;synthetic&quot;, source_row=np.arange(12)))
+    first = evaluate_plane(frame)
+    second = evaluate_plane(frame)
+    pd.testing.assert_frame_equal(first.drop(columns=&quot;seconds&quot;), second.drop(columns=&quot;seconds&quot;))
+    for _, fold in first.groupby(&quot;fold&quot;):
+        assert fold.source_row.nunique() == 1
+        assert fold.train_rows.nunique() == 1
+        assert str(fold.source_row.iloc[0]) not in fold.train_rows.iloc[0].split(&quot;;&quot;)
+    metrics = summarize(first)
+    common = metrics[metrics.subset == &quot;common_hull&quot;]
+    assert common.n_predicted.tolist() == [8, 8, 8]
+    assert common.coverage.tolist() == [1, 1, 1]
+    outside_linear = metrics[(metrics.method == &quot;linear&quot;) &amp; (metrics.subset == &quot;outside_hull&quot;)]
+    assert outside_linear.n_predicted.iloc[0] == 0
+    assert np.isnan(outside_linear.rmse.iloc[0])
+
+
+def test_unseen_target_values_cannot_affect_predictions():
+    frame = pd.DataFrame(dict(x_m=np.repeat([0., 1.], 6),
+                              y_m=np.tile(np.arange(6.), 2), z_m=3.,
+                              speed_mps=np.arange(12.) / 100,
+                              run_id=&quot;synthetic&quot;, source_row=np.arange(12)))
+    baseline = evaluate_plane(frame)
+    changed = frame.copy()
+    changed.loc[3, &quot;speed_mps&quot;] = 1000
+    altered = evaluate_plane(changed)
+    a = baseline[baseline.source_row == 3].prediction_mps
+    b = altered[altered.source_row == 3].prediction_mps
+    np.testing.assert_allclose(a, b)
+</pre></details><details><summary>test_presentation_examples.py — 4 test functions</summary><p><a href="../../tests/test_presentation_examples.py">Open Python source</a></p><ul><li><code>test_zero_bias_can_hide_large_local_errors</code>: Opposite signed errors cancel in bias, but not in MAE or RMSE.</li><li><code>test_sensor_row_order_does_not_change_predictions</code>: Reordering paired coordinates and values must preserve predictions.</li><li><code>test_error_metrics_keep_speed_units_when_scaled</code>: Changing m/s to cm/s multiplies every error metric by one hundred.</li><li><code>test_unsupported_predictions_are_not_silently_scored</code>: A missing prediction requires an explicit coverage decision.</li></ul><pre>&quot;&quot;&quot;Small independent checks that are practical to explain in a demonstration.
+
+These extend the existing affine-field, support and nested-leakage tests.
+They check numerical properties, not the physical validity of jet-bridge CFD.
+&quot;&quot;&quot;
+
+import numpy as np
+import pytest
+
+from jetbridge_ml.interpolation.plane import predict_plane
+from jetbridge_ml.validation.metrics import regression_metrics
+
+
+def test_zero_bias_can_hide_large_local_errors():
+    &quot;&quot;&quot;Opposite signed errors cancel in bias, but not in MAE or RMSE.&quot;&quot;&quot;
+    actual = np.array([0.1, 0.3])
+    predicted = np.array([0.3, 0.1])
+    metrics = regression_metrics(actual, predicted)
+    assert metrics[&quot;bias&quot;] == pytest.approx(0.0, abs=1e-12)
+    assert metrics[&quot;mae&quot;] == pytest.approx(0.2)
+    assert metrics[&quot;rmse&quot;] == pytest.approx(0.2)
+
+
+@pytest.mark.parametrize(&quot;method&quot;, [&quot;nearest&quot;, &quot;linear&quot;, &quot;rbf&quot;])
+def test_sensor_row_order_does_not_change_predictions(method):
+    &quot;&quot;&quot;Reordering paired coordinates and values must preserve predictions.&quot;&quot;&quot;
+    sensors = np.array([[0.0, 0.0], [1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
+    speeds = np.array([0.1, 0.2, 0.3, 0.4])
+    queries = np.array([[0.12, 0.18], [0.83, 0.74]])
+    order = np.array([2, 0, 3, 1])
+    original = predict_plane(method, sensors, speeds, queries)
+    reordered = predict_plane(method, sensors[order], speeds[order], queries)
+    np.testing.assert_allclose(original, reordered, rtol=0.0, atol=1e-12)
+
+
+def test_error_metrics_keep_speed_units_when_scaled():
+    &quot;&quot;&quot;Changing m/s to cm/s multiplies every error metric by one hundred.&quot;&quot;&quot;
+    actual = np.array([0.1, 0.2, 0.3])
+    predicted = np.array([0.12, 0.18, 0.34])
+    metres = regression_metrics(actual, predicted)
+    centimetres = regression_metrics(100.0 * actual, 100.0 * predicted)
+    for name in (&quot;rmse&quot;, &quot;mae&quot;, &quot;bias&quot;):
+        assert centimetres[name] == pytest.approx(100.0 * metres[name])
+
+
+def test_unsupported_predictions_are_not_silently_scored():
+    &quot;&quot;&quot;A missing prediction requires an explicit coverage decision.&quot;&quot;&quot;
+    with pytest.raises(ValueError, match=&quot;finite&quot;):
+        regression_metrics([0.1, 0.2], [0.1, np.nan])
+</pre></details><details><summary>test_reconstruction_lab.py — 5 test functions</summary><p><a href="../../tests/test_reconstruction_lab.py">Open Python source</a></p><ul><li><code>test_affine_field_is_reproduced_inside_support</code>: affine field is reproduced inside support</li><li><code>test_designs_are_nested_disjoint_and_preserve_common_support</code>: designs are nested disjoint and preserve common support</li><li><code>test_heldout_targets_never_enter_noise_fits</code>: heldout targets never enter noise fits</li><li><code>test_virtual_design_rejects_training_test_overlap</code>: virtual design rejects training test overlap</li><li><code>test_lab_configuration_and_explanation</code>: lab configuration and explanation</li></ul><pre>&quot;&quot;&quot;Numerical and leakage checks for the reconstruction comparison workflow.&quot;&quot;&quot;
+from pathlib import Path
+import numpy as np
+import pytest
+from scipy.spatial import Delaunay
+from jetbridge_ml.validation import reconstruction_lab as lab
+from jetbridge_ml.gui.config import RunSpec, available_runs
+from jetbridge_ml.gui.guidance import guide_text
+
+ROOT=Path(__file__).resolve().parents[1]
+
+
+def locations():
+    xx,yy=np.meshgrid(np.linspace(0,1,3),np.linspace(0,2,5))
+    return np.c_[xx.ravel(),yy.ravel()]
+
+
+@pytest.mark.parametrize(&#x27;method&#x27;,[&#x27;linear&#x27;,&#x27;rbf&#x27;])
+def test_affine_field_is_reproduced_inside_support(method):
+    x=locations();y=.1+.03*x[:,0]+.04*x[:,1]
+    q=np.array([[.23,.32],[.61,1.43],[.77,.81]])
+    values,seconds,_=lab.fit_predict(method,x,y,q)
+    np.testing.assert_allclose(values,.1+.03*q[:,0]+.04*q[:,1],atol=1e-12)
+    assert seconds&gt;0
+
+
+def test_designs_are_nested_disjoint_and_preserve_common_support():
+    x=locations()
+    designs,held,q=lab.sensor_designs(x)
+    again,held_again,_=lab.sensor_designs(x)
+    np.testing.assert_array_equal(held,held_again)
+    for repeat in range(3):
+        previous=set()
+        for d in [v for v in designs if v[&#x27;repeat&#x27;]==repeat]:
+            assert previous.issubset(d[&#x27;train&#x27;])
+            assert not set(d[&#x27;train&#x27;]).intersection(held)
+            assert (Delaunay(x[d[&#x27;train&#x27;]]).find_simplex(q)&gt;=0).all()
+            previous=set(d[&#x27;train&#x27;])
+    for a,b in zip(designs,again):np.testing.assert_array_equal(a[&#x27;train&#x27;],b[&#x27;train&#x27;])
+
+
+def test_heldout_targets_never_enter_noise_fits(monkeypatch):
+    x=locations();y=.2+x[:,0]*.01+x[:,1]*.02
+    _,held,_=lab.sensor_designs(x)
+    calls=[]
+    def fit(method,train_x,train_y,query):
+        calls.append((method,train_x.copy(),train_y.copy()))
+        assert not any(np.array_equal(a,b) for a in train_x for b in x[held])
+        return np.full(len(query),train_y.mean()),.01,{}
+    monkeypatch.setattr(lab,&#x27;fit_predict&#x27;,fit)
+    first,_,_=lab.sensitivity_study(x,y)
+    before=[(m,a.copy(),b.copy()) for m,a,b in calls];calls.clear()
+    changed=y.copy();changed[held]+=10
+    second,_,_=lab.sensitivity_study(x,changed)
+    for (m,a,b),(n,c,d) in zip(before,calls):
+        assert m==n;np.testing.assert_array_equal(a,c);np.testing.assert_array_equal(b,d)
+    assert second.rmse.mean()&gt;first.rmse.mean()+9
+    assert set(first.noise_fraction)=={0,.02,.05,.1}
+
+
+def test_virtual_design_rejects_training_test_overlap():
+    x=locations()
+    with pytest.raises(ValueError,match=&#x27;disjoint&#x27;):lab.sensor_designs(x,x[:2])
+
+
+def test_lab_configuration_and_explanation():
+    assert len(available_runs(ROOT,&#x27;lab&#x27;))==36
+    assert available_runs(ROOT,&#x27;lab_cfd&#x27;)==[&#x27;S01-A-16-HN-1&#x27;]
+    RunSpec(kind=&#x27;lab&#x27;).validate(ROOT)
+    with pytest.raises(ValueError,match=&#x27;all methods&#x27;):RunSpec(kind=&#x27;lab&#x27;,method=&#x27;svr&#x27;).validate(ROOT)
+    assert &#x27;instrument uncertainty&#x27; in guide_text(&#x27;lab&#x27;,&#x27;id&#x27;,&#x27;all&#x27;,&#x27;standard&#x27;)
+    assert &#x27;archived&#x27; in guide_text(&#x27;lab_cfd&#x27;,&#x27;id&#x27;,&#x27;all&#x27;,&#x27;standard&#x27;)
+</pre></details><details><summary>test_report_evidence.py — 2 test functions</summary><p><a href="../../tests/test_report_evidence.py">Open Python source</a></p><ul><li><code>test_area_fraction_is_physical_area_not_target_count</code>: area fraction is physical area not target count</li><li><code>test_hull_area_is_translation_invariant_for_sloped_floor_offset</code>: hull area is translation invariant for sloped floor offset</li></ul><pre>import numpy as np
+import pytest
+from jetbridge_ml.report_evidence import hull_area_fraction
+
+
+def test_area_fraction_is_physical_area_not_target_count():
+    points=np.array([[.25,.5],[.75,.5],[.25,1.5],[.75,1.5]])
+    assert hull_area_fraction(points,1.,2.)==pytest.approx(.25)
+    # Adding a target inside the hull does not change physical support area.
+    assert hull_area_fraction(np.vstack([points,[.5,1.]]),1.,2.)==pytest.approx(.25)
+
+
+def test_hull_area_is_translation_invariant_for_sloped_floor_offset():
+    points=np.array([[0.,0.],[2.,0.],[0.,4.],[2.,4.]])
+    assert hull_area_fraction(points+[0.,1.343025],2.,4.)==pytest.approx(1.)
+</pre></details><details><summary>test_sensors.py — 2 test functions</summary><p><a href="../../tests/test_sensors.py">Open Python source</a></p><ul><li><code>test_processed_sensor_loader</code>: processed sensor loader</li><li><code>test_missing_columns_rejected</code>: missing columns rejected</li></ul><pre>import pandas as pd
+import pytest
+from jetbridge_ml.data_processing import load_sensor_speed_csv
+
+
+def test_processed_sensor_loader(tmp_path):
+    p = tmp_path / &#x27;test.csv&#x27;
+    pd.DataFrame({&#x27;x_m&#x27;: [0., 1.], &#x27;y_m&#x27;: [1., 1.], &#x27;z_m&#x27;: [3., 3.], &#x27;speed_m_per_s&#x27;: [0.1, 0.2]}).to_csv(p, index=False)
+    xyz, speeds = load_sensor_speed_csv(p)
+    assert xyz.shape == (2, 3)
+    assert speeds.tolist() == [0.1, 0.2]
+
+
+def test_missing_columns_rejected(tmp_path):
+    p = tmp_path / &#x27;bad.csv&#x27;
+    pd.DataFrame({&#x27;x_m&#x27;: [0.]}).to_csv(p, index=False)
+    with pytest.raises(ValueError):
+        load_sensor_speed_csv(p)
+</pre></details><details><summary>test_stability.py — 7 test functions</summary><p><a href="../../tests/test_stability.py">Open Python source</a></p><ul><li><code>test_diffusion_matches_exact_discrete_mode_amplification</code>: diffusion matches exact discrete mode amplification</li><li><code>test_explicit_diffusion_stability_boundary</code>: explicit diffusion stability boundary</li><li><code>test_crank_nicolson_bounded_oscillation_and_implicit_damping</code>: crank nicolson bounded oscillation and implicit damping</li><li><code>test_temporal_order_against_semidiscrete_exact_solution</code>: temporal order against semidiscrete exact solution</li><li><code>test_central_difference_eigenvalue_has_second_order_error</code>: central difference eigenvalue has second order error</li><li><code>test_jacobi_converges_to_independent_known_solution</code>: jacobi converges to independent known solution</li><li><code>test_invalid_inputs_are_rejected</code>: invalid inputs are rejected</li></ul><pre>&quot;&quot;&quot;Verify reduced schemes against known eigenmodes and convergence orders.&quot;&quot;&quot;
+import numpy as np
+import pytest
+
+from jetbridge_ml.validation.stability import diffusion_laplacian, heat_evolution, weighted_jacobi
+
+
+@pytest.mark.parametrize(&quot;theta&quot;,[0,.5,1])
+def test_diffusion_matches_exact_discrete_mode_amplification(theta):
+    n=16
+    k=5
+    x=np.arange(1,n)/n
+    mode=np.sin(k*np.pi*x)
+    r=.3
+    g=(1-4*(1-theta)*r*np.sin(k*np.pi/(2*n))**2)/(1+4*theta*r*np.sin(k*np.pi/(2*n))**2)
+    tau,history,_=heat_evolution(n,r,theta,4,mode)
+    np.testing.assert_allclose(history[-1],g**4*mode,atol=1e-13)
+    assert tau[-1]==pytest.approx(4*r/n**2)
+
+
+def test_explicit_diffusion_stability_boundary():
+    n=20
+    mode=np.sin((n-1)*np.pi*np.arange(1,n)/n)
+    _,stable,rho_stable=heat_evolution(n,.25,0,20,mode)
+    _,unstable,rho_unstable=heat_evolution(n,.75,0,20,mode)
+    assert rho_stable&lt;1&lt;rho_unstable
+    assert np.linalg.norm(stable[-1])&lt;np.linalg.norm(mode)
+    assert np.linalg.norm(unstable[-1])&gt;1000*np.linalg.norm(mode)
+
+
+def test_crank_nicolson_bounded_oscillation_and_implicit_damping():
+    n=20
+    mode=np.sin((n-1)*np.pi*np.arange(1,n)/n)
+    _,cn,cn_rho=heat_evolution(n,5,.5,4,mode)
+    _,be,be_rho=heat_evolution(n,5,1,4,mode)
+    amplitude_cn=cn@mode/(mode@mode)
+    amplitude_be=be@mode/(mode@mode)
+    assert np.all(amplitude_cn[:-1]*amplitude_cn[1:]&lt;0)
+    assert np.all(amplitude_be&gt;0)
+    assert cn_rho&lt;1 and be_rho&lt;1
+    assert abs(amplitude_be[-1])&lt;abs(amplitude_cn[-1])
+
+
+@pytest.mark.parametrize(&quot;theta,order&quot;,[(1,1),(.5,2)])
+def test_temporal_order_against_semidiscrete_exact_solution(theta,order):
+    n=20
+    x=np.arange(1,n)/n
+    mode=np.sin(np.pi*x)
+    end=.02
+    exact=mode*np.exp(-4*n*n*np.sin(np.pi/(2*n))**2*end)
+    errors=[]
+    for steps in (16,32):
+        _,history,_=heat_evolution(n,end*n*n/steps,theta,steps,mode)
+        errors.append(np.linalg.norm(history[-1]-exact))
+    measured=np.log2(errors[0]/errors[1])
+    assert measured==pytest.approx(order,abs=.03)
+
+
+def test_central_difference_eigenvalue_has_second_order_error():
+    errors=[]
+    for n in (20,40):
+        mode=np.sin(np.pi*np.arange(1,n)/n)
+        approximation=n*n*diffusion_laplacian(n)@mode
+        errors.append(np.linalg.norm(approximation+np.pi*np.pi*mode)/np.sqrt(n-1))
+    assert np.log2(errors[0]/errors[1])==pytest.approx(2,abs=.03)
+
+
+def test_jacobi_converges_to_independent_known_solution():
+    history,residual,rho=weighted_jacobi([[2,-1],[-1,2]],[1,1],.5,100)
+    np.testing.assert_allclose(history[-1],[1,1],atol=1e-11)
+    assert residual[-1]&lt;1e-11
+    assert rho==pytest.approx(.75)
+
+
+def test_invalid_inputs_are_rejected():
+    with pytest.raises(ValueError):
+        heat_evolution(20,-1,0,10,np.zeros(19))
+    with pytest.raises(ValueError):
+        weighted_jacobi([[0,1],[1,1]],[1,1],.5,10)
+</pre></details><details><summary>test_submission_workflow.py — 5 test functions</summary><p><a href="../../tests/test_submission_workflow.py">Open Python source</a></p><ul><li><code>test_mean_baseline_excludes_outer_target</code>: mean baseline excludes outer target</li><li><code>test_paired_sign_and_incomplete_coverage</code>: paired sign and incomplete coverage</li><li><code>test_paired_missing_method_rejected</code>: paired missing method rejected</li><li><code>test_gallery_excludes_raw_and_point_data</code>: gallery excludes raw and point data</li><li><code>test_isolated_case_scaling_and_preserved_geometry</code>: isolated case scaling and preserved geometry</li></ul><pre>import json
+from pathlib import Path
+import numpy as np
+import pandas as pd
+import pytest
+from jetbridge_ml.experimental_svr import evaluate_experimental_plane
+from jetbridge_ml.paired_analysis import paired_errors
+from jetbridge_ml.run_analysis import gallery
+from jetbridge_ml.cfd_interface.verification_study import prepare_case
+
+
+def test_mean_baseline_excludes_outer_target():
+    x,y=np.meshgrid([0.,.5,1.],[0.,.5,1.])
+    values=np.arange(9)/100+.1
+    frame=pd.DataFrame(dict(x_m=x.ravel(),y_m=y.ravel(),speed_mps=values,z_m=3.05,source_row=np.arange(9),run_id=&#x27;one&#x27;))
+    predictions,_,_=evaluate_experimental_plane(frame,dict(C=[.1],gamma=[.1],epsilon=[.002]))
+    mean=predictions[(predictions.method==&#x27;mean&#x27;)&amp;(predictions.fold==0)].iloc[0]
+    assert mean.prediction_mps==pytest.approx(values[1:].mean())
+    assert &#x27;0&#x27; not in mean.train_rows.split(&#x27;;&#x27;)
+
+
+def metrics():
+    return pd.DataFrame([dict(run_id=&#x27;S01-A-10-HN-1&#x27;,method=m,subset=&#x27;common_hull&#x27;,n_requested=8,n_predicted=8,rmse=e)
+                         for m,e in [(&#x27;rbf&#x27;,.01),(&#x27;svr&#x27;,.02)]])
+
+
+def test_paired_sign_and_incomplete_coverage():
+    frame=metrics()
+    pairs=paired_errors(frame)
+    assert pairs.rbf_minus_svr_mps.iloc[0]==pytest.approx(-.01)
+    frame.loc[0,&#x27;n_predicted&#x27;]=7
+    with pytest.raises(ValueError,match=&#x27;coverage&#x27;): paired_errors(frame)
+
+
+def test_paired_missing_method_rejected():
+    with pytest.raises(ValueError,match=&#x27;both methods&#x27;): paired_errors(metrics().iloc[:1])
+
+
+def test_gallery_excludes_raw_and_point_data(tmp_path):
+    root=tmp_path/&#x27;analysis&#x27;; root.mkdir()
+    (root/&#x27;SUMMARY.md&#x27;).write_text(&#x27;summary&#x27;)
+    (root/&#x27;pipeline_manifest.json&#x27;).write_text(&#x27;{}&#x27;)
+    directory=root/&#x27;experimental&#x27;; directory.mkdir()
+    (directory/&#x27;summary.csv&#x27;).write_text(&#x27;small summary&#x27;)
+    (directory/&#x27;predictions.csv&#x27;).write_text(&#x27;must not publish&#x27;)
+    target=tmp_path/&#x27;gallery&#x27;
+    gallery(root,target)
+    assert (target/&#x27;experimental/summary.csv&#x27;).exists()
+    assert not (target/&#x27;experimental/predictions.csv&#x27;).exists()
+    with pytest.raises(ValueError,match=&#x27;new&#x27;): gallery(root,target)
+
+
+def test_isolated_case_scaling_and_preserved_geometry(tmp_path):
+    repo=Path(__file__).resolve().parents[1]
+    baseline=repo/&#x27;cfd/cases/empty_bridge_s01_a_10_hn_1&#x27;
+    output=tmp_path/&#x27;flow&#x27;
+    spec=prepare_case(baseline,output,&#x27;flow80&#x27;)
+    assert spec[&#x27;cells&#x27;]==141312
+    assert &#x27;endTime 600;&#x27; in (output/&#x27;system/controlDict&#x27;).read_text()
+    assert (output/&#x27;constant/transportProperties&#x27;).read_bytes()==(baseline/&#x27;constant/transportProperties&#x27;).read_bytes()
+    import re
+    pattern=r&#x27;volumetricFlowRate\s+constant\s+([\d.eE+-]+)&#x27;
+    before=float(re.search(pattern,(baseline/&#x27;0/U&#x27;).read_text())[1])
+    after=float(re.search(pattern,(output/&#x27;0/U&#x27;).read_text())[1])
+    assert after==pytest.approx(before*.8)
+    pattern=r&#x27;internalField\s+uniform\s+([\d.eE+-]+)&#x27;
+    for field,power in [(&#x27;k&#x27;,2),(&#x27;epsilon&#x27;,3)]:
+        before=float(re.search(pattern,(baseline/&#x27;0&#x27;/field).read_text())[1])
+        after=float(re.search(pattern,(output/&#x27;0&#x27;/field).read_text())[1])
+        assert after==pytest.approx(before*.8**power)
+    coarse=tmp_path/&#x27;coarse&#x27;
+    assert prepare_case(baseline,coarse,&#x27;coarse&#x27;)[&#x27;cells&#x27;]==17664
+</pre></details><details><summary>test_thermal_setup.py — 3 test functions</summary><p><a href="../../tests/test_thermal_setup.py">Open Python source</a></p><ul><li><code>test_thermal_units_window_missing_values_and_gravity</code>: thermal units window missing values and gravity</li><li><code>test_control_disables_gravity_only</code>: control disables gravity only</li><li><code>test_window_mismatch_is_rejected_before_case_creation</code>: window mismatch is rejected before case creation</li></ul><pre>&quot;&quot;&quot;Check thermal setup from synthetic known-unit experimental records.&quot;&quot;&quot;
+import importlib.util
+import json
+from pathlib import Path
+import sys
+
+import numpy as np
+import pandas as pd
+import pytest
+
+ROOT=Path(__file__).resolve().parents[1]
+SPEC=importlib.util.spec_from_file_location(&quot;thermal_prepare&quot;, ROOT/&quot;cfd/cases/thermal_bridge_s01_ac_10_hn_1/scripts/prepare.py&quot;)
+PREPARE=importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(PREPARE)
+
+
+def sources(tmp_path):
+    dataset=tmp_path/&quot;dataset&quot;
+    for folder in (&quot;06-Periods&quot;,&quot;05-HVAC&quot;,&quot;03-Averages&quot;):
+        (dataset/folder).mkdir(parents=True)
+    run=&quot;S01-AC-10-HN-1&quot;
+    pd.DataFrame([{&quot;Set&quot;:run,&quot;Stable-Start (sec)&quot;:100,&quot;Stable-End (sec)&quot;:200,
+                   &quot;Entire Set-Start (sec)&quot;:100,&quot;Entire Set-End (sec)&quot;:200}]).to_csv(dataset/&quot;06-Periods/Periods.csv&quot;,index=False)
+    pd.DataFrame({&quot;Time (sec)&quot;:[99,100,150,200],
+                  &quot;T.db.SA (°C)&quot;:[99,19,21,-9999],
+                  &quot;Tdb.Lab (°C)&quot;:[99,24,26,-9999],
+                  &quot;Q.FS (lps)&quot;:[999,400,600,-9999]}).to_csv(dataset/f&quot;05-HVAC/{run}.csv&quot;,index=False,encoding=&quot;cp1252&quot;)
+    header=&#x27;TITLE=&quot;test&quot;\nVARIABLES=&quot;X (m)&quot;, &quot;Y (m)&quot;, &quot;Z (m)&quot;, &quot;Mean&quot;, &quot;dMean&quot;, &quot;Median&quot;, &quot;dMedian&quot;, &quot;StdDev&quot;\nZONE I=2, J=2, K=1 F=BLOCK\n&#x27;
+    xyz=&quot;0.35 0.35 1.04 1.04\n0.45 2.48 0.45 2.48\n3.05 3.05 3.05 3.05\n&quot;
+    for prefix,values in ((&quot;V&quot;,&quot;.1 .2 .3 .4&quot;),(&quot;T&quot;,&quot;22 23 24 25&quot;)):
+        (dataset/f&quot;03-Averages/{prefix}-{run}.txt&quot;).write_text(header+xyz+values+&quot;\n&quot;+&quot;0 0 0 0\n&quot;*4)
+    (dataset/&quot;Data Dictionary.csv&quot;).write_text(&quot;Synthetic fixture&quot;)
+    template=tmp_path/&quot;template&quot;
+    (template/&quot;system&quot;).mkdir(parents=True)
+    (template/&quot;constant&quot;).mkdir()
+    (template/&quot;system/blockMeshDict&quot;).write_text(&quot;unchanged geometry&quot;)
+    (template/&quot;constant/turbulenceProperties&quot;).write_text(&quot;simulationType RAS;&quot;)
+    return dataset,template
+
+
+def generate(tmp_path,monkeypatch,control=False):
+    dataset,template=sources(tmp_path)
+    output=tmp_path/&quot;case&quot;
+    args=[&quot;prepare&quot;,&quot;--dataset&quot;,str(dataset),&quot;--template&quot;,str(template),&quot;--output&quot;,str(output)]
+    if control:
+        args.append(&quot;--no-buoyancy&quot;)
+    monkeypatch.setattr(sys,&quot;argv&quot;,args)
+    PREPARE.main()
+    return output,dataset,template
+
+
+def test_thermal_units_window_missing_values_and_gravity(tmp_path,monkeypatch):
+    out,_,template=generate(tmp_path,monkeypatch)
+    s=json.loads((out/&quot;data/processed/setup.json&quot;).read_text())
+    assert s[&quot;inlet_temperature_K&quot;]==pytest.approx(293.15)
+    assert s[&quot;ambient_temperature_K&quot;]==pytest.approx(298.15)
+    assert s[&quot;flow_m3ps&quot;]==pytest.approx(.5)
+    assert s[&quot;beta_per_K&quot;]==pytest.approx(1/298.15)
+    assert s[&quot;relative_density_variation&quot;]==pytest.approx(5/298.15)
+    assert set(s[&quot;valid_hvac_counts&quot;].values())=={2}
+    assert &quot;value (0 -9.81 0)&quot; in (out/&quot;constant/g&quot;).read_text()
+    assert (out/&quot;system/blockMeshDict&quot;).read_bytes()==(template/&quot;system/blockMeshDict&quot;).read_bytes()
+    obs=pd.read_csv(out/&quot;data/processed/experimental_sensors.csv&quot;)
+    np.testing.assert_allclose(obs.temperature_C,[22,23,24,25])
+
+
+def test_control_disables_gravity_only(tmp_path,monkeypatch):
+    out,_,_=generate(tmp_path,monkeypatch,control=True)
+    assert &quot;value (0 0 0)&quot; in (out/&quot;constant/g&quot;).read_text()
+    s=json.loads((out/&quot;data/processed/setup.json&quot;).read_text())
+    assert s[&quot;no_buoyancy_control&quot;] is True
+    assert s[&quot;supply_minus_lab_K&quot;]==pytest.approx(-5)
+
+
+def test_window_mismatch_is_rejected_before_case_creation(tmp_path,monkeypatch):
+    dataset,template=sources(tmp_path)
+    p=dataset/&quot;06-Periods/Periods.csv&quot;
+    frame=pd.read_csv(p)
+    frame[&quot;Stable-Start (sec)&quot;]=110
+    frame.to_csv(p,index=False)
+    output=tmp_path/&quot;case&quot;
+    monkeypatch.setattr(sys,&quot;argv&quot;,[&quot;prepare&quot;,&quot;--dataset&quot;,str(dataset),&quot;--template&quot;,str(template),&quot;--output&quot;,str(output)])
+    with pytest.raises(ValueError,match=&quot;Stable window differs&quot;):
+        PREPARE.main()
+    assert not output.exists()
+</pre></details><details><summary>test_virtual_svr.py — 7 test functions</summary><p><a href="../../tests/test_virtual_svr.py">Open Python source</a></p><ul><li><code>test_3d_interpolation_reproduces_affine_field</code>: 3d interpolation reproduces affine field</li><li><code>test_3d_linear_marks_extrapolation_and_rejects_flat_input</code>: 3d linear marks extrapolation and rejects flat input</li><li><code>test_station_weights_have_equal_totals</code>: station weights have equal totals</li><li><code>test_grouped_scaling_excludes_validation_station_and_model_reloads</code>: grouped scaling excludes validation station and model reloads</li><li><code>test_unseen_sparse_targets_do_not_enter_training_partition</code>: unseen sparse targets do not enter training partition</li><li><code>test_common_support_and_negative_predictions_are_reported</code>: common support and negative predictions are reported</li><li><code>test_iteration_budget_warning_is_not_called_an_epoch</code>: iteration budget warning is not called an epoch</li></ul><pre>&quot;&quot;&quot;Numerical, station-isolation and artifact checks for the CFD/SVR benchmark.&quot;&quot;&quot;
+import joblib
+import numpy as np
+import pandas as pd
+import pytest
+from jetbridge_ml.interpolation.spatial import predict_spatial
+from jetbridge_ml.machine_learning.svr import fit_svr, grouped_svr_search, station_weights
+from jetbridge_ml.virtual_benchmark import training_partition, _score
+
+
+@pytest.mark.parametrize(&quot;method&quot;,[&quot;linear&quot;,&quot;rbf&quot;])
+def test_3d_interpolation_reproduces_affine_field(method):
+    x=np.array([[i,j,k] for i in (0.,1.) for j in (0.,1.) for k in (0.,1.)])
+    q=np.array([[.2,.3,.4],[.7,.8,.9]])
+    values=.1+.02*x[:,0]-.01*x[:,1]+.03*x[:,2]
+    np.testing.assert_allclose(predict_spatial(method,x,values,q),
+                               .1+.02*q[:,0]-.01*q[:,1]+.03*q[:,2],atol=1e-12)
+
+
+def test_3d_linear_marks_extrapolation_and_rejects_flat_input():
+    x=np.array([[0.,0.,0.],[1,0,0],[0,1,0],[0,0,1]])
+    assert np.isnan(predict_spatial(&quot;linear&quot;,x,np.ones(4),[[2,2,2]])[0])
+    with pytest.raises(ValueError,match=&quot;span&quot;):
+        predict_spatial(&quot;rbf&quot;,x*np.array([1,1,0]),np.ones(4),[[.1,.1,0]])
+
+
+def sample_training():
+    groups=np.repeat([10,22,34],4)
+    x=np.column_stack([np.tile([0.,1.,0.,1.],3),np.tile([0.,0.,1.,1.],3),groups.astype(float)])
+    y=.1+.01*x[:,0]+.02*x[:,1]+.0005*x[:,2]
+    return x,y,groups
+
+
+def test_station_weights_have_equal_totals():
+    groups=np.array([10,10,22,22,22,22])
+    weights=station_weights(groups)
+    assert weights.mean()==pytest.approx(1)
+    assert weights[groups==10].sum()==pytest.approx(weights[groups==22].sum())
+
+
+def test_grouped_scaling_excludes_validation_station_and_model_reloads(tmp_path):
+    x,y,groups=sample_training()
+    model,params,summary,audit=grouped_svr_search(x,y,groups,dict(C=[.1,1],gamma=[.2],epsilon=[.002]))
+    assert len(summary)==2
+    for row in audit.itertuples():
+        assert str(row.heldout_station) not in row.training_stations.split(&quot;;&quot;)
+        np.testing.assert_allclose(np.array(row.scaler_mean.split(&quot;;&quot;),float),x[groups!=row.heldout_station].mean(axis=0))
+    assert model.named_steps[&quot;svr&quot;].fit_status_==0
+    path=tmp_path/&quot;svr.joblib&quot;
+    joblib.dump(model,path)
+    np.testing.assert_array_equal(model.predict(x),joblib.load(path).predict(x))
+
+
+def test_unseen_sparse_targets_do_not_enter_training_partition():
+    frame=pd.DataFrame(dict(x_m=[.3,.4,.5,.6],height_m=[1.,1.,1.,1.],z_m=[3.,5.,7.,9.],
+                            station_ft=[10,22,34,16],speed_mps=[.1,.2,.3,.4]))
+    first=training_partition(frame,(10,22,34),(16,))
+    frame.loc[3,&quot;speed_mps&quot;]=10000.
+    second=training_partition(frame,(10,22,34),(16,))
+    pd.testing.assert_frame_equal(first,second)
+    with pytest.raises(ValueError,match=&quot;overlap&quot;):
+        training_partition(frame,(10,16),(16,))
+
+
+def test_common_support_and_negative_predictions_are_reported():
+    dense=pd.DataFrame(dict(station_ft=[16]*3,speed_mps=[.1,.2,.3]))
+    pred={&quot;nearest&quot;:np.array([.1,.2,.2]),&quot;linear&quot;:np.array([.1,.2,np.nan]),&quot;svr&quot;:np.array([.1,.2,-.1])}
+    metrics=_score(dense,pred,np.array([True,True,False]),np.array([True,True,False]))
+    common=metrics[metrics.subset==&quot;common_hull&quot;]
+    assert common.n_predicted.tolist()==[2,2,2]
+    assert common.rmse.tolist()==pytest.approx([0,0,0])
+    linear=metrics[(metrics.method==&quot;linear&quot;)&amp;(metrics.subset==&quot;outside_hull&quot;)].iloc[0]
+    assert linear.n_requested==1 and linear.n_predicted==0
+    svr=metrics[(metrics.method==&quot;svr&quot;)&amp;(metrics.subset==&quot;outside_hull&quot;)].iloc[0]
+    assert svr.negative_predictions==1
+
+
+def test_iteration_budget_warning_is_not_called_an_epoch():
+    x,y,groups=sample_training()
+    model,warning=fit_svr(x,y,groups,dict(C=10,gamma=.2,epsilon=.0001),max_iter=1)
+    assert warning and model.named_steps[&quot;svr&quot;].fit_status_!=0
+    assert model.named_steps[&quot;svr&quot;].n_iter_==1
+</pre></details></body></html>

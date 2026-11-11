@@ -16,6 +16,19 @@ def regression_metrics(actual: np.ndarray, predicted: np.ndarray) -> dict[str, f
     -------
     dict of str to float
         ``rmse``, ``mae`` and ``bias`` (predicted minus actual).
+
+    Raises
+    ------
+    ValueError
+        If arrays are empty, have unequal flattened lengths, or contain
+        non-finite values. Restrict to common supported targets explicitly
+        before calling; unsupported predictions are not silently dropped.
+
+    Notes
+    -----
+    Positive bias means overprediction. Opposite errors can cancel in bias
+    while RMSE and MAE remain positive. With speeds in m/s, all three metrics
+    are in m/s. These metrics do not certify physical validation.
     """
     a = np.asarray(actual, dtype=float).reshape(-1)
     p = np.asarray(predicted, dtype=float).reshape(-1)

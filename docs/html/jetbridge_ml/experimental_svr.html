@@ -321,17 +321,20 @@
 
             <div class="docstring"><p>Withhold each location before tuning on one independent replicate.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>frame : pandas.DataFrame
-    One FAA replicate, with unique absolute xyz and scalar speed.
-grid : dict, optional
-    Training-only SVR hyperparameter grid.</p>
+<ul>
+<li><strong>frame</strong> (pandas.DataFrame):
+One FAA replicate, with unique absolute xyz and scalar speed.</li>
+<li><strong>grid</strong> (dict, optional):
+Training-only SVR hyperparameter grid.</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>tuple
-    Outer predictions, search records and nested split/scaler audit.</p>
+<ul>
+<li><strong>tuple</strong>: Outer predictions, search records and nested split/scaler audit.</li>
+</ul>
 </div>
 
 

@@ -29,7 +29,8 @@ def load_sensor_speed_csv(path: str | Path) -> tuple[np.ndarray, np.ndarray]:
     -----
     These are scalar speeds, not the normal velocity component needed for a
     signed area-flux integral. This reader is for the processed demonstration
-    CSV; the general FAA raw-file parser is a separate upcoming task.
+    CSV. FAA averaged records are read by ``data_processing.faa`` and raw
+    time-series records by ``data_processing.raw_speed``.
     """
     frame = pd.read_csv(path)
     required = ['x_m', 'y_m', 'z_m', 'speed_m_per_s']

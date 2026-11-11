@@ -262,17 +262,20 @@
 
             <div class="docstring"><p>Merge probe restart segments by SIMPLE iteration without mixing fields.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>case : pathlib.Path
-    Existing thermal runtime case.
-field : str
-    Scalar probe field name, default temperature in Kelvin.</p>
+<ul>
+<li><strong>case</strong> (pathlib.Path):
+Existing thermal runtime case.</li>
+<li><strong>field</strong> (str):
+Scalar probe field name, default temperature in Kelvin.</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>numpy.ndarray
-    Sorted iteration/probe columns with duplicate iterations removed.</p>
+<ul>
+<li><strong>numpy.ndarray</strong>: Sorted iteration/probe columns with duplicate iterations removed.</li>
+</ul>
 </div>
 
 
@@ -340,15 +343,18 @@ field : str
 
             <div class="docstring"><p>Summarize residuals, bounds, flux and a predeclared stationarity screen.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>case : pathlib.Path
-    Completed bounded thermal run with log and probe outputs.</p>
+<ul>
+<li><strong>case</strong> (pathlib.Path):
+Completed bounded thermal run with log and probe outputs.</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>dict
-    Separate numerical checks; no experimental validation is inferred.</p>
+<ul>
+<li><strong>dict</strong>: Separate numerical checks; no experimental validation is inferred.</li>
+</ul>
 </div>
 
 

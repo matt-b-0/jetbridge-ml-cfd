@@ -4,6 +4,12 @@ An MMA3001 investigation of how accurately interpolation and support vector regr
 
 **Current status:** nested experimental comparisons, sensor-placement experiments and isothermal mesh/coordinate/flow checks have run. The buoyant thermal case remains unconverged. Numerical convergence is not experimental validation.
 
+## Presentation and current verification — 11 November 2026
+
+Open the [presentation materials](docs/presentation/README.md) for the downloadable PowerPoint, browser-readable slide previews, speaker notes, five-minute tutorial and line-by-line tests. For interactive HTML, download/extract the repository and open the offline [presentation tutorial](docs/presentation/index.html), which links the [test walkthrough](docs/presentation/test_walkthrough.html), [complete test source catalogue](docs/presentation/test_catalog.html) and [fresh test report](docs/presentation/test_report.html). The current WSL suite reports **128 passed, 1 skipped**; the native Tk layout module was skipped because this worker lacks Tk. Ruff's correctness gate passes. These checks do not establish physical CFD validation.
+
+The [API documentation](docs/html/jetbridge_ml.html) has been regenerated from current source, including Reconstruction Lab support. Two Tk-only desktop pages are explicitly labelled source-based references in this headless build. Rebuild every API module with `PYTHONPATH=src python tools/build_api_docs.py`, then rebuild the tutorial with `python tools/build_presentation_guide.py`. Run pytest first to refresh `docs/report/test-results.xml`.
+
 ## Results you can inspect immediately
 
 The [results gallery](docs/results/current/README.md) contains selected derived figures and small tables committed with the code. No OpenFOAM installation or local dataset is needed to read it. See the [run summary](docs/results/current/SUMMARY.md) and [methods/reproduction guide](docs/project_improvements.md).
@@ -25,6 +31,10 @@ Each experimental replicate is fitted separately. SVR hyperparameters are select
 RBF wins 21 of 36 paired runs, but its mean advantage is concentrated at the 58 ft, 24-sensor layout. The 12-sensor runs slightly favour SVR on average. Station and layout density are confounded, so this is not evidence that density alone causes the difference. No IID-sensor significance claim is made.
 
 The CFD checks quantify mesh sensitivity and small coordinate-rounding effects. A fixed 24-sensor hybrid layout also improves RBF/SVR full-section reconstruction in a synthetic 80%-flow case. These are numerical studies, not independently matched experimental validations.
+
+## Desktop GUI
+
+Double-click `Launch_Jet_Bridge_GUI.cmd` on Windows, or run `python launch_gui.py`. The default **Reconstruction Lab** compares four methods with interactive matching maps, held-out errors, sensor-count curves, synthetic noise sensitivity and accuracy versus fitting cost. Experimental and archived CFD virtual-sensor modes stay separate. See [Reconstruction Lab usage](docs/GUI.md#reconstruction-lab--interpolation-first). The local interface offers experimental setup, run type, reconstruction method and Coarse/Standard/Fine mesh dropdowns, with logs, cancellation and result previews. Fresh isothermal jobs use the selected measured HVAC window and isolated OpenFOAM cases. Archived views remain labelled; the thermal view is diagnostic only. See [GUI setup and scientific scope](docs/GUI.md) for the editable WSL/Python runtime fields, supported experiments and exact mesh counts.
 
 ## One-clone demonstration
 
@@ -53,7 +63,8 @@ Ruff provides the requested Pylint-style static correctness gate; it is separate
 ```bash
 python -m ruff check src tests run_all.py
 python -m pytest -q
-python -m pdoc jetbridge_ml -o docs/html
+PYTHONPATH=src python tools/build_api_docs.py
+python tools/build_presentation_guide.py
 ```
 
 See [development guidance](docs/DEVELOPMENT.md) for the selected rules, broader optional audit and JUnit report. CI applies the same lint command and tests Python 3.10 and 3.12. Earlier module-specific commands remain available through [research reproduction notes](docs/project_improvements.md), but the bundled driver is the current presentation entry point.
@@ -106,3 +117,5 @@ The [final report review and representative reproduction commands](docs/report/F
 ## Licence
 
 Project code and original documentation are published under the [MIT licence](LICENSE), copyright 2026 Matthew Brasacchio. External FAA/NRC data retain their separate [CC BY 4.0 attribution](data/demo/ATTRIBUTION.md); third-party dependencies retain their own licences.
+
+Fresh GUI CFD runs support optional MPI (Solver processes: 1/2/4/8). See [GUI MPI usage](docs/GUI.md#mpi-acceleration-for-fresh-cfd) for setup, reproduction and limits.

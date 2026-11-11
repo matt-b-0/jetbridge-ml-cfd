@@ -1,0 +1,134 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>progress desktop reference</title><style>
+body{font:19px/1.6 system-ui,sans-serif;color:#142d3e;background:#fafbfc;margin:auto;max-width:1120px;padding:32px}
+h1{font-size:40px;line-height:1.2}h2{margin-top:42px;color:#007f85}h3{margin-top:28px}
+a{color:#006c76}nav{display:flex;gap:22px;flex-wrap:wrap;border-block:1px solid #cddadd;padding:16px 0}
+table{border-collapse:collapse;width:100%;margin:18px 0}td,th{border:1px solid #cbd5db;padding:10px;text-align:left;vertical-align:top}
+th{background:#e8f1f2}pre{overflow:auto;padding:18px;background:#edf2f5;font-size:15px}code{font-size:.9em}
+.lines td:nth-child(1){width:42px;color:#64748b}.lines td:nth-child(2){width:52%;white-space:pre-wrap;overflow-wrap:anywhere;font:15px/1.55 Consolas,monospace}
+.lines td:nth-child(3){font-size:17px}.notice{border-left:5px solid #007f85;padding:12px 20px;background:#eaf4f4}
+details{margin:16px 0}summary{cursor:pointer;font-weight:650}button{font:inherit;padding:7px 15px;background:white;border:1px solid #007f85;border-radius:4px}
+@media(max-width:700px){body{padding:16px;font-size:17px}h1{font-size:30px}.lines td:nth-child(2){width:45%}.lines td:nth-child(3){font-size:14px}nav{gap:12px}}
+@media print{nav,button{display:none}body{max-width:none}details{display:block}}
+</style><body><h1>gui.progress</h1><p class="notice">Current source-based desktop reference. This headless worker has no Tk and did not import or execute this module. Signatures and docstrings are extracted with Python ast; this is not a pdoc introspection page.</p><p><a href="../../../presentation/index.html">Presentation tutorial</a> · <a href="../../../GUI.md">Desktop usage guide</a></p><h3>ResidualPlot</h3><p>Source line 11. Watch a CSV without importing scientific packages into the frontend.</p><h3>__init__(self, parent)</h3><p>Source line 13. See implementation and desktop usage guide for behaviour.</p><h3>wrap(self, event)</h3><p>Source line 35. See implementation and desktop usage guide for behaviour.</p><h3>watch(self, path, description)</h3><p>Source line 39. Select live or archived evidence, clearing traces from the previous job.</p><h3>load_saved(self)</h3><p>Source line 44. See implementation and desktop usage guide for behaviour.</p><h3>read(self)</h3><p>Source line 48. See implementation and desktop usage guide for behaviour.</p><h3>tick(self)</h3><p>Source line 66. See implementation and desktop usage guide for behaviour.</p><h3>stop(self, event)</h3><p>Source line 69. See implementation and desktop usage guide for behaviour.</p><h3>draw(self)</h3><p>Source line 73. See implementation and desktop usage guide for behaviour.</p><h3>px(x)</h3><p>Source line 97. See implementation and desktop usage guide for behaviour.</p><h3>py(value)</h3><p>Source line 98. See implementation and desktop usage guide for behaviour.</p><h2>Complete current source</h2><pre>&quot;&quot;&quot;A lightweight, resizable live log-residual view for the desktop GUI.&quot;&quot;&quot;
+import math
+from pathlib import Path
+import tkinter as tk
+from tkinter import filedialog,ttk
+from .residuals import read_history
+
+COLORS={&#x27;p&#x27;:&#x27;#006B78&#x27;,&#x27;Ux&#x27;:&#x27;#797979&#x27;,&#x27;Uy&#x27;:&#x27;#9073B5&#x27;,&#x27;Uz&#x27;:&#x27;#D66B24&#x27;,&#x27;k&#x27;:&#x27;#2D8B57&#x27;,&#x27;epsilon&#x27;:&#x27;#B84D73&#x27;,&#x27;T&#x27;:&#x27;#6F56A2&#x27;,&#x27;p_rgh&#x27;:&#x27;#006B78&#x27;}
+
+
+class ResidualPlot(ttk.Frame):
+    &quot;&quot;&quot;Watch a CSV without importing scientific packages into the frontend.&quot;&quot;&quot;
+    def __init__(self,parent):
+        super().__init__(parent)
+        self.path=None;self.records=[];self.description=&#x27;No CFD history selected&#x27;
+        self.signature=None;self.timer=None
+        self.columnconfigure(0,weight=1);self.rowconfigure(3,weight=1)
+        self.heading=ttk.Label(self,text=&#x27;Initial residuals against SIMPLE iteration&#x27;,style=&#x27;Section.TLabel&#x27;,wraplength=500)
+        self.heading.grid(row=0,column=0,sticky=&#x27;ew&#x27;,pady=(8,4))
+        controls=ttk.Frame(self);controls.grid(row=1,column=0,sticky=&#x27;ew&#x27;);controls.columnconfigure(0,weight=1)
+        self.selection=tk.StringVar(value=&#x27;All active fields&#x27;)
+        self.fields=ttk.Combobox(controls,textvariable=self.selection,values=[&#x27;All active fields&#x27;],state=&#x27;readonly&#x27;,width=1)
+        self.fields.grid(row=0,column=0,sticky=&#x27;ew&#x27;,padx=(0,6));self.fields.bind(&#x27;&lt;&lt;ComboboxSelected&gt;&gt;&#x27;,lambda e:self.draw())
+        ttk.Button(controls,text=&#x27;Load CSV…&#x27;,command=self.load_saved).grid(row=0,column=1)
+        self.message=tk.StringVar(value=&#x27;Start fresh CFD or load a saved residual_history.csv.&#x27;)
+        self.label=ttk.Label(self,textvariable=self.message,wraplength=500)
+        self.label.grid(row=2,column=0,sticky=&#x27;ew&#x27;,pady=5)
+        self.canvas=tk.Canvas(self,width=1,height=1,background=&#x27;white&#x27;,highlightthickness=0)
+        self.canvas.grid(row=3,column=0,sticky=&#x27;nsew&#x27;)
+        self.canvas.bind(&#x27;&lt;Configure&gt;&#x27;,lambda e:self.draw())
+        self.bind(&#x27;&lt;Configure&gt;&#x27;,self.wrap)
+        self.bind(&#x27;&lt;Destroy&gt;&#x27;,self.stop,add=&#x27;+&#x27;)
+        self.timer=self.after(700,self.tick)
+
+    def wrap(self,event):
+        if event.widget is self:
+            for label in (self.heading,self.label):label.configure(wraplength=max(100,event.width-12))
+
+    def watch(self,path,description):
+        &quot;&quot;&quot;Select live or archived evidence, clearing traces from the previous job.&quot;&quot;&quot;
+        self.path=Path(path) if path else None;self.description=description
+        self.signature=None;self.records=[];self.read();self.draw()
+
+    def load_saved(self):
+        path=filedialog.askopenfilename(title=&#x27;Load saved residual history&#x27;,filetypes=[(&#x27;Residual CSV&#x27;,&#x27;*.csv&#x27;)])
+        if path:self.watch(path,&#x27;Saved history: &#x27;+Path(path).name)
+
+    def read(self):
+        if self.path is None:
+            self.message.set(self.description);return
+        try:
+            stat=self.path.stat();signature=(stat.st_mtime_ns,stat.st_size)
+        except (FileNotFoundError,PermissionError):
+            self.message.set(self.description+&#x27;. Waiting for solver residuals…&#x27;);return
+        if signature!=self.signature:
+            self.signature=signature;self.records=read_history(self.path)
+            names=sorted({r[&#x27;field&#x27;] for r in self.records})
+            self.fields.configure(values=[&#x27;All active fields&#x27;,*names])
+            if self.selection.get() not in [&#x27;All active fields&#x27;,*names]:self.selection.set(&#x27;All active fields&#x27;)
+            if self.records:
+                latest=max(r[&#x27;iteration&#x27;] for r in self.records)
+                self.message.set(f&#x27;{self.description}. Latest iteration {latest:g}. Log scale; initial residuals.&#x27;)
+            else:self.message.set(self.description+&#x27;. No finite residual samples yet.&#x27;)
+            self.draw()
+
+    def tick(self):
+        self.read();self.timer=self.after(700,self.tick)
+
+    def stop(self,event):
+        if event.widget is self and self.timer is not None:
+            self.after_cancel(self.timer);self.timer=None
+
+    def draw(self):
+        canvas=self.canvas;canvas.delete(&#x27;all&#x27;)
+        width,height=canvas.winfo_width(),canvas.winfo_height()
+        if width&lt;180 or height&lt;150:
+            canvas.create_text(max(1,width//2),max(1,height//2),text=&#x27;Enlarge the panel to view residuals.&#x27;,width=max(60,width-12),fill=&#x27;#52636C&#x27;);return
+        choice=self.selection.get()
+        groups={}
+        for r in self.records:
+            if choice!=&#x27;All active fields&#x27; and r[&#x27;field&#x27;]!=choice:continue
+            groups.setdefault(r[&#x27;field&#x27;],[]).append(r)
+        # All-zero component equations have no log ordinate. Keep zeros in CSV.
+        omitted=[field for field,rows in groups.items() if not any(r[&#x27;initial_residual&#x27;]&gt;0 for r in rows)]
+        groups={field:rows for field,rows in groups.items() if field not in omitted}
+        positives=[r[&#x27;initial_residual&#x27;] for rows in groups.values() for r in rows if r[&#x27;initial_residual&#x27;]&gt;0]
+        if not positives:
+            canvas.create_text(width/2,height/2,text=&#x27;No positive residual samples to plot.\nExact zeros remain in the CSV.&#x27;,width=width-30,fill=&#x27;#52636C&#x27;);return
+        left,right,top,bottom=65,width-18,38,height-65
+        xmin=min(r[&#x27;iteration&#x27;] for rows in groups.values() for r in rows)
+        xmax=max(r[&#x27;iteration&#x27;] for rows in groups.values() for r in rows)
+        if xmax&lt;=xmin:xmax=xmin+1
+        low=math.floor(math.log10(min(positives)));high=math.ceil(math.log10(max(positives)))
+        if high&lt;=low:high=low+1
+        zero=any(r[&#x27;initial_residual&#x27;]==0 for rows in groups.values() for r in rows)
+        if zero:low-=1
+        def px(x):return left+(x-xmin)/(xmax-xmin)*(right-left)
+        def py(value):
+            log=math.log10(value) if value&gt;0 else low
+            return bottom-(log-low)/(high-low)*(bottom-top)
+        step=max(1,math.ceil((high-low)/5))
+        for exponent in range(low,high+1,step):
+            y=bottom-(exponent-low)/(high-low)*(bottom-top)
+            canvas.create_line(left,y,right,y,fill=&#x27;#E1E7EB&#x27;)
+            canvas.create_text(left-8,y,text=f&#x27;1e{exponent}&#x27;,anchor=&#x27;e&#x27;,fill=&#x27;#52636C&#x27;,font=(&#x27;Segoe UI&#x27;,9))
+        for i in range(5):
+            value=xmin+(xmax-xmin)*i/4;x=px(value)
+            canvas.create_line(x,top,x,bottom,fill=&#x27;#EEF2F5&#x27;)
+            canvas.create_text(x,bottom+15,text=f&#x27;{value:g}&#x27;,fill=&#x27;#52636C&#x27;,font=(&#x27;Segoe UI&#x27;,9))
+        canvas.create_line(left,top,left,bottom,right,bottom,fill=&#x27;#52636C&#x27;)
+        canvas.create_text((left+right)/2,height-24,text=&#x27;SIMPLE iteration (not physical seconds)&#x27;,fill=&#x27;#173345&#x27;,font=(&#x27;Segoe UI&#x27;,9))
+        legend_x=left
+        for n,(field,rows) in enumerate(sorted(groups.items())):
+            color=COLORS.get(field,[&#x27;#006B78&#x27;,&#x27;#D66B24&#x27;,&#x27;#2D8B57&#x27;,&#x27;#B84D73&#x27;][n%4])
+            rows=sorted(rows,key=lambda r:r[&#x27;iteration&#x27;])
+            points=[coordinate for r in rows for coordinate in (px(r[&#x27;iteration&#x27;]),py(r[&#x27;initial_residual&#x27;]))]
+            if len(points)&gt;2:canvas.create_line(*points,fill=color,width=2)
+            else:canvas.create_oval(points[0]-2,points[1]-2,points[0]+2,points[1]+2,fill=color,outline=color)
+            canvas.create_text(legend_x,16,text=field,anchor=&#x27;w&#x27;,fill=color,font=(&#x27;Segoe UI&#x27;,9,&#x27;bold&#x27;));legend_x+=max(44,len(field)*9+14)
+        if omitted or zero:
+            note=(&#x27;All-zero series omitted. &#x27; if omitted else &#x27;&#x27;)+(&#x27;Zero points use the lower edge.&#x27; if zero else &#x27;&#x27;)
+            canvas.create_text(width/2,height-5,text=note,fill=&#x27;#52636C&#x27;,font=(&#x27;Segoe UI&#x27;,8))
+</pre></body></html>

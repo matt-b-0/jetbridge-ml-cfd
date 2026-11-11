@@ -300,16 +300,19 @@
 
             <div class="docstring"><p>Return per-fold predictions for one replicate, without pooling other runs.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>frame : pandas.DataFrame
-    Parser output for a single run.</p>
+<ul>
+<li><strong>frame</strong> (pandas.DataFrame):
+Parser output for a single run.</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>pandas.DataFrame
-    Identical held-out coordinates per method, training rows, hull flags,
-    missing-target status, and combined fit/prediction runtime.</p>
+<ul>
+<li><strong>pandas.DataFrame</strong>: Identical held-out coordinates per method, training rows, hull flags,
+missing-target status, and combined fit/prediction runtime.</li>
+</ul>
 </div>
 
 
@@ -357,15 +360,18 @@
 
             <div class="docstring"><p>Return coverage and errors on common hull points and extrapolation separately.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>predictions : pandas.DataFrame
-    Per-fold output from evaluate_plane.</p>
+<ul>
+<li><strong>predictions</strong> (pandas.DataFrame):
+Per-fold output from evaluate_plane.</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>pandas.DataFrame
-    Run/method/subset metrics; counts include unsupported predictions.</p>
+<ul>
+<li><strong>pandas.DataFrame</strong>: Run/method/subset metrics; counts include unsupported predictions.</li>
+</ul>
 </div>
 
 

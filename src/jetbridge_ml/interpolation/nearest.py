@@ -23,6 +23,18 @@ def nearest_neighbor(
     -------
     numpy.ndarray
         Nearest training value for each query, with shape (m,).
+
+    Raises
+    ------
+    ValueError
+        If coordinate dimensions differ, training data are empty, a value is
+        missing for a location, or any input contains a non-finite number.
+
+    Notes
+    -----
+    Uses Euclidean distance in the supplied coordinate system. Queries outside
+    the sensor hull still receive values; this does not establish accuracy
+    there. Equidistant neighbours have no guaranteed physical preference.
     """
     x = np.asarray(train_locations, dtype=float)
     y = np.asarray(train_values, dtype=float).reshape(-1)

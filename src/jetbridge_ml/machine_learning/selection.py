@@ -24,6 +24,20 @@ def select_plane_svr(x, y, groups=None, grid=None):
     -------
     tuple
         Fitted model, selected parameters, search table and inner split audit.
+
+    Raises
+    ------
+    ValueError
+        If inputs are non-finite or incorrectly shaped, or fewer than three
+        training location groups are available.
+    RuntimeError
+        If an inner or final SVR fit fails its optimisation convergence check.
+
+    Notes
+    -----
+    The caller must exclude its outer test target before calling. Scaling is
+    refitted on each inner training fold, and selection minimises mean inner
+    fold RMSE. The predefined search is bounded, not a global optimum claim.
     """
     x,y=np.asarray(x,float),np.asarray(y,float)
     if x.ndim!=2 or x.shape[1]!=2 or y.shape!=(len(x),) or not np.isfinite(x).all() or not np.isfinite(y).all():

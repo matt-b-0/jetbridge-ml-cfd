@@ -1,0 +1,214 @@
+{
+  "date": "2026-11-05",
+  "scope": "Local GUI implementation checks; physical validation remains unresolved",
+  "smoke_runs": {
+    "fresh-coarse-20261105": {
+      "request": {
+        "kind": "fresh",
+        "run_id": "S01-A-10-HN-1",
+        "method": "rbf",
+        "mesh": "coarse"
+      },
+      "status": "complete",
+      "fresh_cfd": true,
+      "solver_converged": true,
+      "saved_iteration": 115,
+      "mesh_ok": true,
+      "case_setup": {
+        "cells": 17664,
+        "counts": [
+          12,
+          16,
+          42,
+          9,
+          41
+        ],
+        "bulk_speed_mps": 0.15747136827520403,
+        "initial_k_m2s2": 9.298961934924352e-05,
+        "initial_epsilon_m2s3": 1.1889991383169678e-06,
+        "intensity_assumption": 0.05,
+        "length_scale_m": 0.12392303668943566,
+        "physics": "steady isothermal k-epsilon RANS; full-face inlet; sealed no-slip walls",
+        "mesh_resolution_is_not_accuracy": true,
+        "iteration_cap": 600
+      },
+      "boundary": {
+        "flow_m3s": 0.5338655172413793,
+        "valid_hvac_readings": 58,
+        "entire_start_sec": 1744997159.0,
+        "entire_end_sec": 1744997453.0,
+        "averaging": "Arithmetic mean of nonnegative valid Q.FS in Entire Set window",
+        "source_sha256": "20e8e61469fd646d49c4cba93aecc134f0e00b65e0f636828d3e67867bb13132",
+        "windows_equal": true,
+        "supply_C": 23.400000000000006,
+        "lab_C": 23.288135593220343
+      },
+      "flux": {
+        "inlet_m3s": -0.53386552,
+        "outlet_m3s": 0.53386552,
+        "relative_imbalance": 0.0,
+        "declared_screen": 1e-05
+      },
+      "original_case_unchanged": true,
+      "cfd_sensor_metrics": {
+        "rmse": 0.035286373157407125,
+        "mae": 0.03227463448610226,
+        "bias": 0.03227463448610226
+      },
+      "experimental_reconstruction": {
+        "rmse": 0.015040714620900382,
+        "mae": 0.013114812799974968,
+        "bias": -0.0026641626670670417,
+        "coverage": 1.0,
+        "negative_full_grid_predictions": 0,
+        "unsupported_full_grid_fraction": 0.5833333333333334,
+        "full_refit_parameters": null,
+        "evaluation": "Separate replicate; nested held-location tests; full refit used for visualisation only",
+        "internal_evaluation": "Existing all-method benchmark reused; selected method shown"
+      },
+      "verified_input_files": 2333
+    },
+    "fresh-standard-16ft-20261105": {
+      "request": {
+        "kind": "fresh",
+        "run_id": "S01-A-16-HN-2",
+        "method": "linear",
+        "mesh": "standard"
+      },
+      "status": "complete",
+      "fresh_cfd": true,
+      "solver_converged": true,
+      "saved_iteration": 237,
+      "mesh_ok": true,
+      "case_setup": {
+        "cells": 141312,
+        "counts": [
+          24,
+          32,
+          84,
+          18,
+          82
+        ],
+        "bulk_speed_mps": 0.15563970384153394,
+        "initial_k_m2s2": 9.083894029455149e-05,
+        "initial_epsilon_m2s3": 1.1479895209658926e-06,
+        "intensity_assumption": 0.05,
+        "length_scale_m": 0.12392303668943566,
+        "physics": "steady isothermal k-epsilon RANS; full-face inlet; sealed no-slip walls",
+        "mesh_resolution_is_not_accuracy": true,
+        "iteration_cap": 600
+      },
+      "boundary": {
+        "flow_m3s": 0.527655737704918,
+        "valid_hvac_readings": 61,
+        "entire_start_sec": 1745331840.0,
+        "entire_end_sec": 1745332146.0,
+        "averaging": "Arithmetic mean of nonnegative valid Q.FS in Entire Set window",
+        "source_sha256": "ed4b15faa45d54c0165ef9ab62099c56d6ab2e4457fa116b5991ecbca1ec5daa",
+        "windows_equal": true,
+        "supply_C": 22.7,
+        "lab_C": 23.0
+      },
+      "flux": {
+        "inlet_m3s": -0.52765574,
+        "outlet_m3s": 0.52765574,
+        "relative_imbalance": 0.0,
+        "declared_screen": 1e-05
+      },
+      "original_case_unchanged": true,
+      "cfd_sensor_metrics": {
+        "rmse": 0.04562659582748794,
+        "mae": 0.039835615544780933,
+        "bias": 0.031920221218740434
+      },
+      "experimental_reconstruction": {
+        "rmse": 0.023516858597978803,
+        "mae": 0.01435493827160494,
+        "bias": -0.00858024691358024,
+        "coverage": 1.0,
+        "negative_full_grid_predictions": 0,
+        "unsupported_full_grid_fraction": 0.5833333333333334,
+        "full_refit_parameters": null,
+        "evaluation": "Separate replicate; nested held-location tests; full refit used for visualisation only",
+        "internal_evaluation": "Existing all-method benchmark reused; selected method shown"
+      },
+      "verified_input_files": 4
+    },
+    "experiment-58-svr-20261105": {
+      "request": {
+        "kind": "experimental",
+        "run_id": "S01-A-58-HN-1",
+        "method": "svr",
+        "mesh": "standard"
+      },
+      "status": "complete",
+      "fresh_cfd": false,
+      "original_case_unchanged": true,
+      "experimental_reconstruction": {
+        "rmse": 0.23342028716388047,
+        "mae": 0.2024530423895025,
+        "bias": -0.04448064196185884,
+        "coverage": 1.0,
+        "negative_full_grid_predictions": 0,
+        "unsupported_full_grid_fraction": 0.5,
+        "full_refit_parameters": {
+          "C": 0.1,
+          "gamma": 1.0,
+          "epsilon": 0.01
+        },
+        "evaluation": "Separate replicate; nested held-location tests; full refit used for visualisation only",
+        "internal_evaluation": "Existing all-method benchmark reused; selected method shown"
+      },
+      "verified_input_files": 2333
+    },
+    "thermal-archived-20261105": {
+      "request": {
+        "kind": "thermal",
+        "run_id": "S01-AC-10-HN-1",
+        "method": "rbf",
+        "mesh": "standard"
+      },
+      "status": "diagnostic_only",
+      "fresh_cfd": false,
+      "original_case_unchanged": true,
+      "numerical_status": "archived NOT CONVERGED",
+      "training_reference_eligible": false,
+      "verified_input_files": 62
+    }
+  },
+  "native_windows_frontend": {
+    "passed": true,
+    "workflow": {
+      "kind": "archive",
+      "run_id": "S01-A-10-HN-1",
+      "method": "linear",
+      "mesh": "standard"
+    },
+    "checks": [
+      "Tk event loop",
+      "Runtime preflight",
+      "Dropdown disabling",
+      "Literal Windows-to-WSL paths with spaces",
+      "Archived worker result",
+      "PNG preview"
+    ]
+  },
+  "checks": {
+    "pytest_passed": 100,
+    "ruff": "passed: src tests run_all.py launch_gui.py",
+    "native_gui": "Tk-to-WSL runtime check, archived job, dropdown states and PNG preview passed",
+    "note": "The full suite passed; a subsequent plot-only change aligned the measured/refit axes and was checked with a fresh experimental render. No CFD physics settings changed."
+  },
+  "residual_monitor": {
+    "live_plot_observed": true,
+    "samples": 690,
+    "converged_iteration": 115,
+    "case_status": "complete",
+    "field_filter_and_normal_shutdown": "passed",
+    "archived_isothermal_history": "passed",
+    "laptop_layout_after_new_tabs": "passed",
+    "regressions": "107 passed, 1 native-display module skipped in headless Linux; native Tk checks executed separately",
+    "history_definition": "First initial residual per field and SIMPLE iteration; actual zeros retained in CSV",
+    "physical_validation": "No certification inferred from residual history"
+  }
+}

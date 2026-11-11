@@ -254,17 +254,20 @@
 
             <div class="docstring"><p>Compare identical positions against the finest numerical solution.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>samples : dict
-    DataFrames for coarse, baseline and fine fields at identical positions.
-manifest : dict
-    CFD status records, including pressure drop and mesh counts.</p>
+<ul>
+<li><strong>samples</strong> (dict):
+DataFrames for coarse, baseline and fine fields at identical positions.</li>
+<li><strong>manifest</strong> (dict):
+CFD status records, including pressure drop and mesh counts.</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>pandas.DataFrame
-    Numerical differences, not an exact-error or mesh-independence estimate.</p>
+<ul>
+<li><strong>pandas.DataFrame</strong>: Numerical differences, not an exact-error or mesh-independence estimate.</li>
+</ul>
 </div>
 
 

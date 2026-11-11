@@ -214,15 +214,18 @@
 
             <div class="docstring"><p>Return mean-one weights giving each station equal total weight.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>groups : array-like
-    Station identifier per training observation.</p>
+<ul>
+<li><strong>groups</strong> (array-like):
+Station identifier per training observation.</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>numpy.ndarray
-    Positive weights; mean is one and station sums are equal.</p>
+<ul>
+<li><strong>numpy.ndarray</strong>: Positive weights; mean is one and station sums are equal.</li>
+</ul>
 </div>
 
 
@@ -274,22 +277,25 @@
 
             <div class="docstring"><p>Fit fixed SVR parameters using only supplied training observations.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>x, y : array-like
-    Finite training feature matrix and scalar targets.
-groups : array-like
-    Training station labels for balanced fitting weights.
-parameters : dict
-    C, gamma, epsilon for an RBF-kernel SVR.
-max_iter : int
-    Libsvm optimization iteration limit; -1 means unlimited.</p>
+<ul>
+<li><strong>x, y</strong> (array-like):
+Finite training feature matrix and scalar targets.</li>
+<li><strong>groups</strong> (array-like):
+Training station labels for balanced fitting weights.</li>
+<li><strong>parameters</strong> (dict):
+C, gamma, epsilon for an RBF-kernel SVR.</li>
+<li><strong>max_iter</strong> (int):
+Libsvm optimization iteration limit; -1 means unlimited.</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>tuple
-    Fitted StandardScaler/SVR pipeline and convergence-warning flag.
-    SVR uses optimization iterations, not neural-network epochs.</p>
+<ul>
+<li><strong>tuple</strong>: Fitted StandardScaler/SVR pipeline and convergence-warning flag.
+SVR uses optimization iterations, not neural-network epochs.</li>
+</ul>
 </div>
 
 
@@ -358,20 +364,23 @@ max_iter : int
 
             <div class="docstring"><p>Select parameters by leave-one-training-station-out RMSE.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>x, y : array-like
-    Training features and CFD-derived scalar speeds only.
-groups : array-like
-    At least three distinct training stations.
-grid : dict, optional
-    Lists for C, gamma and epsilon. Defaults are predefined, not test-tuned.</p>
+<ul>
+<li><strong>x, y</strong> (array-like):
+Training features and CFD-derived scalar speeds only.</li>
+<li><strong>groups</strong> (array-like):
+At least three distinct training stations.</li>
+<li><strong>grid</strong> (dict, optional):
+Lists for C, gamma and epsilon. Defaults are predefined, not test-tuned.</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>tuple
-    Fitted best model, selected parameters, candidate summary table and
-    fold audit records. The held-out dense planes are never arguments.</p>
+<ul>
+<li><strong>tuple</strong>: Fitted best model, selected parameters, candidate summary table and
+fold audit records. The held-out dense planes are never arguments.</li>
+</ul>
 </div>
 
 

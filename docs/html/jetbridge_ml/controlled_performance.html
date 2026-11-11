@@ -275,19 +275,22 @@
 
             <div class="docstring"><p>Fit one predictor including its required coordinate preprocessing.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>method : str
-    Mean, nearest, linear, thin-plate RBF, or RBF-kernel SVR.
-x, y : numpy.ndarray
-    Retained coordinates and speeds only.
-params : dict
-    SVR parameters selected previously inside the outer training fold.</p>
+<ul>
+<li><strong>method</strong> (str):
+Mean, nearest, linear, thin-plate RBF, or RBF-kernel SVR.</li>
+<li><strong>x, y</strong> (numpy.ndarray):
+Retained coordinates and speeds only.</li>
+<li><strong>params</strong> (dict):
+SVR parameters selected previously inside the outer training fold.</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>callable
-    Batch predictor including its required query transformation.</p>
+<ul>
+<li><strong>callable</strong>: Batch predictor including its required query transformation.</li>
+</ul>
 </div>
 
 

@@ -627,21 +627,24 @@
 
             <div class="docstring"><p>Sample saved fields at unique metre coordinates and check row alignment.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>case, output : pathlib.Path
-    Existing case and report output directory.
-time : str
-    Saved SIMPLE iteration, not physical time.
-points : numpy.ndarray
-    Unique absolute xyz positions, shape (n, 3).
-thermal : bool
-    Whether temperature is available.</p>
+<ul>
+<li><strong>case, output</strong> (pathlib.Path):
+Existing case and report output directory.</li>
+<li><strong>time</strong> (str):
+Saved SIMPLE iteration, not physical time.</li>
+<li><strong>points</strong> (numpy.ndarray):
+Unique absolute xyz positions, shape (n, 3).</li>
+<li><strong>thermal</strong> (bool):
+Whether temperature is available.</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>dict
-    Aligned U and optional T arrays.</p>
+<ul>
+<li><strong>dict</strong>: Aligned U and optional T arrays.</li>
+</ul>
 </div>
 
 
@@ -719,19 +722,22 @@ thermal : bool
 
             <div class="docstring"><p>Read an explicitly archived grid, rejecting mismatches and invalid data.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>path : pathlib.Path
-    Saved CSV with physical coordinates and sampled U, optionally T.
-points : numpy.ndarray
-    Expected ordered coordinates in metres, shape (n, 3).
-thermal : bool
-    Require stored Celsius temperatures when true.</p>
+<ul>
+<li><strong>path</strong> (pathlib.Path):
+Saved CSV with physical coordinates and sampled U, optionally T.</li>
+<li><strong>points</strong> (numpy.ndarray):
+Expected ordered coordinates in metres, shape (n, 3).</li>
+<li><strong>thermal</strong> (bool):
+Require stored Celsius temperatures when true.</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>dict
-    Finite velocity components and optional Celsius temperature arrays.</p>
+<ul>
+<li><strong>dict</strong>: Finite velocity components and optional Celsius temperature arrays.</li>
+</ul>
 </div>
 
 

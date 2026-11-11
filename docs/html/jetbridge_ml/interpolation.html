@@ -95,36 +95,64 @@
 </span><span id="nearest_neighbor-24"><a href="#nearest_neighbor-24"><span class="linenos">24</span></a><span class="sd">    -------</span>
 </span><span id="nearest_neighbor-25"><a href="#nearest_neighbor-25"><span class="linenos">25</span></a><span class="sd">    numpy.ndarray</span>
 </span><span id="nearest_neighbor-26"><a href="#nearest_neighbor-26"><span class="linenos">26</span></a><span class="sd">        Nearest training value for each query, with shape (m,).</span>
-</span><span id="nearest_neighbor-27"><a href="#nearest_neighbor-27"><span class="linenos">27</span></a><span class="sd">    """</span>
-</span><span id="nearest_neighbor-28"><a href="#nearest_neighbor-28"><span class="linenos">28</span></a>    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">train_locations</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-</span><span id="nearest_neighbor-29"><a href="#nearest_neighbor-29"><span class="linenos">29</span></a>    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">train_values</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="nearest_neighbor-30"><a href="#nearest_neighbor-30"><span class="linenos">30</span></a>    <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">query_locations</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-</span><span id="nearest_neighbor-31"><a href="#nearest_neighbor-31"><span class="linenos">31</span></a>    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">q</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">q</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-</span><span id="nearest_neighbor-32"><a href="#nearest_neighbor-32"><span class="linenos">32</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'Coordinates must be (n, d) and (m, d) with same d'</span><span class="p">)</span>
-</span><span id="nearest_neighbor-33"><a href="#nearest_neighbor-33"><span class="linenos">33</span></a>    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
-</span><span id="nearest_neighbor-34"><a href="#nearest_neighbor-34"><span class="linenos">34</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'Every nonempty training coordinate needs one value'</span><span class="p">)</span>
-</span><span id="nearest_neighbor-35"><a href="#nearest_neighbor-35"><span class="linenos">35</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="k">for</span> <span class="n">arr</span> <span class="ow">in</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">q</span><span class="p">)):</span>
-</span><span id="nearest_neighbor-36"><a href="#nearest_neighbor-36"><span class="linenos">36</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'Arrays must contain finite values'</span><span class="p">)</span>
-</span><span id="nearest_neighbor-37"><a href="#nearest_neighbor-37"><span class="linenos">37</span></a>    <span class="n">_</span><span class="p">,</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">cKDTree</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="nearest_neighbor-38"><a href="#nearest_neighbor-38"><span class="linenos">38</span></a>    <span class="k">return</span> <span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+</span><span id="nearest_neighbor-27"><a href="#nearest_neighbor-27"><span class="linenos">27</span></a>
+</span><span id="nearest_neighbor-28"><a href="#nearest_neighbor-28"><span class="linenos">28</span></a><span class="sd">    Raises</span>
+</span><span id="nearest_neighbor-29"><a href="#nearest_neighbor-29"><span class="linenos">29</span></a><span class="sd">    ------</span>
+</span><span id="nearest_neighbor-30"><a href="#nearest_neighbor-30"><span class="linenos">30</span></a><span class="sd">    ValueError</span>
+</span><span id="nearest_neighbor-31"><a href="#nearest_neighbor-31"><span class="linenos">31</span></a><span class="sd">        If coordinate dimensions differ, training data are empty, a value is</span>
+</span><span id="nearest_neighbor-32"><a href="#nearest_neighbor-32"><span class="linenos">32</span></a><span class="sd">        missing for a location, or any input contains a non-finite number.</span>
+</span><span id="nearest_neighbor-33"><a href="#nearest_neighbor-33"><span class="linenos">33</span></a>
+</span><span id="nearest_neighbor-34"><a href="#nearest_neighbor-34"><span class="linenos">34</span></a><span class="sd">    Notes</span>
+</span><span id="nearest_neighbor-35"><a href="#nearest_neighbor-35"><span class="linenos">35</span></a><span class="sd">    -----</span>
+</span><span id="nearest_neighbor-36"><a href="#nearest_neighbor-36"><span class="linenos">36</span></a><span class="sd">    Uses Euclidean distance in the supplied coordinate system. Queries outside</span>
+</span><span id="nearest_neighbor-37"><a href="#nearest_neighbor-37"><span class="linenos">37</span></a><span class="sd">    the sensor hull still receive values; this does not establish accuracy</span>
+</span><span id="nearest_neighbor-38"><a href="#nearest_neighbor-38"><span class="linenos">38</span></a><span class="sd">    there. Equidistant neighbours have no guaranteed physical preference.</span>
+</span><span id="nearest_neighbor-39"><a href="#nearest_neighbor-39"><span class="linenos">39</span></a><span class="sd">    """</span>
+</span><span id="nearest_neighbor-40"><a href="#nearest_neighbor-40"><span class="linenos">40</span></a>    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">train_locations</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+</span><span id="nearest_neighbor-41"><a href="#nearest_neighbor-41"><span class="linenos">41</span></a>    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">train_values</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="nearest_neighbor-42"><a href="#nearest_neighbor-42"><span class="linenos">42</span></a>    <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">query_locations</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+</span><span id="nearest_neighbor-43"><a href="#nearest_neighbor-43"><span class="linenos">43</span></a>    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">q</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">q</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+</span><span id="nearest_neighbor-44"><a href="#nearest_neighbor-44"><span class="linenos">44</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'Coordinates must be (n, d) and (m, d) with same d'</span><span class="p">)</span>
+</span><span id="nearest_neighbor-45"><a href="#nearest_neighbor-45"><span class="linenos">45</span></a>    <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+</span><span id="nearest_neighbor-46"><a href="#nearest_neighbor-46"><span class="linenos">46</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'Every nonempty training coordinate needs one value'</span><span class="p">)</span>
+</span><span id="nearest_neighbor-47"><a href="#nearest_neighbor-47"><span class="linenos">47</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="k">for</span> <span class="n">arr</span> <span class="ow">in</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">q</span><span class="p">)):</span>
+</span><span id="nearest_neighbor-48"><a href="#nearest_neighbor-48"><span class="linenos">48</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'Arrays must contain finite values'</span><span class="p">)</span>
+</span><span id="nearest_neighbor-49"><a href="#nearest_neighbor-49"><span class="linenos">49</span></a>    <span class="n">_</span><span class="p">,</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">cKDTree</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="nearest_neighbor-50"><a href="#nearest_neighbor-50"><span class="linenos">50</span></a>    <span class="k">return</span> <span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Predict scalar values at query points using the nearest observation.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>train_locations : numpy.ndarray
-    Coordinates of shape (n, d).
-train_values : numpy.ndarray
-    Measured scalar values of shape (n,).
-query_locations : numpy.ndarray
-    Locations of shape (m, d).</p>
+<ul>
+<li><strong>train_locations</strong> (numpy.ndarray):
+Coordinates of shape (n, d).</li>
+<li><strong>train_values</strong> (numpy.ndarray):
+Measured scalar values of shape (n,).</li>
+<li><strong>query_locations</strong> (numpy.ndarray):
+Locations of shape (m, d).</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>numpy.ndarray
-    Nearest training value for each query, with shape (m,).</p>
+<ul>
+<li><strong>numpy.ndarray</strong>: Nearest training value for each query, with shape (m,).</li>
+</ul>
+
+<h6 id="raises">Raises</h6>
+
+<ul>
+<li><strong>ValueError</strong>: If coordinate dimensions differ, training data are empty, a value is
+missing for a location, or any input contains a non-finite number.</li>
+</ul>
+
+<h6 id="notes">Notes</h6>
+
+<p>Uses Euclidean distance in the supplied coordinate system. Queries outside
+the sensor hull still receive values; this does not establish accuracy
+there. Equidistant neighbours have no guaranteed physical preference.</p>
 </div>
 
 

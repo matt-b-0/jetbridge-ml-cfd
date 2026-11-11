@@ -461,20 +461,23 @@
 
             <div class="docstring"><p>Sample the latest saved thermal field and report its solver status.</p>
 
-<h2 id="parameters">Parameters</h2>
+<h6 id="parameters">Parameters</h6>
 
-<p>case : pathlib.Path
-    Solved thermal case with log.solver and saved U/T fields.
-output : pathlib.Path
-    Existing output directory for export dictionaries and logs.
-sensors : pandas.DataFrame
-    Matched absolute-metre experimental positions and measured means.</p>
+<ul>
+<li><strong>case</strong> (pathlib.Path):
+Solved thermal case with log.solver and saved U/T fields.</li>
+<li><strong>output</strong> (pathlib.Path):
+Existing output directory for export dictionaries and logs.</li>
+<li><strong>sensors</strong> (pandas.DataFrame):
+Matched absolute-metre experimental positions and measured means.</li>
+</ul>
 
-<h2 id="returns">Returns</h2>
+<h6 id="returns">Returns</h6>
 
-<p>tuple
-    Sensor comparison, metric/status dictionary, cross-section fields and
-    longitudinal fields. All temperatures in the comparison use Celsius.</p>
+<ul>
+<li><strong>tuple</strong>: Sensor comparison, metric/status dictionary, cross-section fields and
+longitudinal fields. All temperatures in the comparison use Celsius.</li>
+</ul>
 </div>
 
 
