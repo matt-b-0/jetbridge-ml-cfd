@@ -7,7 +7,7 @@ from jetbridge_ml.validation import reconstruction_lab as lab
 from jetbridge_ml.gui.config import RunSpec, available_runs
 from jetbridge_ml.gui.guidance import guide_text
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 
 
 def locations():

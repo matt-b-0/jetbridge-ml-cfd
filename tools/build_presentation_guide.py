@@ -24,6 +24,7 @@ th{background:#e8f1f2}pre{overflow:auto;padding:18px;background:#edf2f5;font-siz
 .lines td:nth-child(1){width:42px;color:#64748b}.lines td:nth-child(2){width:52%;white-space:pre-wrap;overflow-wrap:anywhere;font:15px/1.55 Consolas,monospace}
 .lines td:nth-child(3){font-size:17px}.notice{border-left:5px solid #007f85;padding:12px 20px;background:#eaf4f4}
 details{margin:16px 0}summary{cursor:pointer;font-weight:650}button{font:inherit;padding:7px 15px;background:white;border:1px solid #007f85;border-radius:4px}
+h2,h3,summary,td{overflow-wrap:anywhere}
 @media(max-width:700px){body{padding:16px;font-size:17px}h1{font-size:30px}.lines td:nth-child(2){width:45%}.lines td:nth-child(3){font-size:14px}nav{gap:12px}}
 @media print{nav,button{display:none}body{max-width:none}details{display:block}}
 """
@@ -44,12 +45,15 @@ def page(title, body):
     """Wrap content in a consistent offline navigation shell."""
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>{esc(title)}</title><style>{STYLE}</style></head>
-<body><h1>{esc(title)}</h1><nav><a href="index.html">Presentation tutorial</a><a href="test_walkthrough.html">Tests line by line</a>
-<a href="test_report.html">Fresh test report</a><a href="test_catalog.html">All test source</a><a href="../html/jetbridge_ml.html">HTML API</a>
-<a href="../../README.md">README source</a></nav>{body}</body></html>'''
+<body><h1>{esc(title)}</h1><nav><a href="../html/index.html">Report and code</a><a href="test_walkthrough.html">Six tests</a>
+<a href="test_report.html">Test result</a></nav>{body}</body></html>'''
 
 
 EXPLANATIONS = {
+    'locations = np.array([[0.0, 0.0], [2.0, 0.0], [0.0, 2.0]])': 'Define three known sensor coordinates on a plane.',
+    'values = np.array([1.0, 4.0, 9.0])': 'Attach a deliberately distinct value to each sensor so the selected neighbour is unambiguous.',
+    'out = nearest_neighbor(locations, values, np.array([[0.1, 0.1], [1.8, 0.0]]))': 'Query near the first and second sensors using the production nearest-neighbour implementation.',
+    'np.testing.assert_array_equal(out, [1.0, 4.0])': 'Require the two independently known neighbour values exactly; no fitting tolerance is needed here.',
     'import numpy as np': 'Import NumPy for numerical arrays and independent array comparisons.',
     'import pandas as pd': 'Import pandas to construct synthetic input tables in the same format as the real workflow.',
     'import pytest': 'Import pytest for approximate scalar comparisons, expected exceptions and parametrised cases.',
@@ -152,111 +156,102 @@ def annotated(relative, selected=None, markdown=False):
     return f'<h2>{esc(relative)}</h2><p><a href="../../{relative}">Open original source</a>. Line numbers below refer to that exact file.</p><table class="lines"><tr><th>Line</th><th>Actual code</th><th>Explanation</th></tr>{rows}</table>'
 
 
-TUTORIAL = '''# Presentation tutorial
+TUTORIAL = '''# A manageable presentation and test run
 
-Updated 11 November 2026. The deck has nine main slides totalling a target of five minutes. Remaining slides are for questions. Practise with a timer: five minutes is a budget, not a measured delivery duration.
+## One test file, six checks
 
-## Prepare the demonstration
+Open `tests/test_core.py`. It is the only test file needed for the presentation. Five functions produce six cases because the affine-field test runs for linear and RBF separately.
 
-1. Open the revised PowerPoint. Use Presenter View to see its speaking notes. The main talk ends on slide 9.
-2. Open `docs/presentation/index.html` in a browser. It works offline and links the API, annotated tests, all test source and the fresh test report.
-3. Open `tests/test_presentation_examples.py` and `tests/test_four_workstreams.py` in your editor. The HTML walkthrough already contains their relevant source with real line numbers, so an editor is optional.
-4. Keep the metrics API in another browser tab: `docs/html/jetbridge_ml/validation/metrics.html`. Set browser zoom around 110–125% for the projector.
-5. Check that the report says 128 passed and 1 skipped for this revision. If you change source later, rerun the commands below and rebuild the guide; do not reuse an old count.
-6. Rehearse Alt+Tab from PowerPoint to the browser and back. Do not launch a CFD solve or run the entire suite during the five-minute talk. Use a short test invocation only if time and environment have been checked beforehand.
+| Case | What you can explain |
+| --- | --- |
+| Nearest neighbour | Queries near known sensors return their expected values. |
+| Error metrics | Opposite errors cancel in bias, but MAE and RMSE remain positive. |
+| Linear interpolation | Reproduce a known affine field at unseen interior points. |
+| RBF interpolation | Reproduce that same field with thin-plate RBF. |
+| Unsupported region | Linear returns NaN outside the sensor triangle. |
+| Leakage prevention | Altering a hidden target cannot change its own held-out SVR prediction. |
 
-## Five-minute delivery
-
-| Slide | Time | Say and show |
-|---|---:|---|
-| 1 Problem | 15 s | Sparse sensors leave unobserved regions. Compare interpolation with SVR. |
-| 2 Inputs/outputs | 25 s | x/y positions in metres and scalar speeds in m/s produce maps, errors, support masks and timings. 36 files, 504 sensor means; sequential observations. |
-| 3 Approach | 30 s | Explain nearest/linear as baselines, thin-plate RBF as interpolation and SVR as regularised regression. |
-| 4 Validation | 35 s | Remove one location, tune within the remaining data, predict the removed value. Explain training-only scaling and common support. |
-| 5 Results | 35 s | RBF 0.04959 versus SVR 0.05774 m/s. State the 58 ft concentration and station/layout confounding. |
-| 6 CFD setup | 25 s | Name steady isothermal RANS, measured inlet supply and sealed walls. Initial values are guesses; boundaries constrain the solve. |
-| 7 CFD comparison | 30 s | All twelve matched CFD speeds are high. Convergence and conservation do not establish physical agreement. |
-| 8 Live documentation/test demo | 65 s | Follow the sequence below. |
-| 9 Limits and AI | 40 s | Explain coverage, excluded thermal fields, AI assistance and actual author decisions. End here. |
-
-## The 65-second browser demonstration
-
-- First 10 seconds: show the local tutorial navigation and its repository overview. Say: “The README specifies environment, inputs and reproduction commands.” The repository hyperlink is available if you want to show GitHub, but local files avoid depending on internet access.
-- Next 15 seconds: open the metrics API. Point to Parameters, Returns and Raises, then expand the function source. Say: “Bias is prediction minus observation; unsupported values must be handled explicitly.” Return to the tutorial.
-- Next 25 seconds: open Tests line by line, showing the first test. Actual values are [0.1, 0.3], predicted values [0.3, 0.1]. Errors are +0.2 and -0.2. Bias is zero, but RMSE and MAE are 0.2 m/s. Point to each assertion and explain floating-point tolerance.
-- Final 15 seconds: show the fresh test report, including its skip reason. Say: “These are software and numerical checks. They do not certify the CFD physics.” Return to PowerPoint for slide 9.
-
-If a window switch takes more than 10 seconds, use the on-slide metric example. Keep detailed source explanations for the three-minute question period.
-
-## Read a test in four steps
-
-Identify the property, identify the controlled input, calculate the expected answer independently, then locate the assertion. A passed function is evidence only for its stated property and tested inputs.
-
-`np.array` constructs a numerical array. `assert` makes a falsifiable check: pytest fails when it is false. `pytest.approx` allows floating-point rounding. `assert_allclose` performs an array comparison. `@pytest.mark.parametrize` repeats one test for several inputs; three method names yield three test cases. `pytest.raises` verifies deliberate rejection of bad input. A pytest fixture such as `tmp_path` provides a temporary directory isolated from source data.
-
-The tutorial annotates every line in the small presentation test module, plus the existing affine-field, unsupported-region, real-SVR leakage and inner-scaling tests. All other test modules have an expandable source catalogue. Native GUI checks and scientific worker checks are identified separately.
-
-## Tests to explain during questions
-
-**Known affine field:** f(x,y)=2+3x-y gives an independent expected value at unseen queries. Linear and thin-plate RBF should reproduce it within rounding. This verifies implementation for that field; it does not prove accuracy for arbitrary real airflow.
-
-**Linear support:** inside the sensor triangle a constant field returns one; outside it the prediction is NaN. Missing coverage must be reported rather than hidden or compared with fully supported methods unfairly.
-
-**Hidden-target mutation:** evaluate synthetic data, alter only the target for outer sensor 0 to 9 m/s, and compare its two held-out predictions. They must be identical because sensor 0 is withheld from its own model. This uses real SVR fits with one candidate to keep the test small. It checks outer exclusion, not every possible source of leakage.
-
-**Inner scaling and groups:** decode the recorded split indices, calculate coordinate means using inner training rows, and compare those means with the scaler audit. Check that the same coordinate never appears in both inner training and validation. This detects preprocessing and duplicate-location leakage.
-
-**Row ordering:** permute both coordinates and their attached speeds. Predictions should remain unchanged for the selected non-tied queries. A nearest-neighbour tie is deliberately excluded; no physical preference is claimed between exactly equidistant sensors.
-
-**Units and coverage:** converting both arrays from m/s to cm/s multiplies RMSE, MAE and bias by 100. A NaN prediction must raise an exception until the caller explicitly decides how to restrict coverage.
-
-## Explain the HTML pages
-
-The presentation tutorial is a teaching aid. The pdoc API pages document actual importable functions and show their current source. The Reconstruction Lab dashboard is a separate scientific results page: full-array maps are fitted surfaces, while Unseen sensors reports held-out predictions. Sensor count retains hull anchors and fixed test targets; Input noise is synthetic training-only noise; Accuracy & cost uses its own documented timing protocol. Do not substitute dashboard timings for the separate controlled performance study.
-
-This WSL worker lacks Tk. Its pdoc build excludes only `gui.app` and `gui.progress`; those pages are generated from their current Python syntax tree and explicitly labelled source-based desktop references. They include all classes, functions, method signatures, available docstrings and complete source without claiming successful Tk import. The scientific worker, reconstruction and other GUI support modules use ordinary pdoc pages.
-
-## Likely questions and defensible answers
-
-- **Why use RBF and SVR?** RBF is a credible smooth interpolation baseline. SVR adds regularisation; whether that helps is tested rather than assumed.
-- **Why common support?** Linear cannot predict outside its training hull. Restricting the primary comparison gives all methods the same eligible targets. Outside-hull errors remain separate.
-- **What does RMSE measure?** Typical error magnitude with greater weight on large errors, in m/s. Bias measures systematic direction and may cancel.
-- **Why is the CFD comparison imperfect?** Full-face inlet, sealed walls, turbulence and boundary simplifications may differ from the apparatus. The cause of the discrepancy is unresolved.
-- **Did more sensors always help?** No. Placement changes too. Some independently placed larger arrays were worse; exploratory layouts do not establish an optimum.
-- **What was optimised?** SVR parameters were selected using inner training folds. Layout and expanded-grid studies provide bounded exploratory evidence, not global optima.
-- **What about runtime and memory?** The controlled script separates fitting, prediction and search, with warm-up and repeated timings. Tracemalloc reports traced Python allocations rather than total process memory. Small arrays do not establish large-scale scalability.
-- **Did you verify the physics?** I performed numerical checks and matched measurement comparisons, with limitations. Neither test success nor conservation establishes full physical validation.
-- **What did AI contribute?** Use the author-supplied statement and log. Name actual checks and decisions you personally made. Do not claim to have independently checked something solely because an agent ran a test.
-
-## Reproduce the checks and documentation
+## Run the six checks
 
 From the repository root in the scientific environment:
 
 ```bash
-PYTHONPATH=src python -m pytest -q --junitxml=docs/report/test-results.xml
-python -m ruff check src tests run_all.py launch_gui.py tools/build_presentation_guide.py tools/build_api_docs.py
+PYTHONPATH=src python -m pytest -v
+```
+
+Expected result: **6 passed**. The default configuration collects only `tests/test_core.py`. No CFD solve or display is needed. Run this before the talk and keep the output open.
+
+On this laptop, Ubuntu already has the project environment. Use:
+
+```bash
+cd "/mnt/c/Users/mattb_ar68ij9/OneDrive/Documents/UNI/2026/MMA3001/Project/jetbridge-ml-cfd"
+PYTHONPATH=src /home/mattb/projects/jetbridge-python-env/bin/python -m pytest -v
+```
+
+## A five-minute talk with room to breathe
+
+Use slides 1–6, plus a short repository demonstration after slide 5. Other slides remain available for questions.
+
+| Part | Time | Explain |
+| --- | --- | --- |
+| Slides 1–2 | 45 s | Predict speeds between sparse sensors; positions and measured speeds are the inputs. |
+| Slide 3 | 40 s | Compare nearest, linear, thin-plate RBF and regularised SVR. |
+| Slide 4 | 50 s | Withhold one location, tune on remaining data, and predict the removed value. |
+| Slide 5 | 50 s | RBF has the lowest aggregate error; its advantage concentrates at 58 ft. |
+| Repository demonstration | 45 s | Show README, one API function and one simple passing test. |
+| Slide 6 | 40 s | Explain coverage limits and actual AI assistance. |
+
+Total target: 4 minutes 30 seconds, leaving 30 seconds for transitions. Practise with a timer. The six main slides have updated notes; finish at slide 6.
+
+## The demonstration
+
+Open the README, metrics API and core test result before starting. Show the folder structure briefly. In the API, point to Parameters, Returns and Raises. In `test_core.py`, show `test_zero_bias_can_hide_large_local_errors`:
+
+- Reference speeds are [0.1, 0.3] m/s; predictions are [0.3, 0.1].
+- Prediction errors are +0.2 and -0.2 m/s.
+- Bias is zero, while MAE and RMSE are both 0.2 m/s.
+- `assert` checks the result; `pytest.approx` allows floating-point rounding.
+
+That is enough source detail for the main talk. Use the line-by-line page for questions. For leakage questions, the final function changes sensor 0's hidden target to 9 m/s and checks its held-out SVR prediction is unchanged. Its single-candidate search keeps the regression test small; the research search is larger.
+
+## Optional development checks
+
+The other checks are retained in `tests/extended/`. They cover data parsing, numerical stability, CFD mapping, GUI behaviour and reproducibility. You do not need to present each one. The full WSL run still reports 128 passed and one skipped native-GUI module; the six core cases are part of that total, not duplicates.
+
+To run everything deliberately:
+
+```bash
+PYTHONPATH=src python -m pytest tests -q
+```
+
+GitHub CI and run_all.py continue to run the full suite. A software pass does not establish physical CFD validation. The Tk layout module needs Tk and a display and is skipped in the headless worker.
+
+## Documentation and GitHub
+
+The tutorial, API and test report work offline after downloading/extracting the repository. GitHub-readable Markdown and slide PNGs are linked from `docs/presentation/README.md`. GitHub itself displays HTML source rather than executing the pages. Two Tk-only API pages are explicitly source-based references in this worker.
+
+To refresh documentation after changes:
+
+```bash
+PYTHONPATH=src python -m pytest -q --junitxml=docs/report/core-test-results.xml
+PYTHONPATH=src python -m pytest tests -q --junitxml=docs/report/test-results.xml
 PYTHONPATH=src python tools/build_api_docs.py
 python tools/build_presentation_guide.py
 ```
 
-For the short live numerical example:
-
-```bash
-PYTHONPATH=src python -m pytest tests/test_presentation_examples.py -v
-```
-
-If Tk is installed in the scientific environment, the ordinary full `python -m pdoc jetbridge_ml -o docs/html` build can include the desktop modules. The guide builder then links their pdoc pages instead of replacing them. This revision's native layout check was skipped because Tk was unavailable. Prior November 5 GUI evidence remains historical, separate from the fresh November 11 suite.
-
-## Before submission
-
-The brief requires a 5–10 page main report, references/appendices excluded; an accessible GitHub link; and a zipped clone in Moodle. Ensure the final clone includes the GUI work, updated tests and docs, then verify it before submission. The documentation builders do not publish or commit changes; repository history records publication. Keep the personal AI statement accurate and be ready to explain the functions you show.
+Explain only checks and decisions you actually understand. Use the supplied author statement for AI reflection; do not claim personal verification solely because an agent ran a test.
 '''
 
 
 def build():
     """Write the tutorial, annotated tests, catalogue and fresh-result pages."""
     OUT.mkdir(parents=True, exist_ok=True)
-    report = ROOT / 'docs/report/test-results.xml'
+    report = ROOT / 'docs/report/core-test-results.xml'
+    full_report = ROOT / 'docs/report/test-results.xml'
+    full_cases = ET.parse(full_report).findall('.//testcase')
+    full_skipped = sum(c.find('skipped') is not None for c in full_cases)
+    full_failed = sum(c.find('failure') is not None or c.find('error') is not None for c in full_cases)
+    full_passed = len(full_cases) - full_skipped - full_failed
     tree = ET.parse(report)
     cases = tree.findall('.//testcase')
     skipped = [c for c in cases if c.find('skipped') is not None]
@@ -271,34 +266,31 @@ def build():
         rows.append(f'<tr><td>{esc(c.get("classname"))}</td><td>{esc(c.get("name"))}</td><td>{esc(state)}</td><td>{esc(detail)}</td></tr>')
     suite = tree.find('.//testsuite')
     body = f'<h2>{esc(summary)}</h2><p>JUnit timestamp: {esc(suite.get("timestamp"))}. Suite duration: {esc(suite.get("time"))} seconds.</p>'
-    body += '<p class="notice">Fresh WSL scientific-worker execution. Tk/display-dependent layout tests were skipped, not passed. This report checks software/numerical behaviour; it does not certify physical CFD accuracy.</p>'
-    body += '<p><a href="../report/test-results.xml">Original JUnit XML</a></p><table><tr><th>Module</th><th>Case</th><th>Status</th><th>Reason</th></tr>' + ''.join(rows) + '</table>'
+    body += f'<p class="notice">The default run is six core cases in one file. Optional full regression run: {full_passed} passed, {full_skipped} skipped, {full_failed} failed/error. These are software/numerical checks, not physical CFD certification.</p>'
+    body += '<p><a href="../report/core-test-results.xml">Core JUnit XML</a> · <a href="../report/test-results.xml">Optional full-suite JUnit XML</a></p><table><tr><th>Module</th><th>Case</th><th>Status</th><th>Reason</th></tr>' + ''.join(rows) + '</table>'
     (OUT / 'test_report.html').write_text(page('Test report — 11 November 2026', body), encoding='utf-8')
     walkthrough = '<p>Read each test as controlled inputs → production call → independent expected answer → assertion. Source is read directly at build time; no example code is substituted.</p>'
-    walkthrough += annotated('tests/test_presentation_examples.py')
-    walkthrough += annotated('tests/test_plane_benchmark.py', {'test_affine_field_reproduction', 'test_linear_extrapolation_is_explicit'})
-    walkthrough += annotated('tests/test_four_workstreams.py', {'test_nested_test_target_does_not_change_its_model', 'test_inner_scaling_and_location_groups_exclude_validation'})
+    walkthrough += annotated('tests/test_core.py')
     walkthrough += '<h2>Scope</h2><p>These tests verify stated numerical properties and split isolation. They do not validate every field or prove experimental representativeness. For all remaining tests, use the complete source catalogue.</p>'
     (OUT / 'test_walkthrough.html').write_text(page('Tests explained line by line', walkthrough), encoding='utf-8')
     markdown = '# Tests explained line by line\n\nThese are the same actual source lines as the offline HTML walkthrough. Read each test as controlled inputs, production call, expected answer and assertion.\n'
-    markdown += annotated('tests/test_presentation_examples.py', markdown=True)
-    markdown += annotated('tests/test_plane_benchmark.py', {'test_affine_field_reproduction', 'test_linear_extrapolation_is_explicit'}, markdown=True)
-    markdown += annotated('tests/test_four_workstreams.py', {'test_nested_test_target_does_not_change_its_model', 'test_inner_scaling_and_location_groups_exclude_validation'}, markdown=True)
+    markdown += annotated('tests/test_core.py', markdown=True)
     (OUT / 'TEST_WALKTHROUGH.md').write_text(markdown, encoding='utf-8')
-    catalog = '<p>All current test modules, with exact expandable source. Parametrisation can produce multiple pytest cases per function. See the fresh report for executed case names and skip reasons.</p>'
+    catalog = '<p>Only tests/test_core.py is needed for the presentation and default run. The extended folder below contains optional development regressions. Parametrisation can produce multiple cases per function.</p>'
     hashes = {}
-    for file in sorted((ROOT / 'tests').glob('test_*.py')):
+    for file in sorted((ROOT / 'tests').rglob('test_*.py')):
         text = file.read_text(encoding='utf-8')
         hashes[str(file.relative_to(ROOT))] = sha256(file.read_bytes()).hexdigest()
         module = ast.parse(text)
         functions = [n for n in ast.walk(module) if isinstance(n, ast.FunctionDef) and n.name.startswith('test_')]
         items = ''.join(f'<li><code>{esc(n.name)}</code>: {esc(ast.get_docstring(n) or n.name[5:].replace("_", " "))}</li>' for n in functions)
-        catalog += f'<details><summary>{esc(file.name)} — {len(functions)} test functions</summary><p><a href="../../tests/{esc(file.name)}">Open Python source</a></p><ul>{items}</ul><pre>{esc(text)}</pre></details>'
+        relative = file.relative_to(ROOT).as_posix()
+        catalog += f'<details><summary>{esc(relative)} — {len(functions)} test functions</summary><p><a href="../../{esc(relative)}">Open Python source</a></p><ul>{items}</ul><pre>{esc(text)}</pre></details>'
     (OUT / 'test_catalog.html').write_text(page('Complete test source catalogue', catalog), encoding='utf-8')
-    intro = f'<p class="notice">Current verification: <strong>{esc(summary)}</strong>. Ruff correctness gate passed. Scientific scores are unchanged. Main talk: slides 1–9, target 300 seconds; backups are for questions.</p>'
+    intro = f'<p class="notice">Default run: <strong>{esc(summary)}</strong>, all in tests/test_core.py. Optional full regression run: {full_passed} passed, {full_skipped} skipped. Scientific scores are unchanged. Use the shortened presentation route below.</p>'
     intro += '<h2>Repository overview</h2><p><a href="https://github.com/matt-b-0/jetbridge-ml-cfd">Published GitHub repository</a> · <a href="../../README.md">Current local README</a>. Local presentation updates are not automatically published.</p>'
     intro += '<p>data_processing reads source inputs; interpolation supplies baselines; machine_learning handles SVR; validation handles metrics and checks; cfd_interface handles numerical reference fields; gui presents the existing workflows.</p>'
-    intro += '<h2>Open the API pages</h2><ul><li><a href="../html/jetbridge_ml/validation/metrics.html">RMSE, MAE and bias</a></li><li><a href="../html/jetbridge_ml/interpolation/plane.html">Interpolation methods and support</a></li><li><a href="../html/jetbridge_ml/machine_learning/selection.html">Training-only SVR selection</a></li><li><a href="../html/jetbridge_ml/validation/reconstruction_lab.html">Reconstruction Lab experiments</a></li><li><a href="../html/jetbridge_ml/gui/app.html">Desktop application reference</a></li><li><a href="../html/jetbridge_ml/gui/progress.html">Residual display reference</a></li></ul>'
+    intro += '<h2>Code behind the submitted report</h2><p><a href="../html/index.html">Open the short source guide</a>: inputs, methods, hidden-sensor validation and errors. The full API is optional background.</p>'
     # A deliberately simple Markdown rendering keeps the builder standard-library only.
     blocks = []
     in_code = False
@@ -328,6 +320,35 @@ def build():
             blocks.append('<p>' + inline(line) + '</p>')
     (OUT / 'index.html').write_text(page('Jet Bridge presentation tutorial', intro + ''.join(blocks)), encoding='utf-8')
     (OUT / 'PRESENTATION_TUTORIAL.md').write_text(TUTORIAL, encoding='utf-8')
+    # Keep the teaching entry points short. Detailed commentary remains optional.
+    (OUT / 'test_line_by_line.html').write_text(page('Optional line-by-line source commentary', walkthrough), encoding='utf-8')
+    checks = '''<p>All six checks are in <a href="../../tests/test_core.py">one file: tests/test_core.py</a>. Five functions produce six cases because the known-field check runs for linear and RBF separately.</p>
+<table><tr><th>Check</th><th>What you should understand</th></tr>
+<tr><td>Nearest neighbour</td><td>The nearest known sensor supplies the predicted value.</td></tr>
+<tr><td>Errors</td><td>Opposite errors can cancel in bias; RMSE and MAE still reveal them.</td></tr>
+<tr><td>Linear interpolation</td><td>A known affine field should be reproduced at interior queries.</td></tr>
+<tr><td>RBF interpolation</td><td>The same field should also be reproduced by thin-plate RBF.</td></tr>
+<tr><td>Support</td><td>Linear should return NaN outside its sensor triangle.</td></tr>
+<tr><td>Leakage</td><td>A hidden target must not influence the model predicting it.</td></tr></table>
+<h2>Run them</h2><pre>PYTHONPATH=src python -m pytest -v</pre><p>Run from the repository root in the scientific environment. Expected result: <strong>6 passed</strong>.</p>
+<h2>One example to explain aloud</h2><p>Reference speeds [0.1, 0.3] and predictions [0.3, 0.1] produce errors +0.2 and −0.2 m/s. Bias = 0; MAE = RMSE = 0.2 m/s. An assertion checks this independently known answer.</p>'''
+    core = (ROOT / 'tests/test_core.py').read_text(encoding='utf-8')
+    for node in ast.parse(core).body:
+        if isinstance(node, ast.FunctionDef) and node.name.startswith('test_'):
+            start = min([node.lineno] + [d.lineno for d in node.decorator_list])
+            snippet = '\n'.join(core.splitlines()[start-1:node.end_lineno])
+            checks += f'<details><summary>Show code: {esc(node.name)}</summary><pre>{esc(snippet)}</pre></details>'
+    checks += '<p><a href="test_report.html">See the result</a> · <a href="test_line_by_line.html">Optional line-by-line commentary</a></p><details><summary>Optional development tests</summary><p>The remaining checks are in tests/extended. Run <code>PYTHONPATH=src python -m pytest tests -q</code> to include them. <a href="test_catalog.html">Source catalogue</a>.</p></details>'
+    (OUT / 'test_walkthrough.html').write_text(page('Six core checks', checks), encoding='utf-8')
+    start_page = '''<p>Use these three pages for the presentation. You do not need to learn the full API.</p>
+<ol><li><a href="../html/index.html"><strong>Report and code</strong></a> — the problem, result and six functions behind the submitted PDF.</li>
+<li><a href="test_walkthrough.html"><strong>Six tests</strong></a> — what each check establishes and how to run them.</li>
+<li><a href="test_report.html"><strong>Test result</strong></a> — the six passing cases.</li></ol>
+<h2>Short talk route</h2><p>Use slides 1–6, with a 45-second repository demonstration after slide 5. Aim for 4 minutes 30 seconds, leaving room for transitions. Finish at slide 6; other slides are available for questions.</p>
+<p>Explain the problem, compare methods, describe hidden-sensor validation, show the result, then state limitations and actual AI assistance.</p>
+<h2>What to demonstrate</h2><p>Open the short source guide, show <code>regression_metrics</code>, then explain the opposite-error test and its passing result. The detailed source is there if you are asked a question.</p>
+<p><a href="../report/MMA3001_Jet_Bridge_FinalSubmission.pdf">Submitted report</a> · <a href="PRESENTATION_TUTORIAL.md">Rehearsal instructions</a> · <a href="README.md">PowerPoint and slide previews</a></p>'''
+    (OUT / 'index.html').write_text(page('Presentation start', start_page), encoding='utf-8')
     for name in ('app', 'progress'):
         dest = ROOT / f'docs/html/jetbridge_ml/gui/{name}.html'
         if dest.exists() and 'source-based desktop reference' not in dest.read_text(encoding='utf-8'):
@@ -345,7 +366,7 @@ def build():
         content += ''.join(members) + '<h2>Complete current source</h2><pre>' + esc(source) + '</pre>'
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(f'<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{name} desktop reference</title><style>{STYLE}</style><body><h1>gui.{name}</h1>{content}</body></html>', encoding='utf-8')
-    verification = dict(date='2026-11-11', generated_at=datetime.now().isoformat(timespec='seconds'), passed=passed, skipped=len(skipped), failures=len(failed), junit_sha256=sha256(report.read_bytes()).hexdigest(), test_source_sha256=hashes, documentation='pdoc scientific API; AST source references for two Tk-only modules', physical_validation=False)
+    verification = dict(date='2026-11-11', generated_at=datetime.now().isoformat(timespec='seconds'), passed=passed, skipped=len(skipped), failures=len(failed), full_passed=full_passed, full_skipped=full_skipped, full_failures=full_failed, junit_sha256=sha256(report.read_bytes()).hexdigest(), full_junit_sha256=sha256(full_report.read_bytes()).hexdigest(), test_source_sha256=hashes, documentation='pdoc scientific API; AST source references for two Tk-only modules', physical_validation=False)
     (OUT / 'verification.json').write_text(json.dumps(verification, indent=2) + '\n', encoding='utf-8')
     # Verify local HTML navigation and fragments against existing files.
     missing = []

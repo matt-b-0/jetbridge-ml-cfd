@@ -4,11 +4,6 @@ from jetbridge_ml.interpolation import nearest_neighbor
 from jetbridge_ml.validation import regression_metrics
 
 
-def test_nearest_neighbor_matches_known_locations():
-    locations = np.array([[0.0, 0.0], [2.0, 0.0], [0.0, 2.0]])
-    values = np.array([1.0, 4.0, 9.0])
-    out = nearest_neighbor(locations, values, np.array([[0.1, 0.1], [1.8, 0.0]]))
-    np.testing.assert_array_equal(out, [1.0, 4.0])
 
 
 def test_rmse_mae_and_signed_bias():

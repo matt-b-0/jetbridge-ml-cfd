@@ -1,0 +1,30 @@
+{
+  "report": "MMA3001_Jet_Bridge_FinalSubmission.pdf",
+  "report_sha256": "e52e2ac7b7a28c416f99aab9e1574bfa9d536cc398ec8af77ee19e98cf8171dc",
+  "functions": [
+    {
+      "name": "read_speed_average",
+      "source": "src/jetbridge_ml/data_processing/faa.py"
+    },
+    {
+      "name": "predict_plane",
+      "source": "src/jetbridge_ml/interpolation/plane.py"
+    },
+    {
+      "name": "select_plane_svr",
+      "source": "src/jetbridge_ml/machine_learning/selection.py"
+    },
+    {
+      "name": "evaluate_experimental_plane",
+      "source": "src/jetbridge_ml/experimental_svr.py"
+    },
+    {
+      "name": "regression_metrics",
+      "source": "src/jetbridge_ml/validation/metrics.py"
+    },
+    {
+      "name": "summarize",
+      "source": "src/jetbridge_ml/benchmark.py"
+    }
+  ]
+}

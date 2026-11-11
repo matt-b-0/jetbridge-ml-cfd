@@ -13,7 +13,7 @@ from jetbridge_ml.gui.config import RunSpec, available_runs, cell_count, validat
 from jetbridge_ml.gui.workflow import Job, Cancelled, boundary_inputs, prepare_case
 from jetbridge_ml.data_processing.faa import read_speed_average
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 
 
 def test_resolution_labels_have_exact_counts():

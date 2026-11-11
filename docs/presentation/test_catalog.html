@@ -8,12 +8,12 @@ th{background:#e8f1f2}pre{overflow:auto;padding:18px;background:#edf2f5;font-siz
 .lines td:nth-child(1){width:42px;color:#64748b}.lines td:nth-child(2){width:52%;white-space:pre-wrap;overflow-wrap:anywhere;font:15px/1.55 Consolas,monospace}
 .lines td:nth-child(3){font-size:17px}.notice{border-left:5px solid #007f85;padding:12px 20px;background:#eaf4f4}
 details{margin:16px 0}summary{cursor:pointer;font-weight:650}button{font:inherit;padding:7px 15px;background:white;border:1px solid #007f85;border-radius:4px}
+h2,h3,summary,td{overflow-wrap:anywhere}
 @media(max-width:700px){body{padding:16px;font-size:17px}h1{font-size:30px}.lines td:nth-child(2){width:45%}.lines td:nth-child(3){font-size:14px}nav{gap:12px}}
 @media print{nav,button{display:none}body{max-width:none}details{display:block}}
 </style></head>
-<body><h1>Complete test source catalogue</h1><nav><a href="index.html">Presentation tutorial</a><a href="test_walkthrough.html">Tests line by line</a>
-<a href="test_report.html">Fresh test report</a><a href="test_catalog.html">All test source</a><a href="../html/jetbridge_ml.html">HTML API</a>
-<a href="../../README.md">README source</a></nav><p>All current test modules, with exact expandable source. Parametrisation can produce multiple pytest cases per function. See the fresh report for executed case names and skip reasons.</p><details><summary>test_cfd_alignment.py — 4 test functions</summary><p><a href="../../tests/test_cfd_alignment.py">Open Python source</a></p><ul><li><code>test_sample_alignment_uses_xyz_not_row_order</code>: sample alignment uses xyz not row order</li><li><code>test_sample_alignment_rejects_shifted_plane</code>: sample alignment rejects shifted plane</li><li><code>test_sample_alignment_rejects_duplicate_and_nonfinite_samples</code>: sample alignment rejects duplicate and nonfinite samples</li><li><code>test_probe_drift_does_not_include_iterations_after_saved_field</code>: probe drift does not include iterations after saved field</li></ul><pre>&quot;&quot;&quot;Check coordinate alignment before interpreting CFD-to-sensor deltas.&quot;&quot;&quot;
+<body><h1>Complete test source catalogue</h1><nav><a href="../html/index.html">Report and code</a><a href="test_walkthrough.html">Six tests</a>
+<a href="test_report.html">Test result</a></nav><p>Only tests/test_core.py is needed for the presentation and default run. The extended folder below contains optional development regressions. Parametrisation can produce multiple cases per function.</p><details><summary>tests/extended/test_cfd_alignment.py — 4 test functions</summary><p><a href="../../tests/extended/test_cfd_alignment.py">Open Python source</a></p><ul><li><code>test_sample_alignment_uses_xyz_not_row_order</code>: sample alignment uses xyz not row order</li><li><code>test_sample_alignment_rejects_shifted_plane</code>: sample alignment rejects shifted plane</li><li><code>test_sample_alignment_rejects_duplicate_and_nonfinite_samples</code>: sample alignment rejects duplicate and nonfinite samples</li><li><code>test_probe_drift_does_not_include_iterations_after_saved_field</code>: probe drift does not include iterations after saved field</li></ul><pre>&quot;&quot;&quot;Check coordinate alignment before interpreting CFD-to-sensor deltas.&quot;&quot;&quot;
 import numpy as np
 import pytest
 
@@ -48,7 +48,7 @@ def test_probe_drift_does_not_include_iterations_after_saved_field():
     from jetbridge_ml.cfd_interface.plot_thermal import _probe_temperature_drift
     trace=np.array([[850,0,0],[900,10,20],[950,11,22],[1000,1000,2000]],float)
     assert _probe_temperature_drift(trace,950,50)==pytest.approx(2)
-</pre></details><details><summary>test_controlled_performance.py — 3 test functions</summary><p><a href="../../tests/test_controlled_performance.py">Open Python source</a></p><ul><li><code>test_timed_wrapper_preserves_existing_scaled_prediction</code>: timed wrapper preserves existing scaled prediction</li><li><code>test_mean_and_svr_match_reference_training</code>: mean and svr match reference training</li><li><code>test_unknown_method_rejected</code>: unknown method rejected</li></ul><pre>import numpy as np
+</pre></details><details><summary>tests/extended/test_controlled_performance.py — 3 test functions</summary><p><a href="../../tests/extended/test_controlled_performance.py">Open Python source</a></p><ul><li><code>test_timed_wrapper_preserves_existing_scaled_prediction</code>: timed wrapper preserves existing scaled prediction</li><li><code>test_mean_and_svr_match_reference_training</code>: mean and svr match reference training</li><li><code>test_unknown_method_rejected</code>: unknown method rejected</li></ul><pre>import numpy as np
 import pytest
 from sklearn.preprocessing import StandardScaler
 from jetbridge_ml.controlled_performance import fit_predictor
@@ -75,7 +75,7 @@ def test_mean_and_svr_match_reference_training():
 def test_unknown_method_rejected():
     with pytest.raises(ValueError,match=&#x27;Unknown model&#x27;):
         fit_predictor(&#x27;not-a-model&#x27;,X,Y,PARAMS)
-</pre></details><details><summary>test_demo_runner.py — 7 test functions</summary><p><a href="../../tests/test_demo_runner.py">Open Python source</a></p><ul><li><code>test_bundle_hash_and_escape_checks</code>: bundle hash and escape checks</li><li><code>test_no_output_overwrite_or_source_write</code>: no output overwrite or source write</li><li><code>test_failed_stage_is_recorded_and_logs_preserved</code>: failed stage is recorded and logs preserved</li><li><code>test_archived_field_requires_matching_finite_coordinates</code>: archived field requires matching finite coordinates</li><li><code>test_yplus_does_not_replace_solver_convergence_evidence</code>: yplus does not replace solver convergence evidence</li><li><code>test_included_research_inputs_survive_a_git_checkout</code>: included research inputs survive a git checkout</li><li><code>test_plan_is_safe_without_creating_an_output</code>: plan is safe without creating an output</li></ul><pre>&quot;&quot;&quot;Demo isolation, provenance and archive validation regression tests.&quot;&quot;&quot;
+</pre></details><details><summary>tests/extended/test_demo_runner.py — 7 test functions</summary><p><a href="../../tests/extended/test_demo_runner.py">Open Python source</a></p><ul><li><code>test_bundle_hash_and_escape_checks</code>: bundle hash and escape checks</li><li><code>test_no_output_overwrite_or_source_write</code>: no output overwrite or source write</li><li><code>test_failed_stage_is_recorded_and_logs_preserved</code>: failed stage is recorded and logs preserved</li><li><code>test_archived_field_requires_matching_finite_coordinates</code>: archived field requires matching finite coordinates</li><li><code>test_yplus_does_not_replace_solver_convergence_evidence</code>: yplus does not replace solver convergence evidence</li><li><code>test_included_research_inputs_survive_a_git_checkout</code>: included research inputs survive a git checkout</li><li><code>test_plan_is_safe_without_creating_an_output</code>: plan is safe without creating an output</li></ul><pre>&quot;&quot;&quot;Demo isolation, provenance and archive validation regression tests.&quot;&quot;&quot;
 import importlib.util
 import json
 from hashlib import sha256
@@ -87,7 +87,7 @@ import pandas as pd
 import pytest
 from jetbridge_ml.cfd_interface.report_figures import read_archived_grid
 
-spec=importlib.util.spec_from_file_location(&#x27;demo_runner&#x27;,Path(__file__).resolve().parents[1]/&#x27;run_all.py&#x27;)
+spec=importlib.util.spec_from_file_location(&#x27;demo_runner&#x27;,Path(__file__).resolve().parents[2]/&#x27;run_all.py&#x27;)
 runner=importlib.util.module_from_spec(spec)
 spec.loader.exec_module(runner)
 
@@ -154,7 +154,7 @@ def test_plan_is_safe_without_creating_an_output(tmp_path):
     result=subprocess.run([sys.executable,str(runner.ROOT/&#x27;run_all.py&#x27;),&#x27;--profile&#x27;,&#x27;full&#x27;,&#x27;--output&#x27;,str(output),&#x27;--plan&#x27;],capture_output=True,text=True,check=True)
     assert json.loads(result.stdout)[&#x27;fresh_mesh_study&#x27;] is True
     assert not output.exists()
-</pre></details><details><summary>test_final_report_checks.py — 1 test functions</summary><p><a href="../../tests/test_final_report_checks.py">Open Python source</a></p><ul><li><code>test_extended_search_excludes_outer_target_even_if_it_changes</code>: extended search excludes outer target even if it changes</li></ul><pre>import numpy as np
+</pre></details><details><summary>tests/extended/test_final_report_checks.py — 1 test functions</summary><p><a href="../../tests/extended/test_final_report_checks.py">Open Python source</a></p><ul><li><code>test_extended_search_excludes_outer_target_even_if_it_changes</code>: extended search excludes outer target even if it changes</li></ul><pre>import numpy as np
 import pandas as pd
 from jetbridge_ml.final_report_checks import extended_outer_prediction
 
@@ -172,7 +172,7 @@ def test_extended_search_excludes_outer_target_even_if_it_changes():
         assert not set(train)&amp;set(valid)
         expected=frame.drop(index=2).iloc[train][[&#x27;x_m&#x27;,&#x27;y_m&#x27;]].mean().to_numpy()
         np.testing.assert_allclose(list(map(float,row.scaler_mean.split(&#x27;;&#x27;))),expected)
-</pre></details><details><summary>test_four_workstreams.py — 7 test functions</summary><p><a href="../../tests/test_four_workstreams.py">Open Python source</a></p><ul><li><code>test_nested_test_target_does_not_change_its_model</code>: nested test target does not change its model</li><li><code>test_inner_scaling_and_location_groups_exclude_validation</code>: inner scaling and location groups exclude validation</li><li><code>test_layout_unique_and_value_independent</code>: layout unique and value independent</li><li><code>test_raw_units_sentinel_and_asynchronous_timestamps</code>: raw units sentinel and asynchronous timestamps</li><li><code>test_raw_negative_speed_rejected</code>: raw negative speed rejected</li><li><code>test_probe_restart_segments_sorted_and_deduplicated</code>: probe restart segments sorted and deduplicated</li><li><code>test_experimental_mixed_replicates_rejected</code>: experimental mixed replicates rejected</li></ul><pre>import csv
+</pre></details><details><summary>tests/extended/test_four_workstreams.py — 6 test functions</summary><p><a href="../../tests/extended/test_four_workstreams.py">Open Python source</a></p><ul><li><code>test_inner_scaling_and_location_groups_exclude_validation</code>: inner scaling and location groups exclude validation</li><li><code>test_layout_unique_and_value_independent</code>: layout unique and value independent</li><li><code>test_raw_units_sentinel_and_asynchronous_timestamps</code>: raw units sentinel and asynchronous timestamps</li><li><code>test_raw_negative_speed_rejected</code>: raw negative speed rejected</li><li><code>test_probe_restart_segments_sorted_and_deduplicated</code>: probe restart segments sorted and deduplicated</li><li><code>test_experimental_mixed_replicates_rejected</code>: experimental mixed replicates rejected</li></ul><pre>import csv
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -186,19 +186,6 @@ from jetbridge_ml.cfd_interface.thermal_audit import read_probe_trace
 GRID=dict(C=[.1],gamma=[.1],epsilon=[.002])
 
 
-def test_nested_test_target_does_not_change_its_model():
-    x,y=np.meshgrid([0.,.5,1.],[0.,.5,1.])
-    frame=pd.DataFrame(dict(x_m=x.ravel(),y_m=y.ravel(),z_m=3.05,
-                            speed_mps=.1+.02*x.ravel()+.01*y.ravel(),source_row=np.arange(9),run_id=&#x27;one&#x27;))
-    first,_,audit=evaluate_experimental_plane(frame,GRID)
-    changed=frame.copy(); changed.loc[0,&#x27;speed_mps&#x27;]=9.
-    second,_,_=evaluate_experimental_plane(changed,GRID)
-    a=first[(first.fold==0)&amp;(first.method==&#x27;svr&#x27;)].iloc[0]
-    b=second[(second.fold==0)&amp;(second.method==&#x27;svr&#x27;)].iloc[0]
-    assert a.prediction_mps==b.prediction_mps
-    for item in audit[audit.outer_source_row==0].itertuples():
-        assert &#x27;0&#x27; not in item.outer_training_source_rows.split(&#x27;;&#x27;)
-        assert set(item.training_indices.split(&#x27;;&#x27;)).isdisjoint(item.validation_indices.split(&#x27;;&#x27;))
 
 
 def test_inner_scaling_and_location_groups_exclude_validation():
@@ -262,7 +249,7 @@ def test_experimental_mixed_replicates_rejected():
     frame=pd.DataFrame(dict(run_id=[&#x27;a&#x27;,&#x27;b&#x27;],x_m=[0,1],y_m=[0,1]))
     with pytest.raises(ValueError,match=&#x27;One replicate&#x27;):
         evaluate_experimental_plane(frame,GRID)
-</pre></details><details><summary>test_gui_layout.py — 2 test functions</summary><p><a href="../../tests/test_gui_layout.py">Open Python source</a></p><ul><li><code>test_actions_and_preview_fit_the_available_window</code>: actions and preview fit the available window</li><li><code>test_preview_tracks_shrink_and_growth_without_pillow</code>: preview tracks shrink and growth without pillow</li></ul><pre>&quot;&quot;&quot;Native Tk regression checks for laptop-sized windows and preview fitting.&quot;&quot;&quot;
+</pre></details><details><summary>tests/extended/test_gui_layout.py — 2 test functions</summary><p><a href="../../tests/extended/test_gui_layout.py">Open Python source</a></p><ul><li><code>test_actions_and_preview_fit_the_available_window</code>: actions and preview fit the available window</li><li><code>test_preview_tracks_shrink_and_growth_without_pillow</code>: preview tracks shrink and growth without pillow</li></ul><pre>&quot;&quot;&quot;Native Tk regression checks for laptop-sized windows and preview fitting.&quot;&quot;&quot;
 from pathlib import Path
 from types import SimpleNamespace
 import os
@@ -275,7 +262,7 @@ if os.name!=&#x27;nt&#x27; and not os.environ.get(&#x27;DISPLAY&#x27;):
 
 from jetbridge_ml.gui.app import App
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 
 
 def settle(window):
@@ -339,7 +326,7 @@ def test_preview_tracks_shrink_and_growth_without_pillow(gui,monkeypatch):
         window.geometry(f&#x27;{width}x{height}&#x27;);settle(window);app.preview()
         assert app.image.width()&lt;=app.preview_host.winfo_width()
         assert app.image.height()&lt;=app.preview_host.winfo_height()
-</pre></details><details><summary>test_gui_parallel.py — 5 test functions</summary><p><a href="../../tests/test_gui_parallel.py">Open Python source</a></p><ul><li><code>test_invalid_process_count</code>: invalid process count</li><li><code>test_archived_requests_cannot_claim_mpi</code>: archived requests cannot claim mpi</li><li><code>test_cpu_limit</code>: cpu limit</li><li><code>test_decomposition_and_literal_arguments</code>: decomposition and literal arguments</li><li><code>test_cancellation_stops_mpi_ranks</code>: cancellation stops mpi ranks</li></ul><pre>&quot;&quot;&quot;MPI requests must remain explicit and within available hardware.&quot;&quot;&quot;
+</pre></details><details><summary>tests/extended/test_gui_parallel.py — 5 test functions</summary><p><a href="../../tests/extended/test_gui_parallel.py">Open Python source</a></p><ul><li><code>test_invalid_process_count</code>: invalid process count</li><li><code>test_archived_requests_cannot_claim_mpi</code>: archived requests cannot claim mpi</li><li><code>test_cpu_limit</code>: cpu limit</li><li><code>test_decomposition_and_literal_arguments</code>: decomposition and literal arguments</li><li><code>test_cancellation_stops_mpi_ranks</code>: cancellation stops mpi ranks</li></ul><pre>&quot;&quot;&quot;MPI requests must remain explicit and within available hardware.&quot;&quot;&quot;
 import pytest
 from jetbridge_ml.gui.config import RunSpec, worker_arguments
 from jetbridge_ml.gui import parallel
@@ -384,7 +371,7 @@ def test_cancellation_stops_mpi_ranks(tmp_path):
     import time
     from pathlib import Path
     from jetbridge_ml.gui.workflow import Job, Cancelled
-    root = Path(__file__).resolve().parents[1]
+    root = Path(__file__).resolve().parents[2]
     output = tmp_path/&#x27;job&#x27;
     output.mkdir()
     job = Job(root, output, RunSpec(kind=&#x27;fresh&#x27;, processes=2))
@@ -410,7 +397,7 @@ def test_cancellation_stops_mpi_ranks(tmp_path):
         pid = int(record.read_text())
         status = Path(f&#x27;/proc/{pid}/stat&#x27;)
         assert not status.exists() or status.read_text().split()[2] == &#x27;Z&#x27;
-</pre></details><details><summary>test_gui_residuals.py — 6 test functions</summary><p><a href="../../tests/test_gui_residuals.py">Open Python source</a></p><ul><li><code>test_records_first_initial_residual_and_preserves_final_and_zero</code>: records first initial residual and preserves final and zero</li><li><code>test_stream_reader_ignores_partial_nonfinite_and_invalid_rows</code>: stream reader ignores partial nonfinite and invalid rows</li><li><code>test_archived_residual_column_can_be_read_without_inventing_final_values</code>: archived residual column can be read without inventing final values</li><li><code>test_even_zero_comparison_error_does_not_certify_physical_accuracy</code>: even zero comparison error does not certify physical accuracy</li><li><code>test_experimental_and_thermal_modes_have_distinct_evidence_messages</code>: experimental and thermal modes have distinct evidence messages</li><li><code>test_fresh_case_paths_reject_spaces_but_archived_outputs_allow_them</code>: fresh case paths reject spaces but archived outputs allow them</li></ul><pre>&quot;&quot;&quot;Residual parsing and interpretation must not imply physical validation.&quot;&quot;&quot;
+</pre></details><details><summary>tests/extended/test_gui_residuals.py — 6 test functions</summary><p><a href="../../tests/extended/test_gui_residuals.py">Open Python source</a></p><ul><li><code>test_records_first_initial_residual_and_preserves_final_and_zero</code>: records first initial residual and preserves final and zero</li><li><code>test_stream_reader_ignores_partial_nonfinite_and_invalid_rows</code>: stream reader ignores partial nonfinite and invalid rows</li><li><code>test_archived_residual_column_can_be_read_without_inventing_final_values</code>: archived residual column can be read without inventing final values</li><li><code>test_even_zero_comparison_error_does_not_certify_physical_accuracy</code>: even zero comparison error does not certify physical accuracy</li><li><code>test_experimental_and_thermal_modes_have_distinct_evidence_messages</code>: experimental and thermal modes have distinct evidence messages</li><li><code>test_fresh_case_paths_reject_spaces_but_archived_outputs_allow_them</code>: fresh case paths reject spaces but archived outputs allow them</li></ul><pre>&quot;&quot;&quot;Residual parsing and interpretation must not imply physical validation.&quot;&quot;&quot;
 from pathlib import Path
 import csv
 import pytest
@@ -471,7 +458,7 @@ def test_fresh_case_paths_reject_spaces_but_archived_outputs_allow_them(tmp_path
     with pytest.raises(ValueError,match=&#x27;cannot contain spaces&#x27;):
         validate_output(root,output,fresh_cfd=True)
     assert validate_output(root,output)==output.resolve()
-</pre></details><details><summary>test_gui_workflow.py — 11 test functions</summary><p><a href="../../tests/test_gui_workflow.py">Open Python source</a></p><ul><li><code>test_resolution_labels_have_exact_counts</code>: resolution labels have exact counts</li><li><code>test_only_single_window_experiments_can_launch_fresh_cfd</code>: only single window experiments can launch fresh cfd</li><li><code>test_archived_mesh_and_case_cannot_be_silently_changed</code>: archived mesh and case cannot be silently changed</li><li><code>test_original_inputs_cannot_be_output</code>: original inputs cannot be output</li><li><code>test_existing_output_and_parent_of_repository_are_rejected</code>: existing output and parent of repository are rejected</li><li><code>test_wsl_paths_remain_literal_arguments</code>: wsl paths remain literal arguments</li><li><code>test_hvac_uses_recorded_window_and_litres_conversion</code>: hvac uses recorded window and litres conversion</li><li><code>test_prepared_case_updates_flow_turbulence_and_selected_probes</code>: prepared case updates flow turbulence and selected probes</li><li><code>test_cancellation_stops_a_silent_child_process_group</code>: cancellation stops a silent child process group</li><li><code>test_selected_hash_check_rejects_tampering_without_reading_unrelated_inputs</code>: selected hash check rejects tampering without reading unrelated inputs</li><li><code>test_hash_check_can_be_cancelled_before_file_io</code>: hash check can be cancelled before file io</li></ul><pre>&quot;&quot;&quot;Scientific request, isolation and cancellation checks for the GUI workflow.&quot;&quot;&quot;
+</pre></details><details><summary>tests/extended/test_gui_workflow.py — 11 test functions</summary><p><a href="../../tests/extended/test_gui_workflow.py">Open Python source</a></p><ul><li><code>test_resolution_labels_have_exact_counts</code>: resolution labels have exact counts</li><li><code>test_only_single_window_experiments_can_launch_fresh_cfd</code>: only single window experiments can launch fresh cfd</li><li><code>test_archived_mesh_and_case_cannot_be_silently_changed</code>: archived mesh and case cannot be silently changed</li><li><code>test_original_inputs_cannot_be_output</code>: original inputs cannot be output</li><li><code>test_existing_output_and_parent_of_repository_are_rejected</code>: existing output and parent of repository are rejected</li><li><code>test_wsl_paths_remain_literal_arguments</code>: wsl paths remain literal arguments</li><li><code>test_hvac_uses_recorded_window_and_litres_conversion</code>: hvac uses recorded window and litres conversion</li><li><code>test_prepared_case_updates_flow_turbulence_and_selected_probes</code>: prepared case updates flow turbulence and selected probes</li><li><code>test_cancellation_stops_a_silent_child_process_group</code>: cancellation stops a silent child process group</li><li><code>test_selected_hash_check_rejects_tampering_without_reading_unrelated_inputs</code>: selected hash check rejects tampering without reading unrelated inputs</li><li><code>test_hash_check_can_be_cancelled_before_file_io</code>: hash check can be cancelled before file io</li></ul><pre>&quot;&quot;&quot;Scientific request, isolation and cancellation checks for the GUI workflow.&quot;&quot;&quot;
 from dataclasses import replace
 from hashlib import sha256
 from pathlib import Path
@@ -486,7 +473,7 @@ from jetbridge_ml.gui.config import RunSpec, available_runs, cell_count, validat
 from jetbridge_ml.gui.workflow import Job, Cancelled, boundary_inputs, prepare_case
 from jetbridge_ml.data_processing.faa import read_speed_average
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 
 
 def test_resolution_labels_have_exact_counts():
@@ -593,17 +580,12 @@ def test_hash_check_can_be_cancelled_before_file_io(tmp_path):
     (bundle/&#x27;manifest.json&#x27;).write_text(json.dumps(dict(files=[dict(path=p,sha256=&#x27;irrelevant&#x27;) for p in paths])))
     cancel=tmp_path/&#x27;cancel&#x27;;cancel.touch()
     with pytest.raises(Cancelled):verify_inputs(tmp_path,RunSpec(),cancel)
-</pre></details><details><summary>test_interpolation.py — 3 test functions</summary><p><a href="../../tests/test_interpolation.py">Open Python source</a></p><ul><li><code>test_nearest_neighbor_matches_known_locations</code>: nearest neighbor matches known locations</li><li><code>test_rmse_mae_and_signed_bias</code>: rmse mae and signed bias</li><li><code>test_bad_input_is_rejected</code>: bad input is rejected</li></ul><pre>import numpy as np
+</pre></details><details><summary>tests/extended/test_interpolation.py — 2 test functions</summary><p><a href="../../tests/extended/test_interpolation.py">Open Python source</a></p><ul><li><code>test_rmse_mae_and_signed_bias</code>: rmse mae and signed bias</li><li><code>test_bad_input_is_rejected</code>: bad input is rejected</li></ul><pre>import numpy as np
 import pytest
 from jetbridge_ml.interpolation import nearest_neighbor
 from jetbridge_ml.validation import regression_metrics
 
 
-def test_nearest_neighbor_matches_known_locations():
-    locations = np.array([[0.0, 0.0], [2.0, 0.0], [0.0, 2.0]])
-    values = np.array([1.0, 4.0, 9.0])
-    out = nearest_neighbor(locations, values, np.array([[0.1, 0.1], [1.8, 0.0]]))
-    np.testing.assert_array_equal(out, [1.0, 4.0])
 
 
 def test_rmse_mae_and_signed_bias():
@@ -616,7 +598,7 @@ def test_rmse_mae_and_signed_bias():
 def test_bad_input_is_rejected():
     with pytest.raises(ValueError):
         nearest_neighbor([[0., 0.]], [1.], [[float(&#x27;nan&#x27;), 0.]])
-</pre></details><details><summary>test_interpolation_sensitivity.py — 3 test functions</summary><p><a href="../../tests/test_interpolation_sensitivity.py">Open Python source</a></p><ul><li><code>test_noise_weights_reproduce_direct_predictions</code>: noise weights reproduce direct predictions</li><li><code>test_supported_convex_weights_do_not_amplify_bounded_noise</code>: supported convex weights do not amplify bounded noise</li><li><code>test_rbf_worst_case_noise_bound_is_attained_at_selected_query</code>: rbf worst case noise bound is attained at selected query</li></ul><pre>&quot;&quot;&quot;Check geometry-only interpolation sensitivity against direct predictions.&quot;&quot;&quot;
+</pre></details><details><summary>tests/extended/test_interpolation_sensitivity.py — 3 test functions</summary><p><a href="../../tests/extended/test_interpolation_sensitivity.py">Open Python source</a></p><ul><li><code>test_noise_weights_reproduce_direct_predictions</code>: noise weights reproduce direct predictions</li><li><code>test_supported_convex_weights_do_not_amplify_bounded_noise</code>: supported convex weights do not amplify bounded noise</li><li><code>test_rbf_worst_case_noise_bound_is_attained_at_selected_query</code>: rbf worst case noise bound is attained at selected query</li></ul><pre>&quot;&quot;&quot;Check geometry-only interpolation sensitivity against direct predictions.&quot;&quot;&quot;
 import numpy as np
 import pytest
 from jetbridge_ml.interpolation.plane import predict_plane
@@ -651,7 +633,7 @@ def test_rbf_worst_case_noise_bound_is_attained_at_selected_query():
     perturbation=epsilon*np.sign(weights[0])
     delta=predict_plane(&quot;rbf&quot;,x,base+perturbation,query)-predict_plane(&quot;rbf&quot;,x,base,query)
     assert delta[0]==pytest.approx(epsilon*gain[0],abs=1e-12)
-</pre></details><details><summary>test_plane_benchmark.py — 7 test functions</summary><p><a href="../../tests/test_plane_benchmark.py">Open Python source</a></p><ul><li><code>test_parser_units_metadata_and_missing</code>: parser units metadata and missing</li><li><code>test_parser_rejects_wrong_units_and_truncation</code>: parser rejects wrong units and truncation</li><li><code>test_affine_field_reproduction</code>: affine field reproduction</li><li><code>test_linear_extrapolation_is_explicit</code>: linear extrapolation is explicit</li><li><code>test_repeated_locations_never_cross_split</code>: repeated locations never cross split</li><li><code>test_benchmark_same_folds_and_common_coverage</code>: benchmark same folds and common coverage</li><li><code>test_unseen_target_values_cannot_affect_predictions</code>: unseen target values cannot affect predictions</li></ul><pre>&quot;&quot;&quot;Independent numerical and leakage checks using synthetic source fixtures.&quot;&quot;&quot;
+</pre></details><details><summary>tests/extended/test_plane_benchmark.py — 5 test functions</summary><p><a href="../../tests/extended/test_plane_benchmark.py">Open Python source</a></p><ul><li><code>test_parser_units_metadata_and_missing</code>: parser units metadata and missing</li><li><code>test_parser_rejects_wrong_units_and_truncation</code>: parser rejects wrong units and truncation</li><li><code>test_repeated_locations_never_cross_split</code>: repeated locations never cross split</li><li><code>test_benchmark_same_folds_and_common_coverage</code>: benchmark same folds and common coverage</li><li><code>test_unseen_target_values_cannot_affect_predictions</code>: unseen target values cannot affect predictions</li></ul><pre>&quot;&quot;&quot;Independent numerical and leakage checks using synthetic source fixtures.&quot;&quot;&quot;
 import numpy as np
 import pandas as pd
 import pytest
@@ -692,19 +674,8 @@ def test_parser_rejects_wrong_units_and_truncation(tmp_path):
         read_speed_average(path)
 
 
-@pytest.mark.parametrize(&quot;method&quot;, [&quot;linear&quot;, &quot;rbf&quot;])
-def test_affine_field_reproduction(method):
-    x = np.array([[0, 0], [1, 0], [0, 1], [1, 1], [.5, .5]])
-    q = np.array([[.2, .3], [.6, .8]])
-    result = predict_plane(method, x, 2 + 3*x[:, 0] - x[:, 1], q)
-    np.testing.assert_allclose(result, 2 + 3*q[:, 0] - q[:, 1], atol=1e-12)
 
 
-def test_linear_extrapolation_is_explicit():
-    x = np.array([[0, 0], [1, 0], [0, 1]])
-    result = predict_plane(&quot;linear&quot;, x, [1, 1, 1], [[.2, .2], [2, 2]])
-    assert result[0] == pytest.approx(1)
-    assert np.isnan(result[1])
 
 
 def test_repeated_locations_never_cross_split():
@@ -749,7 +720,7 @@ def test_unseen_target_values_cannot_affect_predictions():
     a = baseline[baseline.source_row == 3].prediction_mps
     b = altered[altered.source_row == 3].prediction_mps
     np.testing.assert_allclose(a, b)
-</pre></details><details><summary>test_presentation_examples.py — 4 test functions</summary><p><a href="../../tests/test_presentation_examples.py">Open Python source</a></p><ul><li><code>test_zero_bias_can_hide_large_local_errors</code>: Opposite signed errors cancel in bias, but not in MAE or RMSE.</li><li><code>test_sensor_row_order_does_not_change_predictions</code>: Reordering paired coordinates and values must preserve predictions.</li><li><code>test_error_metrics_keep_speed_units_when_scaled</code>: Changing m/s to cm/s multiplies every error metric by one hundred.</li><li><code>test_unsupported_predictions_are_not_silently_scored</code>: A missing prediction requires an explicit coverage decision.</li></ul><pre>&quot;&quot;&quot;Small independent checks that are practical to explain in a demonstration.
+</pre></details><details><summary>tests/extended/test_presentation_examples.py — 3 test functions</summary><p><a href="../../tests/extended/test_presentation_examples.py">Open Python source</a></p><ul><li><code>test_sensor_row_order_does_not_change_predictions</code>: Reordering paired coordinates and values must preserve predictions.</li><li><code>test_error_metrics_keep_speed_units_when_scaled</code>: Changing m/s to cm/s multiplies every error metric by one hundred.</li><li><code>test_unsupported_predictions_are_not_silently_scored</code>: A missing prediction requires an explicit coverage decision.</li></ul><pre>&quot;&quot;&quot;Small independent checks that are practical to explain in a demonstration.
 
 These extend the existing affine-field, support and nested-leakage tests.
 They check numerical properties, not the physical validity of jet-bridge CFD.
@@ -762,14 +733,6 @@ from jetbridge_ml.interpolation.plane import predict_plane
 from jetbridge_ml.validation.metrics import regression_metrics
 
 
-def test_zero_bias_can_hide_large_local_errors():
-    &quot;&quot;&quot;Opposite signed errors cancel in bias, but not in MAE or RMSE.&quot;&quot;&quot;
-    actual = np.array([0.1, 0.3])
-    predicted = np.array([0.3, 0.1])
-    metrics = regression_metrics(actual, predicted)
-    assert metrics[&quot;bias&quot;] == pytest.approx(0.0, abs=1e-12)
-    assert metrics[&quot;mae&quot;] == pytest.approx(0.2)
-    assert metrics[&quot;rmse&quot;] == pytest.approx(0.2)
 
 
 @pytest.mark.parametrize(&quot;method&quot;, [&quot;nearest&quot;, &quot;linear&quot;, &quot;rbf&quot;])
@@ -798,7 +761,7 @@ def test_unsupported_predictions_are_not_silently_scored():
     &quot;&quot;&quot;A missing prediction requires an explicit coverage decision.&quot;&quot;&quot;
     with pytest.raises(ValueError, match=&quot;finite&quot;):
         regression_metrics([0.1, 0.2], [0.1, np.nan])
-</pre></details><details><summary>test_reconstruction_lab.py — 5 test functions</summary><p><a href="../../tests/test_reconstruction_lab.py">Open Python source</a></p><ul><li><code>test_affine_field_is_reproduced_inside_support</code>: affine field is reproduced inside support</li><li><code>test_designs_are_nested_disjoint_and_preserve_common_support</code>: designs are nested disjoint and preserve common support</li><li><code>test_heldout_targets_never_enter_noise_fits</code>: heldout targets never enter noise fits</li><li><code>test_virtual_design_rejects_training_test_overlap</code>: virtual design rejects training test overlap</li><li><code>test_lab_configuration_and_explanation</code>: lab configuration and explanation</li></ul><pre>&quot;&quot;&quot;Numerical and leakage checks for the reconstruction comparison workflow.&quot;&quot;&quot;
+</pre></details><details><summary>tests/extended/test_reconstruction_lab.py — 5 test functions</summary><p><a href="../../tests/extended/test_reconstruction_lab.py">Open Python source</a></p><ul><li><code>test_affine_field_is_reproduced_inside_support</code>: affine field is reproduced inside support</li><li><code>test_designs_are_nested_disjoint_and_preserve_common_support</code>: designs are nested disjoint and preserve common support</li><li><code>test_heldout_targets_never_enter_noise_fits</code>: heldout targets never enter noise fits</li><li><code>test_virtual_design_rejects_training_test_overlap</code>: virtual design rejects training test overlap</li><li><code>test_lab_configuration_and_explanation</code>: lab configuration and explanation</li></ul><pre>&quot;&quot;&quot;Numerical and leakage checks for the reconstruction comparison workflow.&quot;&quot;&quot;
 from pathlib import Path
 import numpy as np
 import pytest
@@ -807,7 +770,7 @@ from jetbridge_ml.validation import reconstruction_lab as lab
 from jetbridge_ml.gui.config import RunSpec, available_runs
 from jetbridge_ml.gui.guidance import guide_text
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 
 
 def locations():
@@ -870,7 +833,7 @@ def test_lab_configuration_and_explanation():
     with pytest.raises(ValueError,match=&#x27;all methods&#x27;):RunSpec(kind=&#x27;lab&#x27;,method=&#x27;svr&#x27;).validate(ROOT)
     assert &#x27;instrument uncertainty&#x27; in guide_text(&#x27;lab&#x27;,&#x27;id&#x27;,&#x27;all&#x27;,&#x27;standard&#x27;)
     assert &#x27;archived&#x27; in guide_text(&#x27;lab_cfd&#x27;,&#x27;id&#x27;,&#x27;all&#x27;,&#x27;standard&#x27;)
-</pre></details><details><summary>test_report_evidence.py — 2 test functions</summary><p><a href="../../tests/test_report_evidence.py">Open Python source</a></p><ul><li><code>test_area_fraction_is_physical_area_not_target_count</code>: area fraction is physical area not target count</li><li><code>test_hull_area_is_translation_invariant_for_sloped_floor_offset</code>: hull area is translation invariant for sloped floor offset</li></ul><pre>import numpy as np
+</pre></details><details><summary>tests/extended/test_report_evidence.py — 2 test functions</summary><p><a href="../../tests/extended/test_report_evidence.py">Open Python source</a></p><ul><li><code>test_area_fraction_is_physical_area_not_target_count</code>: area fraction is physical area not target count</li><li><code>test_hull_area_is_translation_invariant_for_sloped_floor_offset</code>: hull area is translation invariant for sloped floor offset</li></ul><pre>import numpy as np
 import pytest
 from jetbridge_ml.report_evidence import hull_area_fraction
 
@@ -885,7 +848,7 @@ def test_area_fraction_is_physical_area_not_target_count():
 def test_hull_area_is_translation_invariant_for_sloped_floor_offset():
     points=np.array([[0.,0.],[2.,0.],[0.,4.],[2.,4.]])
     assert hull_area_fraction(points+[0.,1.343025],2.,4.)==pytest.approx(1.)
-</pre></details><details><summary>test_sensors.py — 2 test functions</summary><p><a href="../../tests/test_sensors.py">Open Python source</a></p><ul><li><code>test_processed_sensor_loader</code>: processed sensor loader</li><li><code>test_missing_columns_rejected</code>: missing columns rejected</li></ul><pre>import pandas as pd
+</pre></details><details><summary>tests/extended/test_sensors.py — 2 test functions</summary><p><a href="../../tests/extended/test_sensors.py">Open Python source</a></p><ul><li><code>test_processed_sensor_loader</code>: processed sensor loader</li><li><code>test_missing_columns_rejected</code>: missing columns rejected</li></ul><pre>import pandas as pd
 import pytest
 from jetbridge_ml.data_processing import load_sensor_speed_csv
 
@@ -903,7 +866,7 @@ def test_missing_columns_rejected(tmp_path):
     pd.DataFrame({&#x27;x_m&#x27;: [0.]}).to_csv(p, index=False)
     with pytest.raises(ValueError):
         load_sensor_speed_csv(p)
-</pre></details><details><summary>test_stability.py — 7 test functions</summary><p><a href="../../tests/test_stability.py">Open Python source</a></p><ul><li><code>test_diffusion_matches_exact_discrete_mode_amplification</code>: diffusion matches exact discrete mode amplification</li><li><code>test_explicit_diffusion_stability_boundary</code>: explicit diffusion stability boundary</li><li><code>test_crank_nicolson_bounded_oscillation_and_implicit_damping</code>: crank nicolson bounded oscillation and implicit damping</li><li><code>test_temporal_order_against_semidiscrete_exact_solution</code>: temporal order against semidiscrete exact solution</li><li><code>test_central_difference_eigenvalue_has_second_order_error</code>: central difference eigenvalue has second order error</li><li><code>test_jacobi_converges_to_independent_known_solution</code>: jacobi converges to independent known solution</li><li><code>test_invalid_inputs_are_rejected</code>: invalid inputs are rejected</li></ul><pre>&quot;&quot;&quot;Verify reduced schemes against known eigenmodes and convergence orders.&quot;&quot;&quot;
+</pre></details><details><summary>tests/extended/test_stability.py — 7 test functions</summary><p><a href="../../tests/extended/test_stability.py">Open Python source</a></p><ul><li><code>test_diffusion_matches_exact_discrete_mode_amplification</code>: diffusion matches exact discrete mode amplification</li><li><code>test_explicit_diffusion_stability_boundary</code>: explicit diffusion stability boundary</li><li><code>test_crank_nicolson_bounded_oscillation_and_implicit_damping</code>: crank nicolson bounded oscillation and implicit damping</li><li><code>test_temporal_order_against_semidiscrete_exact_solution</code>: temporal order against semidiscrete exact solution</li><li><code>test_central_difference_eigenvalue_has_second_order_error</code>: central difference eigenvalue has second order error</li><li><code>test_jacobi_converges_to_independent_known_solution</code>: jacobi converges to independent known solution</li><li><code>test_invalid_inputs_are_rejected</code>: invalid inputs are rejected</li></ul><pre>&quot;&quot;&quot;Verify reduced schemes against known eigenmodes and convergence orders.&quot;&quot;&quot;
 import numpy as np
 import pytest
 
@@ -982,7 +945,7 @@ def test_invalid_inputs_are_rejected():
         heat_evolution(20,-1,0,10,np.zeros(19))
     with pytest.raises(ValueError):
         weighted_jacobi([[0,1],[1,1]],[1,1],.5,10)
-</pre></details><details><summary>test_submission_workflow.py — 5 test functions</summary><p><a href="../../tests/test_submission_workflow.py">Open Python source</a></p><ul><li><code>test_mean_baseline_excludes_outer_target</code>: mean baseline excludes outer target</li><li><code>test_paired_sign_and_incomplete_coverage</code>: paired sign and incomplete coverage</li><li><code>test_paired_missing_method_rejected</code>: paired missing method rejected</li><li><code>test_gallery_excludes_raw_and_point_data</code>: gallery excludes raw and point data</li><li><code>test_isolated_case_scaling_and_preserved_geometry</code>: isolated case scaling and preserved geometry</li></ul><pre>import json
+</pre></details><details><summary>tests/extended/test_submission_workflow.py — 5 test functions</summary><p><a href="../../tests/extended/test_submission_workflow.py">Open Python source</a></p><ul><li><code>test_mean_baseline_excludes_outer_target</code>: mean baseline excludes outer target</li><li><code>test_paired_sign_and_incomplete_coverage</code>: paired sign and incomplete coverage</li><li><code>test_paired_missing_method_rejected</code>: paired missing method rejected</li><li><code>test_gallery_excludes_raw_and_point_data</code>: gallery excludes raw and point data</li><li><code>test_isolated_case_scaling_and_preserved_geometry</code>: isolated case scaling and preserved geometry</li></ul><pre>import json
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -1035,7 +998,7 @@ def test_gallery_excludes_raw_and_point_data(tmp_path):
 
 
 def test_isolated_case_scaling_and_preserved_geometry(tmp_path):
-    repo=Path(__file__).resolve().parents[1]
+    repo=Path(__file__).resolve().parents[2]
     baseline=repo/&#x27;cfd/cases/empty_bridge_s01_a_10_hn_1&#x27;
     output=tmp_path/&#x27;flow&#x27;
     spec=prepare_case(baseline,output,&#x27;flow80&#x27;)
@@ -1054,7 +1017,7 @@ def test_isolated_case_scaling_and_preserved_geometry(tmp_path):
         assert after==pytest.approx(before*.8**power)
     coarse=tmp_path/&#x27;coarse&#x27;
     assert prepare_case(baseline,coarse,&#x27;coarse&#x27;)[&#x27;cells&#x27;]==17664
-</pre></details><details><summary>test_thermal_setup.py — 3 test functions</summary><p><a href="../../tests/test_thermal_setup.py">Open Python source</a></p><ul><li><code>test_thermal_units_window_missing_values_and_gravity</code>: thermal units window missing values and gravity</li><li><code>test_control_disables_gravity_only</code>: control disables gravity only</li><li><code>test_window_mismatch_is_rejected_before_case_creation</code>: window mismatch is rejected before case creation</li></ul><pre>&quot;&quot;&quot;Check thermal setup from synthetic known-unit experimental records.&quot;&quot;&quot;
+</pre></details><details><summary>tests/extended/test_thermal_setup.py — 3 test functions</summary><p><a href="../../tests/extended/test_thermal_setup.py">Open Python source</a></p><ul><li><code>test_thermal_units_window_missing_values_and_gravity</code>: thermal units window missing values and gravity</li><li><code>test_control_disables_gravity_only</code>: control disables gravity only</li><li><code>test_window_mismatch_is_rejected_before_case_creation</code>: window mismatch is rejected before case creation</li></ul><pre>&quot;&quot;&quot;Check thermal setup from synthetic known-unit experimental records.&quot;&quot;&quot;
 import importlib.util
 import json
 from pathlib import Path
@@ -1064,7 +1027,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 SPEC=importlib.util.spec_from_file_location(&quot;thermal_prepare&quot;, ROOT/&quot;cfd/cases/thermal_bridge_s01_ac_10_hn_1/scripts/prepare.py&quot;)
 PREPARE=importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(PREPARE)
@@ -1139,7 +1102,7 @@ def test_window_mismatch_is_rejected_before_case_creation(tmp_path,monkeypatch):
     with pytest.raises(ValueError,match=&quot;Stable window differs&quot;):
         PREPARE.main()
     assert not output.exists()
-</pre></details><details><summary>test_virtual_svr.py — 7 test functions</summary><p><a href="../../tests/test_virtual_svr.py">Open Python source</a></p><ul><li><code>test_3d_interpolation_reproduces_affine_field</code>: 3d interpolation reproduces affine field</li><li><code>test_3d_linear_marks_extrapolation_and_rejects_flat_input</code>: 3d linear marks extrapolation and rejects flat input</li><li><code>test_station_weights_have_equal_totals</code>: station weights have equal totals</li><li><code>test_grouped_scaling_excludes_validation_station_and_model_reloads</code>: grouped scaling excludes validation station and model reloads</li><li><code>test_unseen_sparse_targets_do_not_enter_training_partition</code>: unseen sparse targets do not enter training partition</li><li><code>test_common_support_and_negative_predictions_are_reported</code>: common support and negative predictions are reported</li><li><code>test_iteration_budget_warning_is_not_called_an_epoch</code>: iteration budget warning is not called an epoch</li></ul><pre>&quot;&quot;&quot;Numerical, station-isolation and artifact checks for the CFD/SVR benchmark.&quot;&quot;&quot;
+</pre></details><details><summary>tests/extended/test_virtual_svr.py — 7 test functions</summary><p><a href="../../tests/extended/test_virtual_svr.py">Open Python source</a></p><ul><li><code>test_3d_interpolation_reproduces_affine_field</code>: 3d interpolation reproduces affine field</li><li><code>test_3d_linear_marks_extrapolation_and_rejects_flat_input</code>: 3d linear marks extrapolation and rejects flat input</li><li><code>test_station_weights_have_equal_totals</code>: station weights have equal totals</li><li><code>test_grouped_scaling_excludes_validation_station_and_model_reloads</code>: grouped scaling excludes validation station and model reloads</li><li><code>test_unseen_sparse_targets_do_not_enter_training_partition</code>: unseen sparse targets do not enter training partition</li><li><code>test_common_support_and_negative_predictions_are_reported</code>: common support and negative predictions are reported</li><li><code>test_iteration_budget_warning_is_not_called_an_epoch</code>: iteration budget warning is not called an epoch</li></ul><pre>&quot;&quot;&quot;Numerical, station-isolation and artifact checks for the CFD/SVR benchmark.&quot;&quot;&quot;
 import joblib
 import numpy as np
 import pandas as pd
@@ -1221,4 +1184,70 @@ def test_iteration_budget_warning_is_not_called_an_epoch():
     model,warning=fit_svr(x,y,groups,dict(C=10,gamma=.2,epsilon=.0001),max_iter=1)
     assert warning and model.named_steps[&quot;svr&quot;].fit_status_!=0
     assert model.named_steps[&quot;svr&quot;].n_iter_==1
+</pre></details><details><summary>tests/test_core.py — 5 test functions</summary><p><a href="../../tests/test_core.py">Open Python source</a></p><ul><li><code>test_nearest_neighbor_matches_known_locations</code>: nearest neighbor matches known locations</li><li><code>test_zero_bias_can_hide_large_local_errors</code>: Opposite signed errors cancel in bias, but not in MAE or RMSE.</li><li><code>test_affine_field_reproduction</code>: affine field reproduction</li><li><code>test_linear_extrapolation_is_explicit</code>: linear extrapolation is explicit</li><li><code>test_nested_test_target_does_not_change_its_model</code>: nested test target does not change its model</li></ul><pre>&quot;&quot;&quot;Six core checks for the presentation and the default pytest run.
+
+Five test functions produce six cases: the affine-field test runs once for
+linear interpolation and once for RBF. Optional regression checks are in
+tests/extended. These checks do not certify physical CFD accuracy.
+&quot;&quot;&quot;
+
+import numpy as np
+import pandas as pd
+import pytest
+
+from jetbridge_ml.experimental_svr import evaluate_experimental_plane
+from jetbridge_ml.interpolation import nearest_neighbor
+from jetbridge_ml.interpolation.plane import predict_plane
+from jetbridge_ml.validation.metrics import regression_metrics
+
+# One candidate keeps the leakage check quick; research uses the full grid.
+GRID=dict(C=[.1],gamma=[.1],epsilon=[.002])
+
+
+
+def test_nearest_neighbor_matches_known_locations():
+    locations = np.array([[0.0, 0.0], [2.0, 0.0], [0.0, 2.0]])
+    values = np.array([1.0, 4.0, 9.0])
+    out = nearest_neighbor(locations, values, np.array([[0.1, 0.1], [1.8, 0.0]]))
+    np.testing.assert_array_equal(out, [1.0, 4.0])
+
+
+def test_zero_bias_can_hide_large_local_errors():
+    &quot;&quot;&quot;Opposite signed errors cancel in bias, but not in MAE or RMSE.&quot;&quot;&quot;
+    actual = np.array([0.1, 0.3])
+    predicted = np.array([0.3, 0.1])
+    metrics = regression_metrics(actual, predicted)
+    assert metrics[&quot;bias&quot;] == pytest.approx(0.0, abs=1e-12)
+    assert metrics[&quot;mae&quot;] == pytest.approx(0.2)
+    assert metrics[&quot;rmse&quot;] == pytest.approx(0.2)
+
+
+@pytest.mark.parametrize(&quot;method&quot;, [&quot;linear&quot;, &quot;rbf&quot;])
+def test_affine_field_reproduction(method):
+    x = np.array([[0, 0], [1, 0], [0, 1], [1, 1], [.5, .5]])
+    q = np.array([[.2, .3], [.6, .8]])
+    result = predict_plane(method, x, 2 + 3*x[:, 0] - x[:, 1], q)
+    np.testing.assert_allclose(result, 2 + 3*q[:, 0] - q[:, 1], atol=1e-12)
+
+
+def test_linear_extrapolation_is_explicit():
+    x = np.array([[0, 0], [1, 0], [0, 1]])
+    result = predict_plane(&quot;linear&quot;, x, [1, 1, 1], [[.2, .2], [2, 2]])
+    assert result[0] == pytest.approx(1)
+    assert np.isnan(result[1])
+
+
+def test_nested_test_target_does_not_change_its_model():
+    x,y=np.meshgrid([0.,.5,1.],[0.,.5,1.])
+    frame=pd.DataFrame(dict(x_m=x.ravel(),y_m=y.ravel(),z_m=3.05,
+                            speed_mps=.1+.02*x.ravel()+.01*y.ravel(),source_row=np.arange(9),run_id=&#x27;one&#x27;))
+    first,_,audit=evaluate_experimental_plane(frame,GRID)
+    changed=frame.copy(); changed.loc[0,&#x27;speed_mps&#x27;]=9.
+    second,_,_=evaluate_experimental_plane(changed,GRID)
+    a=first[(first.fold==0)&amp;(first.method==&#x27;svr&#x27;)].iloc[0]
+    b=second[(second.fold==0)&amp;(second.method==&#x27;svr&#x27;)].iloc[0]
+    assert a.prediction_mps==b.prediction_mps
+    for item in audit[audit.outer_source_row==0].itertuples():
+        assert &#x27;0&#x27; not in item.outer_training_source_rows.split(&#x27;;&#x27;)
+        assert set(item.training_indices.split(&#x27;;&#x27;)).isdisjoint(item.validation_indices.split(&#x27;;&#x27;))
 </pre></details></body></html>

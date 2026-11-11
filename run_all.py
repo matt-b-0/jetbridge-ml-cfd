@@ -145,7 +145,7 @@ class Demo:
         shutil.copytree(BUNDLE / 'field_tables', tables)
         if quality:
             self.module('lint', 'ruff', ['check', 'src', 'tests', 'run_all.py'], 'static correctness checks')
-            self.module('tests', 'pytest', ['-q', '-p', 'no:cacheprovider', '--junitxml', out / 'test-results.xml'], 'numerical/software tests')
+            self.module('tests', 'pytest', ['tests', '-q', '-p', 'no:cacheprovider', '--junitxml', out / 'test-results.xml'], 'full numerical/software tests')
         mesh = ROOT / 'cfd/cases/empty_bridge_s01_a_10_hn_1/system/blockMeshDict'
         iso = metadata / 'iso'
         iso_comparisons = BUNDLE / 'iso_comparisons'

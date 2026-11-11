@@ -60,7 +60,7 @@ def main():
             preview = previews / f'slide-{number:02d}.png'
             shutil.copyfile(args.renders / f'slide-{number}.png', preview)
             slides.append(dict(number=number, title=title, notes=notes, preview=f'slides/{preview.name}'))
-    notes_md = '# Speaker notes\n\nMain talk: slides 1–9, target 300 seconds. All remaining slides are for questions. Current delivery notes are extracted from the packaged PowerPoint below; older nested evidence notes are omitted from this readable copy and remain in the deck.\n'
+    notes_md = '# Speaker notes\n\nMain talk: slides 1–6, target 270 seconds including the browser demonstration, leaving 30 seconds for transitions. All remaining slides are for questions. Current delivery notes are extracted from the packaged PowerPoint below; older nested evidence notes are omitted from this readable copy and remain in the deck.\n'
     for slide in slides:
         delivery = slide['notes'].split('Previous evidence notes:')[0].strip()
         notes_md += f'\n## Slide {slide["number"]}: {slide["title"]}\n\n{delivery}\n'
@@ -69,33 +69,36 @@ def main():
 
 Use this page as the entry point during the presentation. It is readable directly on GitHub.
 
-- [Download the PowerPoint](Jet_Bridge_Presentation.pptx?raw=true) — nine main slides with timed speaker notes, followed by eleven backup slides.
+- [Download the PowerPoint](Jet_Bridge_Presentation.pptx?raw=true) — six main slides with timed speaker notes. Fourteen optional backup slides are hidden during the slideshow.
 - [Five-minute tutorial and questions](PRESENTATION_TUTORIAL.md).
+- [Short source-code guide matched to the submitted report](../html/REPORT_CODE_GUIDE.md).
+- [Exact submitted report PDF](../report/MMA3001_Jet_Bridge_FinalSubmission.pdf).
 - [Tests explained line by line](TEST_WALKTHROUGH.md).
 - [Speaker notes extracted from the deck](SPEAKER_NOTES.md).
-- [Actual demonstration test source](../../tests/test_presentation_examples.py).
-- [Actual SVR leakage/scaling test source](../../tests/test_four_workstreams.py).
+- [The six core checks, including SVR leakage](../../tests/test_core.py).
+- [Optional inner-scaling and other regression checks](../../tests/extended/test_four_workstreams.py).
 - [Repository setup and reproduction](../../README.md).
 
-Fresh scientific-worker checks on 11 November: **128 passed, 1 skipped**; Ruff passed. The native Tk layout module was skipped in WSL. Earlier native GUI evidence remains separately dated. Scientific results are unchanged.
+The default test run is now **six cases in one file**, all passing. The wider regressions are optional for the presentation and remain in tests/extended. The full WSL collection still reports **128 passed, 1 skipped**; GitHub CI and the full demo quality gate retain that collection. Ruff passed. Scientific results are unchanged.
 
 ## HTML pages
 
 GitHub's file viewer displays HTML source rather than running the page. To use the interactive tutorial, API documentation and readable test report, choose **Code → Download ZIP**, extract it, and open `docs/presentation/index.html`. All required pages are included and work offline. No Python or OpenFOAM installation is needed to read them. Running the numerical workflows requires the documented environment.
 
 The local tutorial links the complete test source catalogue and current API. Two Tk-only module references are explicitly generated from source; they are not evidence of successful native execution.
+The starting HTML now focuses on the submitted report and six relevant functions. The full API and extended tests are optional background. The deck's backup metric example is now in tests/test_core.py; use the current walkthrough for test locations.
 
 ## Main slides — browser fallback
 
 Use these images if PowerPoint is unavailable. Each image is rendered from the packaged deck; editable slides and notes remain in the PPTX.
 '''
-    for slide in slides[:9]:
+    for slide in slides[:6]:
         landing += f'\n### {slide["number"]}. {slide["title"]}\n\n![Slide {slide["number"]}: {slide["title"]}]({slide["preview"]})\n'
     landing += '\n## Backup slides\n\n'
-    for slide in slides[9:]:
+    for slide in slides[6:]:
         landing += f'- [{slide["number"]}. {slide["title"]}]({slide["preview"]})\n'
     (output / 'README.md').write_text(landing, encoding='utf-8')
-    manifest = dict(deck=deck.name, deck_sha256=sha256(deck.read_bytes()).hexdigest(), main_slides=9, total_slides=len(slides), previews={s['preview']: sha256((output / s['preview']).read_bytes()).hexdigest() for s in slides})
+    manifest = dict(deck=deck.name, deck_sha256=sha256(deck.read_bytes()).hexdigest(), main_slides=6, total_slides=len(slides), previews={s['preview']: sha256((output / s['preview']).read_bytes()).hexdigest() for s in slides})
     (output / 'package_manifest.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
     print(f'Packaged {len(slides)} slide previews, PPTX and extracted speaker notes in {output}')
 

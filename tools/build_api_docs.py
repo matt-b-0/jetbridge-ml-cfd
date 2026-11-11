@@ -8,6 +8,7 @@ import importlib.util
 from pathlib import Path
 import subprocess
 import sys
+import shutil
 
 
 def main():
@@ -29,6 +30,9 @@ def main():
         args.extend(['!jetbridge_ml.gui.app', '!jetbridge_ml.gui.progress'])
     args.extend(['-d', 'numpy', '-o', str(root / 'docs/html')])
     subprocess.run(args, cwd=root, check=True)
+    # Keep the full reference optional; restore the short report guide as home.
+    shutil.copyfile(root / 'docs/html/jetbridge_ml.html', root / 'docs/html/full_api.html')
+    subprocess.run([sys.executable, str(root / 'tools/build_report_guide.py')], cwd=root, check=True)
     print(f'Generated {len(modules)} explicitly named API modules; Tk import available: {has_tk}')
 
 

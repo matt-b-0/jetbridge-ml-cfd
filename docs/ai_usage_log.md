@@ -110,3 +110,31 @@ The associated GUI/Reconstruction Lab source, tests and documentation are
 included so the presentation's described features are available from a clone.
 GitHub HTML files require downloading/extracting the repository to run; the
 Markdown guide and PNG slides provide a browser-readable fallback on GitHub.
+
+At the student's request to simplify the test collection, Codex moved six
+existing cases into tests/test_core.py and placed remaining regressions under
+tests/extended. The default pytest command runs only the core file; CI and
+the full demo quality gate explicitly collect both sets. The core run passed
+all six cases in 6.02 seconds; the full relocated collection retained 128
+passes and one skipped native Tk module. No scientific checks were removed
+or duplicated. Documentation now leads with the core file and shorter talk
+route. These remain software/numerical checks rather than physical validation.
+
+The student supplied MMA3001_Jet_Bridge_FinalSubmission.pdf and requested a
+much simpler HTML guide based on the submitted report. Codex verified that
+the supplied PDF matches the local final submission byte-for-byte, bundled
+it unchanged, and mapped six actual functions to report pages 2–4. The guide
+documents their inputs, outputs, purpose and exact collapsible source. Full
+pdoc pages remain optional background; presentation entry pages focus on the
+report, six core tests and their result. The report's original 82-test snapshot
+is distinguished from later test organisation. No report results, CFD model
+or student AI statement were changed. Publication is explicitly authorised
+by the student's request to reflect these simplifications on GitHub.
+
+The deck was reordered to six main slides with a 270-second target including
+a short documentation/test demonstration. Fourteen supporting slides remain
+hidden during the slideshow. Notes and the backup metric example now point
+to tests/test_core.py. Headless Edge checks verified the four simplified HTML
+entry pages at 1280, 800 and 390 pixels, including source disclosure and no
+JavaScript errors; screenshots were reviewed. Presentation package/layout
+checks passed. The report PDF remains byte-identical to the supplied file.

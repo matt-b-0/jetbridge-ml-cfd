@@ -10,7 +10,7 @@ import pandas as pd
 import pytest
 from jetbridge_ml.cfd_interface.report_figures import read_archived_grid
 
-spec=importlib.util.spec_from_file_location('demo_runner',Path(__file__).resolve().parents[1]/'run_all.py')
+spec=importlib.util.spec_from_file_location('demo_runner',Path(__file__).resolve().parents[2]/'run_all.py')
 runner=importlib.util.module_from_spec(spec)
 spec.loader.exec_module(runner)
 

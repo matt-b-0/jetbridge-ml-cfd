@@ -51,7 +51,7 @@ def test_gallery_excludes_raw_and_point_data(tmp_path):
 
 
 def test_isolated_case_scaling_and_preserved_geometry(tmp_path):
-    repo=Path(__file__).resolve().parents[1]
+    repo=Path(__file__).resolve().parents[2]
     baseline=repo/'cfd/cases/empty_bridge_s01_a_10_hn_1'
     output=tmp_path/'flow'
     spec=prepare_case(baseline,output,'flow80')

@@ -24,7 +24,8 @@ dev = ["pytest>=7.4", "pdoc>=14", "ruff>=0.6"]
 where = ["src"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+# A short default run; `python -m pytest tests` includes optional regressions.
+testpaths = ["tests/test_core.py"]
 
 [tool.ruff]
 target-version = "py310"

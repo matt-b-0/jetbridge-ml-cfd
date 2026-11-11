@@ -11,7 +11,7 @@ if os.name!='nt' and not os.environ.get('DISPLAY'):
 
 from jetbridge_ml.gui.app import App
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 
 
 def settle(window):

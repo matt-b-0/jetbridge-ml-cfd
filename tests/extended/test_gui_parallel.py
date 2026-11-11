@@ -43,7 +43,7 @@ def test_cancellation_stops_mpi_ranks(tmp_path):
     import time
     from pathlib import Path
     from jetbridge_ml.gui.workflow import Job, Cancelled
-    root = Path(__file__).resolve().parents[1]
+    root = Path(__file__).resolve().parents[2]
     output = tmp_path/'job'
     output.mkdir()
     job = Job(root, output, RunSpec(kind='fresh', processes=2))

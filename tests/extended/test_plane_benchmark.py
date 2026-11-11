@@ -39,19 +39,8 @@ def test_parser_rejects_wrong_units_and_truncation(tmp_path):
         read_speed_average(path)
 
 
-@pytest.mark.parametrize("method", ["linear", "rbf"])
-def test_affine_field_reproduction(method):
-    x = np.array([[0, 0], [1, 0], [0, 1], [1, 1], [.5, .5]])
-    q = np.array([[.2, .3], [.6, .8]])
-    result = predict_plane(method, x, 2 + 3*x[:, 0] - x[:, 1], q)
-    np.testing.assert_allclose(result, 2 + 3*q[:, 0] - q[:, 1], atol=1e-12)
 
 
-def test_linear_extrapolation_is_explicit():
-    x = np.array([[0, 0], [1, 0], [0, 1]])
-    result = predict_plane("linear", x, [1, 1, 1], [[.2, .2], [2, 2]])
-    assert result[0] == pytest.approx(1)
-    assert np.isnan(result[1])
 
 
 def test_repeated_locations_never_cross_split():

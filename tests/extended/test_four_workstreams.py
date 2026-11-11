@@ -12,19 +12,6 @@ from jetbridge_ml.cfd_interface.thermal_audit import read_probe_trace
 GRID=dict(C=[.1],gamma=[.1],epsilon=[.002])
 
 
-def test_nested_test_target_does_not_change_its_model():
-    x,y=np.meshgrid([0.,.5,1.],[0.,.5,1.])
-    frame=pd.DataFrame(dict(x_m=x.ravel(),y_m=y.ravel(),z_m=3.05,
-                            speed_mps=.1+.02*x.ravel()+.01*y.ravel(),source_row=np.arange(9),run_id='one'))
-    first,_,audit=evaluate_experimental_plane(frame,GRID)
-    changed=frame.copy(); changed.loc[0,'speed_mps']=9.
-    second,_,_=evaluate_experimental_plane(changed,GRID)
-    a=first[(first.fold==0)&(first.method=='svr')].iloc[0]
-    b=second[(second.fold==0)&(second.method=='svr')].iloc[0]
-    assert a.prediction_mps==b.prediction_mps
-    for item in audit[audit.outer_source_row==0].itertuples():
-        assert '0' not in item.outer_training_source_rows.split(';')
-        assert set(item.training_indices.split(';')).isdisjoint(item.validation_indices.split(';'))
 
 
 def test_inner_scaling_and_location_groups_exclude_validation():

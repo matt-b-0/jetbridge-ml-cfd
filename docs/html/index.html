@@ -1,7 +1,321 @@
-<!doctype html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="refresh" content="0; url=./jetbridge_ml.html"/>
-</head>
-</html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Code behind my submitted report</title><style>
+body{max-width:960px;margin:auto;padding:30px 24px 60px;background:#fff;color:#193242;font:19px/1.6 system-ui,sans-serif}
+h1{font-size:38px;line-height:1.15;margin-bottom:12px}h2{font-size:27px;margin-top:38px;color:#006d73}h3{font-size:21px;margin-bottom:8px}
+nav{display:flex;gap:24px;flex-wrap:wrap;border-block:1px solid #cfdbdf;padding:13px 0;margin:24px 0}a{color:#006d73}
+table{width:100%;border-collapse:collapse;margin:18px 0;font-size:17px}th,td{padding:10px;border-bottom:1px solid #d6e0e4;text-align:left;vertical-align:top}th{background:#eff5f6}
+pre{font:15px/1.55 Consolas,monospace;overflow:auto;background:#f2f5f6;padding:18px}code{font-family:Consolas,monospace;font-size:.88em}
+details{padding:14px 0;border-bottom:1px solid #d6e0e4}summary{cursor:pointer;font-weight:650}.muted{color:#566873}.result{font-size:21px;font-weight:650}
+@media(max-width:650px){body{font-size:17px;padding:22px 15px}h1{font-size:31px}table{font-size:14px}th,td{padding:7px}nav{gap:15px}}
+@media print{details{break-inside:avoid}body{font-size:11pt}nav{display:none}}
+</style></head><body><h1>Code behind my submitted report</h1>
+<p>A short guide to <em>Jet Bridge Air Speed Reconstruction</em>, submitted 27 October 2026. Start here for the presentation.</p>
+<nav><a href="#report">The report</a><a href="#code">The code</a><a href="../presentation/test_walkthrough.html">Six tests</a></nav>
+<h2 id="report">1. The report in one minute</h2>
+<p><strong>Question:</strong> can sparse sensor measurements reconstruct air speed across a jet bridge, and does SVR improve on simpler interpolation?</p>
+<p><strong>Workflow:</strong> read measured speeds → hide one sensor → fit the retained sensors → predict the hidden speed → compare errors.</p>
+<p>Inputs are sensor positions in metres and scalar speeds in m/s. Outputs are predicted speeds, held-location errors and a mask showing spatial support. The study uses 36 averaged files and 504 sensor means from one apparatus.</p>
+<table><tr><th>Method</th><th>Mean per-run RMSE (m/s)</th></tr>
+<tr><td>Mean baseline</td><td>0.06765</td></tr><tr><td>Nearest neighbour</td><td>0.07129</td></tr>
+<tr><td>Linear</td><td>0.05524</td></tr><tr><td>Thin-plate RBF</td><td><strong>0.04959</strong></td></tr><tr><td>SVR</td><td>0.05774</td></tr></table>
+<p class="result">RBF has the lowest aggregate error, but its advantage concentrates at the 58 ft station.</p>
+<p>These scores use the same 360 supported targets. Linear cannot extrapolate; the other 144 targets are reported separately. The sensor hull is the polygon enclosing known sensor positions. More than half of the physical section lies outside that hull in the illustrated layouts. Smooth maps do not establish accuracy there.</p>
+<p>Report pages 6–9 provide supporting CFD, sensitivity and timing evidence. CFD is a separate numerical reference, with unresolved physical bias. The thermal extension is unconverged and excluded from trusted training/reference data.</p>
+<p><a href="../report/MMA3001_Jet_Bridge_FinalSubmission.pdf">Open the exact submitted PDF</a> · <a href="../report/MMA3001_Jet_Bridge_FinalSubmission.pdf#page=10">Read its conclusions</a></p>
+<h2 id="code">2. The six functions worth knowing</h2>
+<p>These are the actual functions used by the report workflow. Each entry explains its inputs, outputs and purpose. Open the code only when you want the implementation detail.</p><h3 id="read_speed_average">Read the measurements — <code>read_speed_average</code></h3>
+<p><strong>Input:</strong> One FAA averaged-data text file.<br><strong>Output:</strong> A table of x, y, z in metres, speed in m/s and run identifiers.<br><strong>What it does:</strong> Checks the file structure, units and coordinates. Converts the -9999 missing-speed marker to NaN; invalid negative/infinite speeds are rejected.</p>
+<p class="muted">Report p. 2 · <a href="../../src/jetbridge_ml/data_processing/faa.py">data_processing/faa.py, line 9</a></p>
+<details><summary>Show this function’s actual code</summary><pre>def read_speed_average(path: str | Path) -&gt; pd.DataFrame:
+    &quot;&quot;&quot;Read one numeric-station FAA BLOCK file.
+
+    Parameters
+    ----------
+    path : str or Path
+        V-Sxx-setup-station-flow-replicate.txt in 03-Averages.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Absolute metre coordinates, speed in m/s, source row and run metadata.
+        Missing speed sentinels become NaN; invalid coordinates are rejected.
+    &quot;&quot;&quot;
+    path = Path(path)
+    match = re.fullmatch(
+        r&quot;V-(S\d+)-([A-Z0-9]+)-(\d+)-(HN|HP|LN|LP)-(\d+[A-Z]?)&quot;, path.stem)
+    if not match:
+        raise ValueError(f&quot;Unsupported replicate filename: {path.name}&quot;)
+    text = path.read_text(encoding=&quot;cp1252&quot;)
+    variables = re.search(r&quot;(?m)^VARIABLES=(.*)$&quot;, text)
+    zones = list(re.finditer(r&quot;(?m)^ZONE\s+(.*)$&quot;, text))
+    if variables is None or len(zones) != 1:
+        raise ValueError(&quot;Expected VARIABLES and exactly one ZONE&quot;)
+    names = re.findall(r&#x27;&quot;([^&quot;]+)&quot;&#x27;, variables[1])
+    expected = [&quot;X (m)&quot;, &quot;Y (m)&quot;, &quot;Z (m)&quot;, &quot;Mean&quot;, &quot;dMean&quot;, &quot;Median&quot;, &quot;dMedian&quot;, &quot;StdDev&quot;]
+    if names != expected:
+        raise ValueError(f&quot;Unexpected units/variables: {names}&quot;)
+    header = zones[0][1]
+    dims = [re.search(rf&quot;\b{axis}\s*=\s*(\d+)&quot;, header) for axis in &quot;IJK&quot;]
+    if not all(dims) or not re.search(r&quot;\bF\s*=\s*BLOCK\b&quot;, header):
+        raise ValueError(&quot;Expected I/J/K dimensions and F=BLOCK&quot;)
+    count = int(np.prod([int(dim[1]) for dim in dims]))
+    tokens = text[zones[0].end():].split()
+    values = np.array([float(token) for token in tokens])
+    if count &lt; 4 or values.size != count * len(names):
+        raise ValueError(&quot;BLOCK data length does not match dimensions&quot;)
+    data = values.reshape(len(names), count)
+    xyz = data[:3].T
+    if not np.isfinite(xyz).all() or np.any(xyz == -9999):
+        raise ValueError(&quot;Invalid sensor coordinates&quot;)
+    if np.unique(xyz, axis=0).shape[0] != count or np.ptp(xyz[:, 2]) &gt; 1e-9:
+        raise ValueError(&quot;Expected unique coordinates on one z plane&quot;)
+    speed = data[3].copy()
+    speed[speed == -9999] = np.nan
+    if np.isinf(speed).any() or np.any(speed[np.isfinite(speed)] &lt; 0):
+        raise ValueError(&quot;Invalid negative/infinite speed&quot;)
+    config, setup, station, flow, replicate = match.groups()
+    frame = pd.DataFrame(xyz, columns=[&quot;x_m&quot;, &quot;y_m&quot;, &quot;z_m&quot;])
+    frame[&quot;speed_mps&quot;] = speed
+    frame[&quot;source_row&quot;] = np.arange(count)
+    frame[&quot;run_id&quot;] = path.stem[2:]
+    frame[&quot;config&quot;], frame[&quot;setup&quot;] = config, setup
+    frame[&quot;station_ft&quot;], frame[&quot;flow&quot;], frame[&quot;replicate&quot;] = int(station), flow, replicate
+    return frame</pre></details><h3 id="predict_plane">Apply an interpolation method — <code>predict_plane</code></h3>
+<p><strong>Input:</strong> A method name, retained sensor coordinates and speeds, and query coordinates.<br><strong>Output:</strong> One predicted speed per query; linear gives NaN outside the sensor hull.<br><strong>What it does:</strong> Chooses nearest neighbour, linear or thin-plate RBF. It uses the coordinates supplied by the caller; the report workflow supplies training-only standardised coordinates.</p>
+<p class="muted">Report p. 3 · <a href="../../src/jetbridge_ml/interpolation/plane.py">interpolation/plane.py, line 8</a></p>
+<details><summary>Show this function’s actual code</summary><pre>def predict_plane(method: str, locations, values, queries) -&gt; np.ndarray:
+    &quot;&quot;&quot;Predict scalar speeds using metre x/y coordinates.
+
+    Parameters
+    ----------
+    method : str
+        nearest, linear, or rbf (thin-plate spline, degree 1, no smoothing).
+    locations, queries : array-like
+        Finite arrays of shape (n, 2) and (m, 2).
+    values : array-like
+        Finite scalar training values, shape (n,).
+
+    Returns
+    -------
+    numpy.ndarray
+        Predictions; linear returns NaN outside the training convex hull.
+        RBF may extrapolate or predict negative values; no clipping is applied.
+
+    Raises
+    ------
+    ValueError
+        If the method is unknown, arrays have incompatible shapes, values are
+        non-finite, or fewer than three unique non-collinear sensors are given.
+
+    Notes
+    -----
+    This function uses the coordinates supplied by its caller. The nested
+    experimental workflow supplies training-only standardised coordinates;
+    direct calls may supply metre coordinates. These distance conventions
+    should not be mixed when comparing experiments.
+    &quot;&quot;&quot;
+    x, q = np.asarray(locations, float), np.asarray(queries, float)
+    y = np.asarray(values, float)
+    if (x.ndim != 2 or x.shape[1] != 2 or q.ndim != 2 or q.shape[1] != 2
+            or y.shape != (len(x),) or len(x) &lt; 3):
+        raise ValueError(&quot;Expected at least three training points in two dimensions&quot;)
+    if not all(np.isfinite(a).all() for a in (x, y, q)):
+        raise ValueError(&quot;Inputs must be finite&quot;)
+    if len(np.unique(x, axis=0)) != len(x):
+        raise ValueError(&quot;Duplicate training coordinates&quot;)
+    if np.linalg.matrix_rank(x - x.mean(axis=0)) &lt; 2:
+        raise ValueError(&quot;Training coordinates must span a plane&quot;)
+    if method == &quot;nearest&quot;:
+        return nearest_neighbor(x, y, q)
+    if method == &quot;linear&quot;:
+        return np.asarray(LinearNDInterpolator(x, y, fill_value=np.nan)(q)).reshape(-1)
+    if method == &quot;rbf&quot;:
+        return RBFInterpolator(x, y, kernel=&quot;thin_plate_spline&quot;, degree=1, smoothing=0)(q)
+    raise ValueError(f&quot;Unknown method: {method}&quot;)</pre></details><h3 id="select_plane_svr">Choose SVR settings — <code>select_plane_svr</code></h3>
+<p><strong>Input:</strong> Training coordinates and speeds, with optional location groups and parameter grid.<br><strong>Output:</strong> A fitted SVR, selected settings, search results and split/scaler audit.<br><strong>What it does:</strong> Uses three inner folds. Scaling is fitted inside each training fold. The outer hidden sensor must already have been excluded by the caller.</p>
+<p class="muted">Report p. 3 · <a href="../../src/jetbridge_ml/machine_learning/selection.py">machine_learning/selection.py, line 11</a></p>
+<details><summary>Show this function’s actual code</summary><pre>def select_plane_svr(x, y, groups=None, grid=None):
+    &quot;&quot;&quot;Tune an SVR using three grouped training-only folds.
+
+    Parameters
+    ----------
+    x, y : array-like
+        Finite training coordinates and speed targets; outer test is excluded.
+    groups : array-like, optional
+        Location group per row. Defaults to one unique group per coordinate.
+    grid : dict, optional
+        Predefined C/gamma/epsilon values, independent of outer test targets.
+
+    Returns
+    -------
+    tuple
+        Fitted model, selected parameters, search table and inner split audit.
+
+    Raises
+    ------
+    ValueError
+        If inputs are non-finite or incorrectly shaped, or fewer than three
+        training location groups are available.
+    RuntimeError
+        If an inner or final SVR fit fails its optimisation convergence check.
+
+    Notes
+    -----
+    The caller must exclude its outer test target before calling. Scaling is
+    refitted on each inner training fold, and selection minimises mean inner
+    fold RMSE. The predefined search is bounded, not a global optimum claim.
+    &quot;&quot;&quot;
+    x,y=np.asarray(x,float),np.asarray(y,float)
+    if x.ndim!=2 or x.shape[1]!=2 or y.shape!=(len(x),) or not np.isfinite(x).all() or not np.isfinite(y).all():
+        raise ValueError(&#x27;Finite two-dimensional coordinates and scalar targets required&#x27;)
+    if groups is None:
+        _,groups=np.unique(x,axis=0,return_inverse=True)
+    groups=np.asarray(groups)
+    if len(np.unique(groups))&lt;3:
+        raise ValueError(&#x27;At least three training location groups required&#x27;)
+    grid=grid or DEFAULT_GRID
+    splits=list(GroupKFold(n_splits=3).split(x,y,groups))
+    rows,audit=[],[]
+    for number,(c,g,e) in enumerate(itertools.product(grid[&#x27;C&#x27;],grid[&#x27;gamma&#x27;],grid[&#x27;epsilon&#x27;]),1):
+        errors=[]
+        params=dict(C=c,gamma=g,epsilon=e)
+        for fold,(train,validation) in enumerate(splits):
+            model,warning=fit_svr(x[train],y[train],groups[train],params)
+            if warning or model.named_steps[&#x27;svr&#x27;].fit_status_:
+                raise RuntimeError(&#x27;Inner SVR optimization did not converge&#x27;)
+            error=float(np.sqrt(np.mean((model.predict(x[validation])-y[validation])**2)))
+            errors.append(error)
+            audit.append(dict(candidate=number,inner_fold=fold,
+                              training_indices=&#x27;;&#x27;.join(map(str,train)),validation_indices=&#x27;;&#x27;.join(map(str,validation)),
+                              scaler_mean=&#x27;;&#x27;.join(map(str,model.named_steps[&#x27;standardscaler&#x27;].mean_)),rmse=error))
+        rows.append(dict(candidate=number,**params,cv_rmse=float(np.mean(errors))))
+    search=pd.DataFrame(rows)
+    best=search.sort_values([&#x27;cv_rmse&#x27;,&#x27;candidate&#x27;]).iloc[0]
+    params={k:float(best[k]) for k in (&#x27;C&#x27;,&#x27;gamma&#x27;,&#x27;epsilon&#x27;)}
+    model,warning=fit_svr(x,y,groups,params)
+    if warning or model.named_steps[&#x27;svr&#x27;].fit_status_:
+        raise RuntimeError(&#x27;Final SVR optimization did not converge&#x27;)
+    return model,params,search,pd.DataFrame(audit)</pre></details><h3 id="evaluate_experimental_plane">Predict sensors that were hidden — <code>evaluate_experimental_plane</code></h3>
+<p><strong>Input:</strong> One experimental run; an optional SVR search grid.<br><strong>Output:</strong> Held-location predictions, parameter-search records and split/scaler audits.<br><strong>What it does:</strong> Removes one location before tuning, predicts it with all five methods, and repeats for every location. Each experimental run is fitted separately.</p>
+<p class="muted">Report p. 3 · <a href="../../src/jetbridge_ml/experimental_svr.py">experimental_svr.py, line 23</a></p>
+<details><summary>Show this function’s actual code</summary><pre>def evaluate_experimental_plane(frame,grid=None):
+    &quot;&quot;&quot;Withhold each location before tuning on one independent replicate.
+
+    Parameters
+    ----------
+    frame : pandas.DataFrame
+        One FAA replicate, with unique absolute xyz and scalar speed.
+    grid : dict, optional
+        Training-only SVR hyperparameter grid.
+
+    Returns
+    -------
+    tuple
+        Outer predictions, search records and nested split/scaler audit.
+    &quot;&quot;&quot;
+    if frame.run_id.nunique()!=1 or frame[[&#x27;x_m&#x27;,&#x27;y_m&#x27;]].duplicated().any():
+        raise ValueError(&#x27;One replicate with unique sensor locations required&#x27;)
+    valid=frame[np.isfinite(frame.speed_mps)].reset_index(drop=True)
+    x=valid[[&#x27;x_m&#x27;,&#x27;y_m&#x27;]].to_numpy()
+    y=valid.speed_mps.to_numpy()
+    predictions,searches,audits=[],[],[]
+    for heldout in range(len(valid)):
+        train=np.delete(np.arange(len(valid)),heldout)
+        model,params,search,audit=select_plane_svr(x[train],y[train],grid=grid)
+        scaler=model.named_steps[&#x27;standardscaler&#x27;]
+        tx,qx=scaler.transform(x[train]),scaler.transform(x[[heldout]])
+        inside=bool(Delaunay(tx).find_simplex(qx,tol=1e-10)[0]&gt;=0)
+        for method in METHODS:
+            if method==&#x27;mean&#x27;:
+                pred=np.array([y[train].mean()])
+            else:
+                pred=model.predict(x[[heldout]]) if method==&#x27;svr&#x27; else predict_plane(method,tx,y[train],qx)
+            row=valid.iloc[heldout].to_dict()
+            row.update(method=method,fold=heldout,prediction_mps=float(pred[0]),inside_hull=inside,
+                       target_available=True,train_rows=&#x27;;&#x27;.join(map(str,valid.iloc[train].source_row)))
+            if method==&#x27;svr&#x27;:
+                row.update(params)
+            predictions.append(row)
+        for table in (search,audit):
+            table[&#x27;run_id&#x27;]=frame.run_id.iloc[0]
+            table[&#x27;outer_source_row&#x27;]=int(valid.source_row.iloc[heldout])
+        # Inner indices refer only to these outer training rows, never to test.
+        audit[&#x27;outer_training_source_rows&#x27;]=&#x27;;&#x27;.join(map(str,valid.iloc[train].source_row))
+        audit[&#x27;outer_scaler_mean&#x27;]=&#x27;;&#x27;.join(map(str,scaler.mean_))
+        searches.append(search)
+        audits.append(audit)
+    return pd.DataFrame(predictions),pd.concat(searches),pd.concat(audits)</pre></details><h3 id="regression_metrics">Calculate prediction error — <code>regression_metrics</code></h3>
+<p><strong>Input:</strong> Reference speeds and predictions at the same supported locations.<br><strong>Output:</strong> RMSE, MAE and signed bias, all in m/s when the inputs are m/s.<br><strong>What it does:</strong> Computes prediction minus observation. Rejects empty, mismatched or non-finite arrays. Positive bias means overprediction.</p>
+<p class="muted">Report p. 4 · <a href="../../src/jetbridge_ml/validation/metrics.py">validation/metrics.py, line 5</a></p>
+<details><summary>Show this function’s actual code</summary><pre>def regression_metrics(actual: np.ndarray, predicted: np.ndarray) -&gt; dict[str, float]:
+    &quot;&quot;&quot;Return RMSE, MAE and signed mean prediction bias in input units.
+
+    Parameters
+    ----------
+    actual : numpy.ndarray
+        Held-out reference observations, shape (n,).
+    predicted : numpy.ndarray
+        Predictions at identical locations, shape (n,).
+
+    Returns
+    -------
+    dict of str to float
+        ``rmse``, ``mae`` and ``bias`` (predicted minus actual).
+
+    Raises
+    ------
+    ValueError
+        If arrays are empty, have unequal flattened lengths, or contain
+        non-finite values. Restrict to common supported targets explicitly
+        before calling; unsupported predictions are not silently dropped.
+
+    Notes
+    -----
+    Positive bias means overprediction. Opposite errors can cancel in bias
+    while RMSE and MAE remain positive. With speeds in m/s, all three metrics
+    are in m/s. These metrics do not certify physical validation.
+    &quot;&quot;&quot;
+    a = np.asarray(actual, dtype=float).reshape(-1)
+    p = np.asarray(predicted, dtype=float).reshape(-1)
+    if a.size == 0 or a.shape != p.shape or not np.isfinite(a).all() or not np.isfinite(p).all():
+        raise ValueError(&#x27;actual and predicted must be equal-size finite nonempty arrays&#x27;)
+    err = p-a
+    return {
+        &#x27;rmse&#x27;: float(np.sqrt(np.mean(err**2))),
+        &#x27;mae&#x27;: float(np.mean(np.abs(err))),
+        &#x27;bias&#x27;: float(np.mean(err)),
+    }</pre></details><h3 id="summarize">Compare methods fairly — <code>summarize</code></h3>
+<p><strong>Input:</strong> The table of held-location predictions and hull flags.<br><strong>Output:</strong> Per-run method errors and coverage for inside, outside and all targets.<br><strong>What it does:</strong> Keeps unsupported queries visible in coverage counts. The report then averages the per-run errors equally over runs; it does not pool every error into one RMSE.</p>
+<p class="muted">Report p. 4 · <a href="../../src/jetbridge_ml/benchmark.py">benchmark.py, line 60</a></p>
+<details><summary>Show this function’s actual code</summary><pre>def summarize(predictions):
+    &quot;&quot;&quot;Return coverage and errors on common hull points and extrapolation separately.
+
+    Parameters
+    ----------
+    predictions : pandas.DataFrame
+        Per-fold output from evaluate_plane.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Run/method/subset metrics; counts include unsupported predictions.
+    &quot;&quot;&quot;
+    rows = []
+    for (run, method), group in predictions.groupby([&quot;run_id&quot;, &quot;method&quot;], sort=True):
+        for subset in (&quot;common_hull&quot;, &quot;outside_hull&quot;, &quot;all&quot;):
+            selected = group[group.target_available]
+            if subset != &quot;all&quot;:
+                selected = selected[selected.inside_hull == (subset == &quot;common_hull&quot;)]
+            valid = selected[np.isfinite(selected.prediction_mps)]
+            metrics = regression_metrics(valid.speed_mps, valid.prediction_mps) if len(valid) else dict(rmse=np.nan, mae=np.nan, bias=np.nan)
+            rows.append(dict(run_id=run, method=method, subset=subset,
+                             n_requested=len(selected), n_predicted=len(valid),
+                             coverage=len(valid)/len(selected) if len(selected) else np.nan,
+                             negative_predictions=int((valid.prediction_mps &lt; 0).sum()),
+                             **metrics))
+    return pd.DataFrame(rows)</pre></details><h2>3. Show one simple test</h2>
+<p>All six core checks are in <a href="../../tests/test_core.py">tests/test_core.py</a>. Run them from the repository root in the scientific environment:</p>
+<pre>PYTHONPATH=src python -m pytest -v</pre>
+<p>For the talk, explain the metric test: errors of +0.2 and −0.2 m/s give zero bias, but MAE and RMSE are still 0.2 m/s. Then point to the passing result.</p>
+<p><a href="../presentation/test_walkthrough.html">Explain the six checks</a> · <a href="../presentation/test_report.html">See the six-test result</a> · <a href="../presentation/PRESENTATION_TUTORIAL.md">Short presentation plan</a></p>
+<details><summary>Optional: the full API reference</summary><p><a href="full_api.html">Open all generated API documentation</a>. This is background reference; the six functions above are sufficient for the main source-code demonstration.</p></details>
+<p class="muted">The submitted report records its original 82-test development snapshot. Current organisation: six core cases by default; the full regression collection has 128 passes and one skipped native-GUI module. This later documentation/test reorganisation changes no report results.</p></body></html>

@@ -2,21 +2,24 @@
 
 Use this page as the entry point during the presentation. It is readable directly on GitHub.
 
-- [Download the PowerPoint](Jet_Bridge_Presentation.pptx?raw=true) — nine main slides with timed speaker notes, followed by eleven backup slides.
+- [Download the PowerPoint](Jet_Bridge_Presentation.pptx?raw=true) — six main slides with timed speaker notes. Fourteen optional backup slides are hidden during the slideshow.
 - [Five-minute tutorial and questions](PRESENTATION_TUTORIAL.md).
+- [Short source-code guide matched to the submitted report](../html/REPORT_CODE_GUIDE.md).
+- [Exact submitted report PDF](../report/MMA3001_Jet_Bridge_FinalSubmission.pdf).
 - [Tests explained line by line](TEST_WALKTHROUGH.md).
 - [Speaker notes extracted from the deck](SPEAKER_NOTES.md).
-- [Actual demonstration test source](../../tests/test_presentation_examples.py).
-- [Actual SVR leakage/scaling test source](../../tests/test_four_workstreams.py).
+- [The six core checks, including SVR leakage](../../tests/test_core.py).
+- [Optional inner-scaling and other regression checks](../../tests/extended/test_four_workstreams.py).
 - [Repository setup and reproduction](../../README.md).
 
-Fresh scientific-worker checks on 11 November: **128 passed, 1 skipped**; Ruff passed. The native Tk layout module was skipped in WSL. Earlier native GUI evidence remains separately dated. Scientific results are unchanged.
+The default test run is now **six cases in one file**, all passing. The wider regressions are optional for the presentation and remain in tests/extended. The full WSL collection still reports **128 passed, 1 skipped**; GitHub CI and the full demo quality gate retain that collection. Ruff passed. Scientific results are unchanged.
 
 ## HTML pages
 
 GitHub's file viewer displays HTML source rather than running the page. To use the interactive tutorial, API documentation and readable test report, choose **Code → Download ZIP**, extract it, and open `docs/presentation/index.html`. All required pages are included and work offline. No Python or OpenFOAM installation is needed to read them. Running the numerical workflows requires the documented environment.
 
 The local tutorial links the complete test source catalogue and current API. Two Tk-only module references are explicitly generated from source; they are not evidence of successful native execution.
+The starting HTML now focuses on the submitted report and six relevant functions. The full API and extended tests are optional background. The deck's backup metric example is now in tests/test_core.py; use the current walkthrough for test locations.
 
 ## Main slides — browser fallback
 
@@ -42,24 +45,15 @@ Use these images if PowerPoint is unavailable. Each image is rendered from the p
 
 ![Slide 5: RBF has the lowest aggregate error](slides/slide-05.png)
 
-### 6. CFD setup and initial conditions
+### 6. Limitations and AI reflection
 
-![Slide 6: CFD setup and initial conditions](slides/slide-06.png)
-
-### 7. CFD overpredicts speed at all 12 sensors
-
-![Slide 7: CFD overpredicts speed at all 12 sensors](slides/slide-07.png)
-
-### 8. Repository, documentation and tests
-
-![Slide 8: Repository, documentation and tests](slides/slide-08.png)
-
-### 9. Limitations and AI reflection
-
-![Slide 9: Limitations and AI reflection](slides/slide-09.png)
+![Slide 6: Limitations and AI reflection](slides/slide-06.png)
 
 ## Backup slides
 
+- [7. CFD setup and initial conditions](slides/slide-07.png)
+- [8. CFD overpredicts speed at all 12 sensors](slides/slide-08.png)
+- [9. Repository, documentation and tests](slides/slide-09.png)
 - [10. Backup  Libraries and their roles](slides/slide-10.png)
 - [11. Backup  Reconstructing a CFD field](slides/slide-11.png)
 - [12. Backup  Numerical stability and accuracy](slides/slide-12.png)

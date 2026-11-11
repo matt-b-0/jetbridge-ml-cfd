@@ -11,14 +11,6 @@ from jetbridge_ml.interpolation.plane import predict_plane
 from jetbridge_ml.validation.metrics import regression_metrics
 
 
-def test_zero_bias_can_hide_large_local_errors():
-    """Opposite signed errors cancel in bias, but not in MAE or RMSE."""
-    actual = np.array([0.1, 0.3])
-    predicted = np.array([0.3, 0.1])
-    metrics = regression_metrics(actual, predicted)
-    assert metrics["bias"] == pytest.approx(0.0, abs=1e-12)
-    assert metrics["mae"] == pytest.approx(0.2)
-    assert metrics["rmse"] == pytest.approx(0.2)
 
 
 @pytest.mark.parametrize("method", ["nearest", "linear", "rbf"])

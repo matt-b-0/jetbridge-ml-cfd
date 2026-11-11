@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-ROOT=Path(__file__).resolve().parents[1]
+ROOT=Path(__file__).resolve().parents[2]
 SPEC=importlib.util.spec_from_file_location("thermal_prepare", ROOT/"cfd/cases/thermal_bridge_s01_ac_10_hn_1/scripts/prepare.py")
 PREPARE=importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(PREPARE)

@@ -15,12 +15,13 @@ Ruff is the selected fast static checker. It fills the requested Pylint-like rol
 ```bash
 python -m ruff check src tests run_all.py
 python -m pytest -q
-python -m pytest -q --junitxml=test-results.xml
+python -m pytest -q --junitxml=docs/report/core-test-results.xml
+python -m pytest tests -q --junitxml=docs/report/test-results.xml
 PYTHONPATH=src python tools/build_api_docs.py
 python tools/build_presentation_guide.py
 ```
 
-GitHub Actions runs the same lint gate and automated tests on Python 3.10 and 3.12 and saves the JUnit reports. A lint pass is not a numerical test, and neither establishes physical validation of the CFD. The demo runner runs lint/tests first unless `--skip-quality` is explicitly selected and recorded.
+The default pytest run contains six core cases in tests/test_core.py. The optional regressions are in tests/extended; explicitly passing `tests` collects both sets. GitHub Actions runs the full collection on Python 3.10 and 3.12 and saves JUnit reports. The demo runner also retains the full collection unless `--skip-quality` is selected and recorded. A lint pass is not a numerical test, and neither establishes physical validation of the CFD.
 
 To review broader style and unused-import diagnostics without changing files:
 
@@ -52,3 +53,5 @@ The Reconstruction Lab keeps numerical experiments in validation/reconstruction_
 Use `PYTHONPATH=src python tools/build_api_docs.py` to explicitly include all current modules: package `__all__` lists can otherwise hide submodule pages. The builder uses the installed pdoc and NumPy docstring format. In a headless environment without Tk, app/progress pages are supplied as clearly labelled AST source references by the guide builder. With a Tk-capable environment, normal pdoc pages are preserved.
 
 Run `python tools/build_presentation_guide.py` after refreshing the JUnit report and API pages. It builds the tutorial, annotated actual test lines, complete test source catalogue, readable test report and source-hash manifest; broken local links fail the build. These tools need no new scientific dependencies. The complete command sequence and presentation fallback are in [the tutorial](presentation/PRESENTATION_TUTORIAL.md).
+
+The normal documentation home is now [the short report-focused code guide](html/index.html), built with `python tools/build_report_guide.py`. It maps six real functions to report pages, documents inputs/outputs and keeps source in collapsible sections. The full pdoc home is preserved as html/full_api.html. `build_api_docs.py` saves that full reference then restores the short guide, so rebuilding API pages does not replace the beginner starting page. The exact supplied final PDF is bundled unchanged under docs/report; its hash is recorded in html/report_guide_manifest.json. The report's original 82-test snapshot and current six-core/128-full organisation are explicitly distinguished.
