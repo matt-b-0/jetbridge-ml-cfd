@@ -4,7 +4,7 @@ An MMA3001 investigation of how accurately interpolation and support vector regr
 
 **Current status:** nested experimental comparisons, sensor-placement experiments and isothermal mesh/coordinate/flow checks have run. The buoyant thermal case remains unconverged. Numerical convergence is not experimental validation.
 
-## Presentation and current verification — 11 November 2026
+## Presentation and current verification
 
 Start with **[six core checks in one file](tests/test_core.py)**. Running `python -m pytest -v` collects only those six cases. [Test instructions](tests/README.md) explain each one; the remaining development checks are in `tests/extended/` and can be included with `python -m pytest tests -q`.
 
